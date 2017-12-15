@@ -10,7 +10,10 @@ def crawl_bittrex():
 
 while True:
     print('current time is ' + str(time.time()))
-    time.sleep(2)
 
     for coin in crawl_bittrex()["result"]:
-        print(coin["MarketName"] + ' {:.8f}'.format(coin["Last"]))
+        if str(coin["MarketName"]).startswith('BTC'):
+            print(coin["MarketName"] + ' {:.8f}'.format(coin["Last"]))
+
+    print('')
+    time.sleep(2)
