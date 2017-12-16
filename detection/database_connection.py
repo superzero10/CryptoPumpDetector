@@ -22,9 +22,4 @@ def obtain_db_connection():
         port=url.port
     )
 
-    # db_cursor = connection.cursor()
-    # db_cursor.execute('SELECT * FROM COMPANY;')
-    # rows = db_cursor.fetchall()
-    # for row in rows:
-    #     print(row[0], row[1], )
     return connection
