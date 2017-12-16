@@ -6,7 +6,7 @@ parse.uses_netloc.append("postgres")
 db_name = os.environ.get("DATABASE_URL")
 
 
-def connect_to_database():
+def obtain_db_connection():
     if db_name is None:
         url = parse.urlparse("pumpdetectordb")
         url_path = url.path
@@ -22,9 +22,9 @@ def connect_to_database():
         port=url.port
     )
 
-    db_cursor = connection.cursor()
-    db_cursor.execute('SELECT * FROM COMPANY;')
-    rows = db_cursor.fetchall()
-    for row in rows:
-        print(row[0], row[1], )
+    # db_cursor = connection.cursor()
+    # db_cursor.execute('SELECT * FROM COMPANY;')
+    # rows = db_cursor.fetchall()
+    # for row in rows:
+    #     print(row[0], row[1], )
     return connection
