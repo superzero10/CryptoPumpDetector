@@ -4,6 +4,7 @@ import requests
 def crawl_bittrex():
     bittrex_market_response = requests.get(
         "https://bittrex.com/api/v1.1/public/getmarketsummaries")
+    print(bittrex_market_response)
     return bittrex_market_response.json()
 
 

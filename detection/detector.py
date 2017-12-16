@@ -1,4 +1,3 @@
-import os
 import time
 
 from detection.bittrex_cron_crawler import crawl_bittrex, crawl_active_btc_pairs
@@ -6,9 +5,9 @@ from detection.constants import SERVER_SCRAPPING_FREQUENCY_SEC, MIN_BTC_VOLUME
 from detection.database_connection import connect_to_database
 
 coin_data = crawl_bittrex()
-active_coin_names = crawl_active_btc_pairs()
+active_coins_names = crawl_active_btc_pairs()
 connect_to_database()
-print(active_coin_names)
+print(active_coins_names)
 
 while True:
     time.sleep(SERVER_SCRAPPING_FREQUENCY_SEC)
