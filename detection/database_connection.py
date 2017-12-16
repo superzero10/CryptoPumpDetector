@@ -3,12 +3,28 @@ from urllib import parse
 import psycopg2
 
 parse.uses_netloc.append("postgres")
-url = parse.urlparse(os.environ["DATABASE_URL"])
+db_name = os.environ.get("DATABASE_URL")
 
-connection = psycopg2.connect(
-    database=url.path[1:],
-    user=url.username,
-    password=url.password,
-    host=url.hostname,
-    port=url.port
-)
+
+def obtain_db_connection():
+    if db_name is None:
+        url = parse.urlparse("pumpdetectordb")
+        url_path = url.path
+    else:
+        url = parse.urlparse(db_name)
+        url_path = url.path[1:]
+
+    connection = psycopg2.connect(
+        database=url_path,
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+
+    # db_cursor = connection.cursor()
+    # db_cursor.execute('SELECT * FROM COMPANY;')
+    # rows = db_cursor.fetchall()
+    # for row in rows:
+    #     print(row[0], row[1], )
+    return connection
