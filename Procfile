@@ -1,1 +1,1 @@
-worker: python detector.py
+worker: python detection/detector.py
