@@ -24,6 +24,5 @@ class YobitService:
 
             market_request = 'https://yobit.net/api/3/ticker/' + divided_query_pairs + '?ignore_invalid=1'
             market_response = requests.get(market_request).json()
-            # print(market_response)
             result.update(market_response)
         return result
