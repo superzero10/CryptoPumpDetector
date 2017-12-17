@@ -6,17 +6,15 @@ BTC_PREFIX = "BTC"
 
 
 class BittrexService:
+    market_request = "https://bittrex.com/api/v1.1/public/getmarketsummaries"
 
-    @staticmethod
-    def fetch_btc_coin_data():
-        bittrex_market_response = requests.get(
-            "https://bittrex.com/api/v1.1/public/getmarketsummaries")
+    def fetch_btc_coin_data(self):
+        bittrex_market_response = requests.get(self.market_request)
         return bittrex_market_response.json()
 
-    @staticmethod
-    def fetch_active_btc_pairs():
+    def fetch_active_btc_pairs(self):
         coin_list = []
-        coin_data = BittrexService.fetch_btc_coin_data()
+        coin_data = self.fetch_btc_coin_data()
         for coin in coin_data[RESULT]:
             if str(coin[MARKET_NAME]).startswith(BTC_PREFIX):
                 coin_list.append(coin[MARKET_NAME])
