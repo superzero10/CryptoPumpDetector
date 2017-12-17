@@ -15,12 +15,12 @@ print(active_btc_pairs)
 while True:
     time.sleep(SERVER_REQUEST_FREQUENCY_SEC)
     current_timestamp = time.time()
-    current_time = datetime.time()
+    current_time = datetime.datetime.now().time()
 
     coin_data = new_coin_data
     new_coin_data = bittrex_service.fetch_coin_data()
     for coin in new_coin_data['result']:
-        if str(coin['MarketName']).startswith('BTC') and coin['BaseVolume'] >= MIN_BTC_VOLUME:
+        if coin['BaseVolume'] >= MIN_BTC_VOLUME:
             old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
             # print(old_coin)
             if coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
@@ -30,7 +30,7 @@ while True:
                 for unwanted_key in unwanted_keys:
                     del coin[unwanted_key]
 
-    print('')
+    print(current_time)
 
                 # db_cursor = connection.cursor()
                 # db_cursor.execute('SELECT * FROM COMPANY;')
