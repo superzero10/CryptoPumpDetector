@@ -2,7 +2,6 @@ import datetime
 import time
 
 from database.database_connection import obtain_db_connection
-from detection.bittrex_detector import active_btc_pairs
 from detection.constants import SERVER_REQUEST_FREQUENCY_SEC, MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD
 from exchange_services.bittrex_service import BittrexService
 
@@ -18,24 +17,25 @@ class YobitDetector:
         db_connection = obtain_db_connection()
         print(active_btc_pairs)
 
-    def start(self):
-        time.sleep(SERVER_REQUEST_FREQUENCY_SEC)
-        current_timestamp = time.time()
-        current_time = datetime.datetime.now().time()
+    def detect(self):
+        print('Yobit thread started at ', time.time())
 
-        coin_data = self.new_coin_data
-        self.new_coin_data = BittrexService.fetch_btc_coin_data()
-        for coin in self.new_coin_data['result']:
-            if coin['BaseVolume'] >= MIN_BTC_VOLUME:
-                old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
-                if coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
-                    print('Coin soaring: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ', coin['Ask'])
-
-                    unwanted_keys = set(coin.keys()) - WANTED_KEYS
-                    for unwanted_key in unwanted_keys:
-                        del coin[unwanted_key]
-
-        print(current_time)
+        # current_timestamp = time.time()
+        # current_time = datetime.datetime.now().time()
+        #
+        # coin_data = self.new_coin_data
+        # self.new_coin_data = BittrexService.fetch_btc_coin_data()
+        # for coin in self.new_coin_data['result']:
+        #     if coin['BaseVolume'] >= MIN_BTC_VOLUME:
+        #         old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
+        #         if coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
+        #             print('Coin soaring: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ', coin['Ask'])
+        #
+        #             unwanted_keys = set(coin.keys()) - WANTED_KEYS
+        #             for unwanted_key in unwanted_keys:
+        #                 del coin[unwanted_key]
+        #
+        # print(current_time)
 
         # db_cursor = connection.cursor()
         # db_cursor.execute('SELECT * FROM COMPANY;')

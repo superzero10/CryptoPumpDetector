@@ -14,36 +14,37 @@ class BittrexDetector:
     db_connection = None
 
     def __init__(self):
+        print("start")
         active_btc_pairs = BittrexService.fetch_active_btc_pairs()
         new_coin_data = BittrexService.fetch_btc_coin_data()
         db_connection = obtain_db_connection()
         print(active_btc_pairs)
 
-    def start(self):
-        while True:
-            time.sleep(SERVER_REQUEST_FREQUENCY_SEC)
-            current_timestamp = time.time()
-            current_time = datetime.datetime.now().time()
+    def detect(self):
+        print('Bittrex thread started at ', time.time())
 
-            coin_data = self.new_coin_data
-            self.new_coin_data = BittrexService.fetch_btc_coin_data()
-            for coin in self.new_coin_data['result']:
-                if coin['BaseVolume'] >= MIN_BTC_VOLUME:
-                    old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
-                    if coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
-                        print('Possible pump coin: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ',
-                              coin['Ask'])
+        current_timestamp = time.time()
+        current_time = datetime.datetime.now().time()
 
-                        unwanted_keys = set(coin.keys()) - WANTED_KEYS
-                        for unwanted_key in unwanted_keys:
-                            del coin[unwanted_key]
+        coin_data = self.new_coin_data
+        self.new_coin_data = BittrexService.fetch_btc_coin_data()
+        for coin in self.new_coin_data['result']:
+            if coin['BaseVolume'] >= MIN_BTC_VOLUME:
+                old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
+                if coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
+                    print('Possible pump coin: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ',
+                          coin['Ask'])
 
-            print(current_time)
+                    unwanted_keys = set(coin.keys()) - WANTED_KEYS
+                    for unwanted_key in unwanted_keys:
+                        del coin[unwanted_key]
 
-            # db_cursor = connection.cursor()
-            # db_cursor.execute('SELECT * FROM COMPANY;')
-            # rows = db_cursor.fetchall()
-            # for row in rows:
-            #     print(row[0], row[1], )2
+        print(current_time)
+
+        # db_cursor = connection.cursor()
+        # db_cursor.execute('SELECT * FROM COMPANY;')
+        # rows = db_cursor.fetchall()
+        # for row in rows:
+        #     print(row[0], row[1], )2
 
 
