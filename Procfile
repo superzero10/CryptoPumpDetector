@@ -1,1 +1,1 @@
-worker: python detection/detector.py
+worker: python system_start.py
