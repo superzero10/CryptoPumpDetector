@@ -2,41 +2,29 @@ import datetime
 import time
 
 from database.database_connection import obtain_db_connection
-from detection.constants import SERVER_REQUEST_FREQUENCY_SEC, MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD
-from exchange_services.bittrex_service import BittrexService
-
-WANTED_KEYS = {'MarketName', 'BaseVolume', 'Bid', 'Ask', 'OpenBuyOrders', 'OpenSellOrders'}
+from detection.constants import MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD
+from exchange_services.yobit_service import YobitService
 
 
 class YobitDetector:
-    new_coin_data = {}
-
-    def __init__(self):
-        apiService = BittrexService()
-        active_btc_pairs = apiService.fetch_active_btc_pairs()
-        new_coin_data = apiService.fetch_btc_coin_data()
-        db_connection = obtain_db_connection()
-        print(active_btc_pairs)
+    apiService = YobitService()
+    active_btc_pairs = apiService.fetch_active_btc_pairs()
+    new_coin_data = apiService.fetch_btc_coins_data()
+    db_connection = obtain_db_connection()
 
     def detect(self):
-        print('Yobit thread started at ', time.time())
+        # print('Yobit thread started at ', time.time())
 
-        # current_timestamp = time.time()
-        # current_time = datetime.datetime.now().time()
-        #
-        # coin_data = self.new_coin_data
-        # self.new_coin_data = BittrexService.fetch_btc_coin_data()
-        # for coin in self.new_coin_data['result']:
-        #     if coin['BaseVolume'] >= MIN_BTC_VOLUME:
-        #         old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
-        #         if coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
-        #             print('Coin soaring: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ', coin['Ask'])
-        #
-        #             unwanted_keys = set(coin.keys()) - WANTED_KEYS
-        #             for unwanted_key in unwanted_keys:
-        #                 del coin[unwanted_key]
-        #
-        # print(current_time)
+        current_timestamp = time.time()
+        current_time = datetime.datetime.now().time()
+
+        coin_data = self.new_coin_data
+        self.new_coin_data = self.apiService.fetch_btc_coins_data()
+        for coin_name, coin in self.new_coin_data.items():
+            if coin['vol'] >= MIN_BTC_VOLUME:
+                old_coin = coin_data[coin_name]
+                if old_coin is not None and coin['sell'] >= old_coin['sell'] * MIN_SOAR_THRESHOLD:
+                    print('Yobit coin soaring: ', coin_name, ', was: ', old_coin['sell'], ', is: ', coin['sell'])
 
         # db_cursor = connection.cursor()
         # db_cursor.execute('SELECT * FROM COMPANY;')
