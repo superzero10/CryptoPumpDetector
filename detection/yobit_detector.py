@@ -12,8 +12,9 @@ class YobitDetector:
     new_coin_data = {}
 
     def __init__(self):
-        active_btc_pairs = BittrexService.fetch_active_btc_pairs()
-        new_coin_data = BittrexService.fetch_btc_coin_data()
+        apiService = BittrexService()
+        active_btc_pairs = apiService.fetch_active_btc_pairs()
+        new_coin_data = apiService.fetch_btc_coin_data()
         db_connection = obtain_db_connection()
         print(active_btc_pairs)
 

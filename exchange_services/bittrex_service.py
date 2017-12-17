@@ -9,8 +9,7 @@ class BittrexService:
     market_request = "https://bittrex.com/api/v1.1/public/getmarketsummaries"
 
     def fetch_btc_coin_data(self):
-        bittrex_market_response = requests.get(self.market_request)
-        return bittrex_market_response.json()
+        return requests.get(self.market_request).json()
 
     def fetch_active_btc_pairs(self):
         coin_list = []
