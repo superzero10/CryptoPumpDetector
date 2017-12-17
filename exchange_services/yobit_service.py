@@ -1,4 +1,5 @@
 import requests
+import math
 
 BTC_POSTFIX = '_btc'
 ADMISSABLE_PAIRS_COUNT = 57
@@ -15,9 +16,9 @@ class YobitService:
     @staticmethod
     def fetch_btc_coins_data():
         btc_pairs = fetch_active_btc_pairs()
-        for index in range(len(btc_pairs) // ADMISSABLE_PAIRS_COUNT):
+        for index in range(int(math.ceil(len(btc_pairs) / ADMISSABLE_PAIRS_COUNT))):
             start_index = index * ADMISSABLE_PAIRS_COUNT
-            end_index = start_index + ADMISSABLE_PAIRS_COUNT
+            end_index = start_index + ADMISSABLE_PAIRS_COUNT - 1
             divided_query_pairs = '-'.join(btc_pairs[start_index:end_index])
             print(start_index, end_index)
 
