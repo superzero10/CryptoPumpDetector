@@ -26,8 +26,6 @@ class YobitDetector:
                 if old_coin is not None and coin['sell'] >= old_coin['sell'] * MIN_SOAR_THRESHOLD:
                     print('Yobit coin soaring: ', coin_name, ', was: ', old_coin['sell'], ', is: ', coin['sell'])
 
-        print(current_time)
-
         # db_cursor = connection.cursor()
         # db_cursor.execute('SELECT * FROM COMPANY;')
         # rows = db_cursor.fetchall()
