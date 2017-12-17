@@ -1,8 +1,8 @@
 import datetime
 import time
 
+from database.database_connection import obtain_db_connection
 from detection.constants import SERVER_REQUEST_FREQUENCY_SEC, MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD
-from detection.database_connection import obtain_db_connection
 from exchange_services.bittrex_service import BittrexService
 
 wanted_keys = {'MarketName', 'BaseVolume', 'Bid', 'Ask', 'OpenBuyOrders', 'OpenSellOrders'}
