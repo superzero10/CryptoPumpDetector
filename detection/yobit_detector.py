@@ -10,7 +10,7 @@ class YobitDetector:
     apiService = YobitService()
     active_btc_pairs = apiService.fetch_active_btc_pairs()
     new_coin_data = apiService.fetch_btc_coins_data()
-    db_connection = obtain_db_connection()
+    # db_connection = obtain_db_connection()
 
     def detect(self):
         # print('Yobit thread started at ', time.time())
