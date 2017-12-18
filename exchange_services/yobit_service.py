@@ -24,9 +24,10 @@ class YobitService:
             divided_query_pairs = '-'.join(btc_pairs[start_index:end_index])
 
             market_request = 'https://yobit.net/api/3/ticker/' + divided_query_pairs + '?ignore_invalid=1'
+            market_response = None
             try:
                 market_response = requests.get(market_request).json()
                 result.update(market_response)
-            except Exception as e:
-                print(e)
+            except:
+                print(market_response)
         return result
