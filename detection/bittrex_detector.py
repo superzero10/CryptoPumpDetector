@@ -19,7 +19,6 @@ class BittrexDetector:
         # print('Bittrex thread started at ', time.time())
 
         active_btc_pairs = self.apiService.fetch_active_btc_pairs()
-        db_connection = obtain_db_connection()
 
         current_timestamp = time.time()
         current_time = datetime.datetime.now().time()
