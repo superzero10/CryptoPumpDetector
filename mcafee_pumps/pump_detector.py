@@ -1,5 +1,4 @@
 import json
-
 import twitter
 
 api = twitter.Api(consumer_key='TjtC3Moxczg62gsMYNzrxGtQ3',
@@ -11,8 +10,8 @@ TRACKED_USERS = ['@officialmcafee']
 LANGUAGES = ['en']
 
 
-def main():
-        # api.GetStreamFilter will return a generator that yields one status
-        # message (i.e., Tweet) at a time as a JSON dictionary.
-        for line in api.GetStreamFilter(track=TRACKED_USERS, languages=LANGUAGES):
-            print(json.dumps(line))
+def track_that_mcafee_bastard():
+    # api.GetStreamFilter will return a generator that yields one status
+    # message (i.e., Tweet) at a time as a JSON dictionary.
+    for line in api.GetStreamFilter(track=TRACKED_USERS, languages=LANGUAGES):
+        print(json.dumps(line))
