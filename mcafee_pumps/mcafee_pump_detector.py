@@ -1,12 +1,12 @@
 import json
-
 import sys
 import twitter
 from detection.bittrex_detector import BittrexService
-
+from bittrex.bittrex import Bittrex
 
 TRACKED_USERS = ['@officialmcafee']
 LANGUAGES = ['en']
+my_bittrex = Bittrex("a915c64c2fae4387ae569f0253ff5d67", "87ec1df1a1774886a342e26dcfdb9038")
 
 active_bittrex_pairs = BittrexService().fetch_active_btc_pairs()
 bittrex_coins = list(map(lambda x: x[4:], active_bittrex_pairs))
@@ -16,8 +16,9 @@ print(bittrex_coins)
 def analyse_tweet(tweet):
     print(tweet['text'])
     sys.stdout.write('\a')
-    if any(coin in tweet['text'] for coin in bittrex_coins) and tweet['user']['screen_name'] == "officialmcafee":
-        print('WE GOT A PUMP')
+    pumped_coin = next(coin in tweet['text'] for coin in bittrex_coins)
+    if pumped_coin is not None and tweet['user']['screen_name'] == "officialmcafee":
+        print("WE GOT A PUMP")
 
 
 def track_that_mcafee_bastard():

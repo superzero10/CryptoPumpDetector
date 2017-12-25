@@ -1,3 +1,4 @@
+bittrex
 twitter
 requests
 psycopg2
