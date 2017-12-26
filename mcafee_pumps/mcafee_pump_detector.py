@@ -21,7 +21,7 @@ with PyTessBaseAPI() as api:
     print(api.GetUTF8Text())
     print(api.AllWordConfidences())
 
-print(tesserocr.file_to_text('ocr_image.png'))
+print(tesserocr.file_to_text('ocr_image_5.png'))
 
 
 def analyse_ocr(tweet):
