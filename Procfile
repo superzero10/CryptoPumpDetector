@@ -1,1 +1,1 @@
-worker: python mcafee_pump.py
+worker: python system_start.py
