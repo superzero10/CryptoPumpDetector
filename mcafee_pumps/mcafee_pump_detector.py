@@ -1,5 +1,8 @@
 import json
 import sys
+from tesserocr import PyTessBaseAPI
+
+import tesserocr
 import twitter
 from detection.bittrex_detector import BittrexService
 from bittrex.bittrex import Bittrex
@@ -13,13 +16,23 @@ bittrex_coins = list(map(lambda x: x[4:], active_bittrex_pairs))
 bittrex_coins = bittrex_coins + list(map(lambda x: x.lower(), bittrex_coins)) + list(map(lambda x: x.capitalize(), bittrex_coins))
 print(bittrex_coins)
 
+with PyTessBaseAPI() as api:
+    api.SetImageFile('ocr_image.png')
+    print(api.GetUTF8Text())
+    print(api.AllWordConfidences())
+
+print(tesserocr.file_to_text('ocr_image.png'))
+
+
+def analyse_ocr(tweet):
+    pass
+
 
 def analyse_tweet(tweet):
     print(tweet)
-    sys.stdout.write('\a')
-    pumped_coin = next(coin in tweet['text'] for coin in bittrex_coins)
-    if pumped_coin is not None and tweet['user']['screen_name'] == "officialmcafee":
+    if tweet['user']['screen_name'] == "officialmcafee":
         print("WE GOT A PUMP")
+        analyse_ocr(tweet)
 
 
 def track_that_mcafee_bastard():
