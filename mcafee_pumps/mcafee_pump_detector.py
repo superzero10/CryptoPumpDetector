@@ -28,8 +28,8 @@ def track_that_mcafee_bastard():
                       access_token_key='913148816668454912-ir0ibXXXO0h2NU4PZhYIPm42ZbtNflf',
                       access_token_secret='hyTdLdsIGHaOMnPVQIaHEr3KCeThW4hlPK3BXTUkKthd6')
 
-    # statuses = api.GetUserTimeline(screen_name='@officialmcafee')
-    # print(statuses[0])
+    statuses = api.GetUserTimeline(screen_name='@officialmcafee')
+    print(statuses[0])
     #
     # print(api.VerifyCredentials())
     # api.GetStreamFilter will return a generator that yields one status
