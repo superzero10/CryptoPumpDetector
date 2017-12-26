@@ -14,6 +14,7 @@ class BittrexService:
     def fetch_active_btc_pairs(self):
         coin_list = []
         coin_data = self.fetch_btc_coin_data()
+        print(coin_data)
         for coin in coin_data[RESULT]:
             if str(coin[MARKET_NAME]).startswith(BTC_PREFIX):
                 coin_list.append(coin[MARKET_NAME])

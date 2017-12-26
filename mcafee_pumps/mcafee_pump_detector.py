@@ -22,17 +22,17 @@ print(bittrex_coins)
 
 
 def track_that_mcafee_bastard():
-
-    # return a generator that yields one status
+    # use a generator that yields one status at a time
     for line in twitter_api.GetStreamFilter(track=TRACKED_USERS, languages=LANGUAGES):
         print(line)
         process_tweet_if_written_by_mcafee(line)
 
 
 def process_tweet_if_written_by_mcafee(tweet):
-    print(tweet)
+    # filter out all retweets & replies
     if tweet['user']['screen_name'] == "officialmcafee":
         print("New McAfee - authored tweet.")
+        print(tweet)
 
         # expecting to have the promoted coin as plain text embedded in picture
         analyse_ocr(tweet)
