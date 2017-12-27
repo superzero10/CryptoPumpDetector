@@ -13,4 +13,8 @@ def fetch_word_definitions_count(word):
             "Accept": "application/json"
         }
     )
-    print(len(response.json()['definitions']))
+    result = 0
+    try:
+        result = len(response.json()['definitions'])
+    finally:
+        return result
