@@ -19,13 +19,14 @@ def create_coin_keywords_eval_dict():
 
         # convert to definition count punishment partial dictionary
         current_market_dictionary = {}
-        for index, item in enumerate(market):
-            print(index, item)
-            if index is 0 or item.endswith('coin'):
+        for index, market_alias in enumerate(market):
+            print(index, market_alias)
+            if index is 0 or market_alias.lower().endswith('coin'):
                 # cannot punish coin names, and coins with names "*coin" are definitely not proper english words
-                current_market_update_dict = {item: 0}
+                # no need to drain words api quota
+                current_market_update_dict = {market_alias: 0}
             else:
-                current_market_update_dict = {item: fetch_word_definitions_count(item)}
+                current_market_update_dict = {market_alias: fetch_word_definitions_count(market_alias)}
             current_market_dictionary.update(current_market_update_dict)
         print("Punishment dictionary for current coin: ", current_market_dictionary)
         print("")
