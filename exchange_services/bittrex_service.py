@@ -29,17 +29,6 @@ class BittrexService:
         markets_data = requests.get(self.all_markets_request).json()
         for market in markets_data[RESULT]:
             if str(market[MARKET_NAME]).startswith(BTC_PREFIX) and market[IS_ACIVE]:
-                market_name_variants_list = [market[MARKET_SHORT_NAME], market[MARKET_LONG_NAME]]
-
-                if market[MARKET_LONG_NAME] != market[MARKET_LONG_NAME].capitalize():
-                    market_name_variants_list.append(market[MARKET_LONG_NAME].capitalize())
-
-                if market[MARKET_LONG_NAME].lower().endswith("coin"):
-                    market_name_variants_list.append(market[MARKET_LONG_NAME][:-4])
-
-                result.append(market_name_variants_list)
+                result.append([market[MARKET_SHORT_NAME], market[MARKET_LONG_NAME]])
 
         return result
-
-
-print(BittrexService().fetch_active_btc_pairs_with_names())

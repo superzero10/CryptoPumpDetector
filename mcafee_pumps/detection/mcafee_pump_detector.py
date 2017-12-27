@@ -43,3 +43,4 @@ def analyse_ocr(tweet):
         api.SetImageFile('ocr_samples/ocr_image.png')
         print(api.GetUTF8Text())
         print(api.AllWordConfidences())
+
