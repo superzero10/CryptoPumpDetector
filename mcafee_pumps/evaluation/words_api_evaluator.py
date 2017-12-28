@@ -1,9 +1,8 @@
 import requests
 
 
-# Use english words API to punish the coin names that are normal words & could have been used not relating to coin name
+# Use english words API to punish the coin names that are normal words & could have been used in other context
 # Heuristic: the more the existing word definitions, the higher the punishment gets
-# WARNING: no more than 2500 requests/day
 
 def fetch_word_definitions_count(word):
     response = requests.get(
