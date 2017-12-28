@@ -12,8 +12,9 @@ def obtain_db_connection():
         url_path = url.path
     else:
         url = parse.urlparse(db_name)
-        url_path = url.path[1:]
+        url_path = url.path
 
+    print(url_path)
     connection = psycopg2.connect(
         database=url_path,
         user=url.username,

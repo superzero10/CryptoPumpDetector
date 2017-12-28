@@ -34,11 +34,3 @@ class BittrexDetector:
                     unwanted_keys = set(coin.keys()) - WANTED_KEYS
                     for unwanted_key in unwanted_keys:
                         del coin[unwanted_key]
-
-        # db_cursor = connection.cursor()
-        # db_cursor.execute('SELECT * FROM COMPANY;')
-        # rows = db_cursor.fetchall()
-        # for row in rows:
-        #     print(row[0], row[1], )2
-
-
