@@ -47,6 +47,7 @@ def create_coin_keywords_eval_dict():
     db_cursor.execute('INSERT into coins (timestamp, dict) values (%s, %s)',
                       [time.time(), Json(markets_eval_dict)])
     db_connection.commit()
+    db_connection.close()
 
 
 create_coin_keywords_eval_dict()
