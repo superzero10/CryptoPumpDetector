@@ -1,4 +1,4 @@
-from tesserocr import PyTessBaseAPI
+# from tesserocr import PyTessBaseAPI
 import twitter
 from bittrex.bittrex import Bittrex
 import re
@@ -34,12 +34,12 @@ def process_tweet_if_written_by_mcafee(tweet):
         print("")
 
         # expecting to have the promoted coin as plain text embedded in picture
-        analyse_ocr(tweet)
-
-
-def analyse_ocr(tweet):
-    with PyTessBaseAPI() as api:
-        api.SetImageFile('ocr_samples/ocr_image.png')
-        print(api.GetUTF8Text())
-        print(api.AllWordConfidences())
+        # analyse_ocr(tweet)
+#
+#
+# def analyse_ocr(tweet):
+#     with PyTessBaseAPI() as api:
+#         api.SetImageFile('ocr_samples/ocr_image.png')
+#         print(api.GetUTF8Text())
+#         print(api.AllWordConfidences())
 
