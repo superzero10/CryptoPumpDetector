@@ -1,5 +1,5 @@
 tesserocr
 bittrex
-twitter
+python-twitter
 requests
 psycopg2
