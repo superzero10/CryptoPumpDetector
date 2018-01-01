@@ -21,7 +21,7 @@ def track_that_mcafee_bastard():
     # use a generator that yields one status at a time
     print("Listening for incoming tweets")
     for line in twitter_api.GetStreamFilter(track=TRACKED_USER, languages=LANGUAGES):
-        print(line)
+        # print(line)
         process_tweet_if_written_by_mcafee(line)
 
 
