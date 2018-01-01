@@ -4,7 +4,7 @@ from bittrex.bittrex import Bittrex
 import re
 from detection.bittrex_detector import BittrexService
 
-TRACKED_USER = ["@officialmcafee"]
+TRACKED_USER = ['@haydart_']
 LANGUAGES = ['en', 'pl']
 alphanumerics_pattern = re.compile('([^\s\w]|_)+')
 
@@ -20,9 +20,13 @@ twitter_api = twitter.Api(consumer_key='TjtC3Moxczg62gsMYNzrxGtQ3',
 def track_that_mcafee_bastard():
     # use a generator that yields one status at a time
     print("Listening for incoming tweets")
-    for line in twitter_api.GetStreamFilter(follow=TRACKED_USER, languages=LANGUAGES):
+    for line in twitter_api.GetStreamFilter(follow=['961445378'], languages=LANGUAGES):
         # print(line)
         process_tweet_if_written_by_mcafee(line)
+
+    for line in twitter_api.GetUserStream(withuser='961445378'):
+        print("ASD", line)
+        # process_tweet_if_written_by_mcafee(line)
 
 
 def process_tweet_if_written_by_mcafee(tweet):
