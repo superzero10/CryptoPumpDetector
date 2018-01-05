@@ -7,7 +7,8 @@ from exchange_services.bittrex_service import BittrexService
 from mcafee_pumps.evaluation.words_api_service import fetch_word_definitions_count
 
 COIN_SUFFIX = 'coin'
-WORD_VALUE_DENOMINATOR = 40
+WORD_VALUE_DENOMINATOR = 35
+FORBIDDEN_PART_WORDS = ['Breakout', 'Ethereum', 'Internet', 'Basic', 'Status', 'Bitcoin', 'Project']
 
 
 def create_coin_keywords_eval_dict():
@@ -18,19 +19,26 @@ def create_coin_keywords_eval_dict():
     for market in market_names_list:
 
         # create different permutations of the coin names that are plausible to be used in the tweeted image
-        if market[1] != market[1].capitalize():
-            market.append(market[1].capitalize())
         if market[1].lower().endswith(COIN_SUFFIX):
-            market.append(market[1][:-4].lower().capitalize())
-        if market[0] == market[1]:
-            del market[1]
+            potential_coin_variant = market[1][:-4].lower().capitalize()
+            if len(potential_coin_variant) > 1 and market[1].lower() != potential_coin_variant.lower() and \
+                    potential_coin_variant not in FORBIDDEN_PART_WORDS:
+                market.append(potential_coin_variant)
+
+        if len(market[1].split(' ')) > 1:
+            potential_coin_variant = market[1].split(' ')[0]
+            if potential_coin_variant not in FORBIDDEN_PART_WORDS:
+                market.append(potential_coin_variant)
+
+        if market[0].lower() == market[-1].lower():
+            del market[-1]
 
         # convert to definition count punishment partial dictionary
         current_market_dictionary = []
         for index, market_alias in enumerate(market):
             print(index, market_alias)
-            if index is 0 or market_alias.lower().endswith(COIN_SUFFIX):
-                # cannot punish coin names. also coins with names "*coin" are definitely not proper english words
+            if market_alias.lower().endswith(COIN_SUFFIX):
+                # coins with names "*coin" are definitely not proper english words
                 current_market_coin_tuple = (market_alias, 1)
             else:
                 # calculate the word trust value depending on english dictionary definitions count

@@ -11,15 +11,16 @@ def extract_mentioned_coin_abbr(text):
     for coin_name_variants in word_eval_dict:
         print(coin_name_variants)
         for coin_value_tuple in coin_name_variants:
-            coin_name = coin_value_tuple[0]
+            coin_name = coin_value_tuple[0].lower()
             print('The word: ', coin_name, ' occurred in text ', count_occurrences(coin_name, text), ' times.')
 
 
 def count_occurrences(word, text):
-    return text.lower().split().count(word)
+    return text.lower().count(word)
 
 
-extract_mentioned_coin_abbr("""A powerhouse platform being applied to a
+extract_mentioned_coin_abbr("""FACTOM (FCT) 
+A powerhouse platform being applied to a
 wide range of fields. FCT has been endorsed
 by the Bill Gates Foundation and Homeland
 Security has a fully implemented technology
