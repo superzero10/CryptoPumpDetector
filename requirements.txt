@@ -1,4 +1,4 @@
-tesserocr=2.2.2
+tesserocr==2.2.2
 bittrex
 python-twitter
 requests
