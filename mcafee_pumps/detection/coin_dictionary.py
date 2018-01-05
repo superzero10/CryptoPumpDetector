@@ -1,10 +1,8 @@
 import time
 
 from psycopg2._json import Json
-from psycopg2.extras import DictCursor
-from psycopg2.psycopg1 import connection
-from database.database_connection import obtain_db_connection
 
+from database.database_connection import obtain_db_connection
 from exchange_services.bittrex_service import BittrexService
 from mcafee_pumps.evaluation.words_api_evaluator import fetch_word_definitions_count
 

@@ -1,5 +1,5 @@
-tesserocr
+tesserocr==2.2.2
 bittrex
-twitter
+python-twitter
 requests
 psycopg2
