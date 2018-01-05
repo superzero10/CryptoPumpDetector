@@ -15,7 +15,7 @@ def create_coin_keywords_eval_dict():
     db_connection = obtain_db_connection()
     markets_eval_dict = []
 
-    for market in market_names_list[:5]:
+    for market in market_names_list:
 
         # create different permutations of the coin names that are plausible to be used in the tweeted image
         if market[1] != market[1].capitalize():

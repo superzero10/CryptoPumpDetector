@@ -10,9 +10,13 @@ def extract_mentioned_coin_abbr(text):
 
     for coin_name_variants in word_eval_dict:
         print(coin_name_variants)
-        for coin_name_trust_value in coin_name_variants:
-            coin_name_variant = coin_name_trust_value[0]
-            print()
+        for coin_value_tuple in coin_name_variants:
+            coin_name = coin_value_tuple[0]
+            print('The word: ', coin_name, ' occurred in text ', count_occurrences(coin_name, text), ' times.')
+
+
+def count_occurrences(word, text):
+    return text.lower().split().count(word)
 
 
 extract_mentioned_coin_abbr("""A powerhouse platform being applied to a
