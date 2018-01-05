@@ -1,7 +1,7 @@
 # from tesserocr import PyTessBaseAPI
 import pkg_resources
 
-print('TesserOcr version:', pkg_resources.get_distribution("construct").version)
+print('TesserOcr version:', pkg_resources.get_distribution("tesserocr").version)
 
 from tesserocr import PyTessBaseAPI
 from urllib import request
