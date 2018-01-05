@@ -7,6 +7,7 @@ from exchange_services.bittrex_service import BittrexService
 from mcafee_pumps.evaluation.words_api_evaluator import fetch_word_definitions_count
 
 COIN_SUFFIX = 'coin'
+WORD_VALUE_FACTOR = 50
 
 
 def create_coin_keywords_eval_dict():
@@ -14,7 +15,7 @@ def create_coin_keywords_eval_dict():
     db_connection = obtain_db_connection()
     markets_eval_dict = {}
 
-    for market in market_names_list[:3]:
+    for market in market_names_list:
 
         # create different permutations of the coin names that are plausible to be used in the tweeted image
         if market[1] != market[1].capitalize():
@@ -32,7 +33,9 @@ def create_coin_keywords_eval_dict():
                 # cannot punish coin names. also coins with names "*coin" are definitely not proper english words
                 current_market_dict_update = {market_alias: 1}
             else:
-                current_market_dict_update = {market_alias: fetch_word_definitions_count(market_alias)}
+                # calculate the word trust value depending on english dictionary definitions count
+                current_market_word_value = 1 - fetch_word_definitions_count(market_alias) / WORD_VALUE_FACTOR
+                current_market_dict_update = {market_alias: current_market_word_value}
             current_market_dictionary.update(current_market_dict_update)
         print("Punishment dictionary for current coin: ", current_market_dictionary)
         print("")
