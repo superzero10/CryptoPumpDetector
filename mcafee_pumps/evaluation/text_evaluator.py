@@ -1,4 +1,5 @@
 from mcafee_pumps.detection.coin_dictionary import fetch_word_evaluation_dictionary
+import operator
 
 word_eval_dict = fetch_word_evaluation_dictionary()
 print(word_eval_dict)
@@ -6,13 +7,23 @@ print('')
 
 
 def extract_mentioned_coin_abbr(text):
-    coin_name_occurences = {}
+    coin_occurrence_points = {}
 
     for coin_name_variants in word_eval_dict:
+        coin_occurrence_points.update({coin_name_variants[0][0]: 0})
         for coin_value_tuple in coin_name_variants:
             coin_name = coin_value_tuple[0].lower()
             if count_occurrences(coin_name, text) > 0:
-                print(coin_name.upper(), ' found ', count_occurrences(coin_name, text), ' times at value ', coin_value_tuple[1])
+                occurrence_count = count_occurrences(coin_name, text)
+                coin_abbr = coin_name_variants[0][0]
+                coin_occurrence_points[coin_abbr] += coin_name_variants[0][1] * occurrence_count
+                print(coin_name, ' found ', occurrence_count, ' times at value ', coin_value_tuple[1])
+
+    print("")
+    print(coin_occurrence_points)
+    coin_to_buy = max(coin_occurrence_points.keys(), key=(lambda key: coin_occurrence_points[key]))
+    print('Coin to buy is: ', coin_to_buy)
+    return coin_to_buy
 
 
 def count_occurrences(word, text):
