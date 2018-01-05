@@ -1,10 +1,11 @@
 import requests
 
-
 # Use english words API to punish the coin names that are normal words & could have been used in other context
 # Heuristic: the more the existing word definitions, the higher the punishment gets
 
+
 def fetch_word_definitions_count(word):
+    # print(word)
     response = requests.get(
         "https://wordsapiv1.p.mashape.com/words/" + word + "/definitions",
         headers={
