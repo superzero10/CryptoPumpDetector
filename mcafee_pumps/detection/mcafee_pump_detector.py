@@ -26,18 +26,19 @@ def track_that_mcafee_bastard():
     # use a generator that yields one status at a time
     print('Listening for incoming tweets')
     for line in twitter_api.GetStreamFilter(follow=TRACKED_USER_ID, languages=LANGUAGES):
-        process_tweet_if_written_by_mcafee(line)
+        process_tweet_if_written_by_tracked_user(line)
 
 
-def process_tweet_if_written_by_mcafee(tweet):
+def process_tweet_if_written_by_tracked_user(tweet):
     # filter out all retweets & replies
+    print(tweet)
     if tweet['user']['screen_name'] == TRACKED_USER and 'retweeted_status' not in tweet.keys() and \
             not tweet['text'].startswith('RT'):
         print("")
         print(TRACKED_USER, 'AUTHORED TWEET')
         print(tweet)
         print("")
-        if 'extended_entities' in tweet.keys() and 'media' in tweet['extended'].keys():
+        if 'extended_entities' in tweet.keys() and 'media' in tweet['extended_entities'].keys():
             analyse_ocr(tweet['extended_entities']['media'][0]['media_url'])
             # expecting to have the promoted coin as plain text embedded in picture
         else: print('There was no image attached.')
