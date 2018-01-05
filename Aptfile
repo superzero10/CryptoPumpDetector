@@ -1,4 +1,4 @@
 libgif-dev
 libtesseract-dev
 libleptonica-dev
-tesseract-ocr
+tesseract-ocr==2.2.2
