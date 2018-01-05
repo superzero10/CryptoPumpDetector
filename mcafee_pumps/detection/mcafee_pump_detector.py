@@ -6,6 +6,7 @@ import twitter
 from bittrex.bittrex import Bittrex
 import re
 from detection.bittrex_detector import BittrexService
+from mcafee_pumps.detection.coin_dictionary import fetch_word_evaluation_dictionary
 
 TRACKED_USER = 'haydart_'
 TRACKED_USER_ID = ['913148816668454912']
@@ -20,6 +21,10 @@ twitter_api = twitter.Api(consumer_key='TjtC3Moxczg62gsMYNzrxGtQ3',
                           consumer_secret='rObL9LQu7pH0iU1DmvRvYiNpwzqBKtHQfWLJxBbuEfyvroAxB6',
                           access_token_key='913148816668454912-ir0ibXXXO0h2NU4PZhYIPm42ZbtNflf',
                           access_token_secret='hyTdLdsIGHaOMnPVQIaHEr3KCeThW4hlPK3BXTUkKthd6')
+
+
+word_eval_dict = fetch_word_evaluation_dictionary()
+print(word_eval_dict)
 
 
 def track_that_mcafee_bastard():
@@ -49,8 +54,14 @@ def analyse_ocr(url):
         print(url)
         request.urlretrieve(url, 'mcafeecoin.jpg')
         api.SetImageFile('mcafeecoin.jpg')
-        print(api.GetUTF8Text())
+        recognized_text = api.GetUTF8Text()
+        print()
         print(api.AllWordConfidences())
+        extract_possible_coin_name(recognized_text)
+
+
+def extract_possible_coin_name(text):
+    print(text)
 
 
 # process_tweet_if_written_by_mcafee(

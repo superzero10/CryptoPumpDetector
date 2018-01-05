@@ -7,7 +7,7 @@ from exchange_services.bittrex_service import BittrexService
 from mcafee_pumps.evaluation.words_api_evaluator import fetch_word_definitions_count
 
 COIN_SUFFIX = 'coin'
-WORD_VALUE_FACTOR = 50
+WORD_VALUE_FORMULA_DENOMINATOR = 40
 
 
 def create_coin_keywords_eval_dict():
@@ -34,7 +34,7 @@ def create_coin_keywords_eval_dict():
                 current_market_dict_update = {market_alias: 1}
             else:
                 # calculate the word trust value depending on english dictionary definitions count
-                current_market_word_value = 1 - fetch_word_definitions_count(market_alias) / WORD_VALUE_FACTOR
+                current_market_word_value = 1 - fetch_word_definitions_count(market_alias) / WORD_VALUE_FORMULA_DENOMINATOR
                 current_market_dict_update = {market_alias: current_market_word_value}
             current_market_dictionary.update(current_market_dict_update)
         print("Punishment dictionary for current coin: ", current_market_dictionary)
@@ -51,4 +51,10 @@ def create_coin_keywords_eval_dict():
     db_connection.close()
 
 
-create_coin_keywords_eval_dict()
+def fetch_word_evaluation_dictionary():
+    db_connection = obtain_db_connection()
+    db_cursor = db_connection.cursor()
+    db_cursor.execute('SELECT dict FROM coins')
+    word_eval_dict = db_cursor.fetchone()
+    db_connection.close()
+    return word_eval_dict
