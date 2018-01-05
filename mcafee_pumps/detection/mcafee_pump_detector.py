@@ -7,7 +7,7 @@ from bittrex.bittrex import Bittrex
 import re
 from detection.bittrex_detector import BittrexService
 
-TRACKED_USER = '@haydart_'
+TRACKED_USER = 'haydart_'
 TRACKED_USER_ID = ['913148816668454912']
 LANGUAGES = ['en', 'pl']
 alphanumerics_pattern = re.compile('([^\s\w]|_)+')
@@ -37,8 +37,10 @@ def process_tweet_if_written_by_mcafee(tweet):
         print(TRACKED_USER, 'AUTHORED TWEET')
         print(tweet)
         print("")
-        analyse_ocr(tweet['extended_entities']['media'][0]['media_url'])
-        # expecting to have the promoted coin as plain text embedded in picture
+        if 'extended_entities' in tweet.keys() and 'media' in tweet['extended'].keys():
+            analyse_ocr(tweet['extended_entities']['media'][0]['media_url'])
+            # expecting to have the promoted coin as plain text embedded in picture
+        else: print('There was no image attached.')
 
 
 def analyse_ocr(url):
