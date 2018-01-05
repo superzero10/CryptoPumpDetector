@@ -9,10 +9,10 @@ def extract_mentioned_coin_abbr(text):
     coin_name_occurences = {}
 
     for coin_name_variants in word_eval_dict:
-        print(coin_name_variants)
         for coin_value_tuple in coin_name_variants:
             coin_name = coin_value_tuple[0].lower()
-            print('The word: ', coin_name, ' occurred in text ', count_occurrences(coin_name, text), ' times.')
+            if count_occurrences(coin_name, text) > 0:
+                print(coin_name.upper(), ' found ', count_occurrences(coin_name, text), ' times at value ', coin_value_tuple[1])
 
 
 def count_occurrences(word, text):
