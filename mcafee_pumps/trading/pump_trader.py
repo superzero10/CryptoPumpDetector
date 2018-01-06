@@ -10,17 +10,16 @@ bittrex_trader = Bittrex("a915c64c2fae4387ae569f0253ff5d67", "87ec1df1a1774886a3
 def buy_limit(coin):
     while True:
         print("TRADING...")
-        time.sleep(10)
         start_time = time.time()
-        # print(bittrex_trader.get_balance("BTC"))
 
         place_order_response = bittrex_trader.buy_limit('BTC-LTC', 1, 0.001)
         print('Place order: ', place_order_response)
         uuid = place_order_response['result']['uuid']
-        print('trade request took', time.time() - start_time)
+        print('trade request took', time.time() - start_time, ' seconds')
 
         cancel_order_response = bittrex_trader.cancel(uuid)
         print('Cancel order: ', cancel_order_response)
+        time.sleep(10)
 
 
-# buy_limit('BTC_LTC')
+buy_limit('BTC_LTC')
