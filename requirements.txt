@@ -1,6 +1,4 @@
-bittrex
 tesserocr==2.2.2
-python-bittrex
 python-twitter
 requests
 psycopg2

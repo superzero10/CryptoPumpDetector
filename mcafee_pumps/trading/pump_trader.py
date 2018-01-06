@@ -22,4 +22,4 @@ def buy_limit(coin):
         print('Cancel order: ', cancel_order_response)
 
 
-buy_limit('BTC_LTC')
+# buy_limit('BTC_LTC')
