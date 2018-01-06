@@ -30,15 +30,15 @@ def count_occurrences(word, text):
     return text.lower().count(word)
 
 
-extract_mentioned_coin_abbr("""FACTOM (FCT) 
-A powerhouse platform being applied to a
-wide range of fields. FCT has been endorsed
-by the Bill Gates Foundation and Homeland
-Security has a fully implemented technology
-China. It is one the few Blockchain
-and already has contracts with 25 cities in
-companies with a fully functional API that
-integrates directly with most existing software,
-allowing sharing, auditing and exchange of a
-wide range of sensitive documents. FACTOM.
-COM.""")
+# extract_mentioned_coin_abbr("""FACTOM (FCT)
+# A powerhouse platform being applied to a
+# wide range of fields. FCT has been endorsed
+# by the Bill Gates Foundation and Homeland
+# Security has a fully implemented technology
+# China. It is one the few Blockchain
+# and already has contracts with 25 cities in
+# companies with a fully functional API that
+# integrates directly with most existing software,
+# allowing sharing, auditing and exchange of a
+# wide range of sensitive documents. FACTOM.
+# COM.""")

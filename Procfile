@@ -1,1 +1,1 @@
-worker: python mcafee_pump_starter.py
+worker: python pump_trader.py

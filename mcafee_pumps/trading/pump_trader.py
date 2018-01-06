@@ -1,17 +1,25 @@
-from bittrex import Bittrex
+import time
+from bittrex.bittrex import Bittrex
 from detection.bittrex_detector import BittrexService
 
 BTC_TRADE_AMOUNT = 0.1
-my_bittrex = Bittrex("a915c64c2fae4387ae569f0253ff5d67", "87ec1df1a1774886a342e26dcfdb9038")
+bittrex_trader = Bittrex("a915c64c2fae4387ae569f0253ff5d67", "87ec1df1a1774886a342e26dcfdb9038")
 
 
 def buy_limit(coin):
-    print("TRADING...")
-    bittrex_markets = BittrexService().fetch_btc_coin_data()['result']
-    print(bittrex_markets)
-    traded_coin = next((item for item in bittrex_markets if item['MarketName'] == coin))
-    print(traded_coin)
-    print(my_bittrex.buy_limit("BTC-LTC", 1.0, 0.0015))
+    while True:
+        print("TRADING...")
+        time.sleep(10)
+        start_time = time.time()
+        # print(bittrex_trader.get_balance("BTC"))
+
+        place_order_response = bittrex_trader.buy_limit('BTC-LTC', 1, 0.001)
+        print('Place order: ', place_order_response)
+        uuid = place_order_response['result']['uuid']
+        print('trade request took', time.time() - start_time)
+
+        cancel_order_response = bittrex_trader.cancel(uuid)
+        print('Cancel order: ', cancel_order_response)
 
 
 buy_limit('BTC_LTC')
