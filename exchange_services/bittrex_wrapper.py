@@ -5,6 +5,7 @@
 import time
 import hmac
 import hashlib
+import urllib
 
 try:
     from urllib import urlencode
@@ -141,16 +142,15 @@ class Bittrex(object):
         if protection != PROTECTION_PUB:
             request_url = "{0}apikey={1}&nonce={2}&".format(request_url, self.api_key, nonce)
 
-        request_url += urlencode(options)
+        request_url += urllib.parse.urlencode(options)
 
         try:
-            apisign = hmac.new(self.api_secret.encode(),
-                               request_url.encode(),
-                               hashlib.sha512).hexdigest()
+            signature = hmac.new(self.api_secret.encode('utf-8'), request_url.encode('utf-8'),
+                                 hashlib.sha512).hexdigest()
 
             self.wait()
 
-            return self.dispatch(request_url, apisign)
+            return self.dispatch(request_url, signature)
 
         except Exception:
             return {

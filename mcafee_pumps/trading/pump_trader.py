@@ -1,6 +1,7 @@
 import time
-from bittrex.bittrex import Bittrex
+
 from detection.bittrex_detector import BittrexService
+from exchange_services.bittrex_wrapper import Bittrex
 
 BTC_TRADE_AMOUNT = 0.1
 bittrex_trader = Bittrex("a915c64c2fae4387ae569f0253ff5d67", "87ec1df1a1774886a342e26dcfdb9038")
