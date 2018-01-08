@@ -82,7 +82,7 @@ class Bittrex(object):
     Used for requesting Bittrex with API key and API secret
     """
 
-    def __init__(self, api_key, api_secret, calls_per_second=1, dispatch=using_requests, api_version=API_V1_1):
+    def __init__(self, api_key, api_secret, calls_per_second=1, dispatch=using_requests, api_version=API_V2_0):
         self.api_key = str(api_key) if api_key is not None else ''
         self.api_secret = str(api_secret) if api_secret is not None else ''
         self.dispatch = dispatch
@@ -143,6 +143,7 @@ class Bittrex(object):
             request_url = "{0}apikey={1}&nonce={2}&".format(request_url, self.api_key, nonce)
 
         request_url += urllib.parse.urlencode(options)
+        print('Request URL: ', request_url)
 
         try:
             signature = hmac.new(self.api_secret.encode('utf-8'), request_url.encode('utf-8'),
