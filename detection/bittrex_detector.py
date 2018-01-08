@@ -26,7 +26,7 @@ class BittrexDetector:
         for coin in self.new_coin_data['result']:
             if str(coin['MarketName']).startswith(BTC_PAIR_PREFIX) and coin['BaseVolume'] >= MIN_BTC_VOLUME:
                 old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
-                if old_coin is not None and coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
+                if old_coin is not None and coin['Ask'] > old_coin['Ask'] * MIN_SOAR_THRESHOLD:
                     print('Bittrex pump: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ', coin['Ask'])
 
                     unwanted_keys = set(coin.keys()) - WANTED_KEYS

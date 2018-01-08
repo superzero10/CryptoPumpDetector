@@ -1,13 +1,15 @@
 # from tesserocr import PyTessBaseAPI
-import pkg_resources
+import re
 from tesserocr import PyTessBaseAPI
 from urllib import request
+
+import pkg_resources
 import twitter
 from bittrex.bittrex import Bittrex
-import re
+
 from detection.bittrex_detector import BittrexService
-from mcafee_pumps.detection.coin_dictionary import fetch_word_evaluation_dictionary
 from mcafee_pumps.evaluation.text_evaluator import extract_mentioned_coin_abbr
+from mcafee_pumps.trading.pump_trader import trade_limit, trade_market
 
 TRACKED_USER = 'haydart_'
 TRACKED_USER_ID = ['913148816668454912']
@@ -33,7 +35,6 @@ def track_that_mcafee_bastard():
 
 def process_tweet_if_written_by_tracked_user(tweet):
     # filter out all retweets & replies
-    print(tweet)
     if tweet['user']['screen_name'] == TRACKED_USER and 'retweeted_status' not in tweet.keys() and \
             not tweet['text'].startswith('RT'):
         print("")
@@ -55,5 +56,4 @@ def analyse_ocr(url):
         recognized_text = api.GetUTF8Text()
         print(api.AllWordConfidences())
         coin_to_buy = extract_mentioned_coin_abbr(recognized_text)
-        print('The coin to buy is ', coin_to_buy)
-
+        trade_market(coin_to_buy)
