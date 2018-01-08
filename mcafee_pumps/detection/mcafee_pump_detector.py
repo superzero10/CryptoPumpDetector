@@ -5,11 +5,9 @@ from urllib import request
 
 import pkg_resources
 import twitter
-from bittrex.bittrex import Bittrex
-
 from detection.bittrex_detector import BittrexService
 from mcafee_pumps.evaluation.text_evaluator import extract_mentioned_coin_abbr
-from mcafee_pumps.trading.pump_trader import trade_limit, trade_market
+from mcafee_pumps.trading.pump_trader import trade_market
 
 TRACKED_USER = 'haydart_'
 TRACKED_USER_ID = ['913148816668454912']
@@ -18,7 +16,6 @@ alphanumerics_pattern = re.compile('([^\s\w]|_)+')
 
 print('TesserOcr version:', pkg_resources.get_distribution("tesserocr").version)
 
-my_bittrex = Bittrex("a915c64c2fae4387ae569f0253ff5d67", "87ec1df1a1774886a342e26dcfdb9038")
 active_bittrex_pairs = BittrexService().fetch_active_btc_pairs()
 twitter_api = twitter.Api(consumer_key='TjtC3Moxczg62gsMYNzrxGtQ3',
                           consumer_secret='rObL9LQu7pH0iU1DmvRvYiNpwzqBKtHQfWLJxBbuEfyvroAxB6',
