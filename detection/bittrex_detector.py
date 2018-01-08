@@ -16,8 +16,6 @@ class BittrexDetector:
     db_connection = None
 
     def detect(self):
-        # print('Bittrex thread started at ', time.time())
-
         active_btc_pairs = self.apiService.fetch_active_btc_pairs()
 
         current_timestamp = time.time()
@@ -28,8 +26,8 @@ class BittrexDetector:
         for coin in self.new_coin_data['result']:
             if str(coin['MarketName']).startswith(BTC_PAIR_PREFIX) and coin['BaseVolume'] >= MIN_BTC_VOLUME:
                 old_coin = next((item for item in coin_data['result'] if item['MarketName'] == coin['MarketName']))
-                if old_coin is not None and coin['Ask'] >= old_coin['Ask'] * MIN_SOAR_THRESHOLD:
-                    print('Bittrex coin soaring: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ', coin['Ask'])
+                if old_coin is not None and coin['Ask'] > old_coin['Ask'] * MIN_SOAR_THRESHOLD:
+                    print('Bittrex pump: ', old_coin['MarketName'], ', was: ', old_coin['Ask'], ', is: ', coin['Ask'])
 
                     unwanted_keys = set(coin.keys()) - WANTED_KEYS
                     for unwanted_key in unwanted_keys:

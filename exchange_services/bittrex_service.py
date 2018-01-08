@@ -5,7 +5,7 @@ MARKET_NAME = "MarketName"
 MARKET_SHORT_NAME = "MarketCurrency"
 MARKET_LONG_NAME = "MarketCurrencyLong"
 IS_ACIVE = "IsActive"
-BTC_PREFIX = "BTC"
+BTC_PREFIX = "BTC-"
 
 
 class BittrexService:
