@@ -32,14 +32,14 @@ class BittrexDetector:
 
                 possible_coin_names = [coin['MarketName'] for coin in last_coins_snapshot]
 
-                print('possible coin names', possible_coin_names)
-
                 for coin in last_coins_snapshot:
                     if coin['BaseVolume'] >= MIN_BTC_VOLUME:
                         old_coin = next(item for item in first_coins_snapshot if item['MarketName'] == coin['MarketName'])
                         if old_coin is not None and coin['Ask'] > old_coin['Ask'] * MIN_SOAR_THRESHOLD:
-                            print('Bittrex coin possible: ', old_coin['MarketName'], ', was: ', old_coin['Ask'],', is: ', coin['Ask'])
+                            print('Bittrex possible pump: ', old_coin['MarketName'], ', was: ', old_coin['Ask'],', is: ', coin['Ask'])
                         else:
+                            if old_coin['Ask'] == 0:
+                                old_coin['Ask'] = 1  # to prevent zero division
                             print('Removing ', coin['MarketName'], ' not possible, valued at ',
                                   coin['Ask'] / old_coin['Ask'] * 100, '% of the first snapshot price')
                             possible_coin_names.remove(coin['MarketName'])
