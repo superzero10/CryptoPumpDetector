@@ -30,20 +30,16 @@ class BittrexDetector:
                 first_coins_snapshot = self.coins_snapshots_list[0]
                 last_coins_snapshot = self.coins_snapshots_list[-1]
 
-                possible_coin_names = [coin['MarketName'] for coin in last_coins_snapshot]
+                # possible_coin_names = [coin['MarketName'] for coin in last_coins_snapshot]
+                possible_coins = []
 
                 for coin in last_coins_snapshot:
                     if coin['BaseVolume'] >= MIN_BTC_VOLUME:
                         old_coin = next(item for item in first_coins_snapshot if item['MarketName'] == coin['MarketName'])
                         if old_coin is not None and coin['Ask'] > old_coin['Ask'] * MIN_SOAR_THRESHOLD:
-                            print('Bittrex possible pump: ', old_coin['MarketName'], ', was: ', old_coin['Ask'],', is: ', coin['Ask'])
-                        else:
                             if old_coin['Ask'] == 0:
                                 old_coin['Ask'] = 1  # to prevent zero division
-                            print('Removing ', coin['MarketName'], ' not possible, valued at ',
-                                  coin['Ask'] / old_coin['Ask'] * 100, '% of the first snapshot price')
-                            possible_coin_names.remove(coin['MarketName'])
-
+                            possible_coins.append((coin['MarketName'], coin['Ask'], old_coin['Ask'], coin['Ask'] / old_coin['Ask']))
 
                 # for index in range(0, ITERATIONS_COUNT - 1):
                 #     previous_coins_snapshot = self.coins_snapshots_list[index]
@@ -64,10 +60,11 @@ class BittrexDetector:
                 #                 for unwanted_key in unwanted_keys:
                 #                     del current_snapshot_coin[unwanted_key]
 
-                print('Possible coin names at the end ', possible_coin_names)
+                print('Possible coin names at the end: ')
+                for possible_coin in possible_coins:
+                    print(possible_coin)
 
-
-                del self.coins_snapshots_list[0]
                 # delete the oldest coins snapshot
+                del self.coins_snapshots_list[0]
 
             time.sleep(SNAPSHOT_FREQUENCY_SEC)
