@@ -39,7 +39,8 @@ class BittrexDetector:
                         if old_coin is not None and coin['Ask'] > old_coin['Ask'] * MIN_SOAR_THRESHOLD:
                             if old_coin['Ask'] == 0:
                                 old_coin['Ask'] = 1  # to prevent zero division
-                            possible_coins.append((coin['MarketName'], coin['Ask'], old_coin['Ask'], coin['Ask'] / old_coin['Ask']))
+                            possible_coins.append((coin['MarketName'], coin['Ask'], old_coin['Ask'],
+                                                   str(coin['Ask'] / old_coin['Ask'] * 100) + '%'))
 
                 # for index in range(0, ITERATIONS_COUNT - 1):
                 #     previous_coins_snapshot = self.coins_snapshots_list[index]
