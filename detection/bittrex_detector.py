@@ -1,6 +1,7 @@
 import time
 
-from detection.bittrex_constants import MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD, ITERATIONS_COUNT, SNAPSHOT_FREQUENCY_SEC
+from datetime import datetime
+from detection.bittrex_constants import MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD, SNAPSHOT_COUNT, SNAPSHOT_FREQUENCY_SEC
 from exchange_services.bittrex_service import BittrexService
 
 WANTED_KEYS = {'MarketName', 'BaseVolume', 'Bid', 'Ask', 'OpenBuyOrders', 'OpenSellOrders'}
@@ -20,12 +21,8 @@ class BittrexDetector:
             self.coins_snapshots_list.append(self.apiService.fetch_btc_coin_data())
             coins_snapshot_count = len(self.coins_snapshots_list)
 
-            print(coins_snapshot_count, ' snapshots are ready')
-
             # calculate the differences only if all required snapshots have been captured
-            if coins_snapshot_count >= ITERATIONS_COUNT:
-
-                print('now calculating..')
+            if coins_snapshot_count >= SNAPSHOT_COUNT:
 
                 first_coins_snapshot = self.coins_snapshots_list[0]
                 last_coins_snapshot = self.coins_snapshots_list[-1]
@@ -40,7 +37,7 @@ class BittrexDetector:
                             if old_coin['Ask'] == 0:
                                 old_coin['Ask'] = 1  # to prevent zero division
                             possible_coins.append((coin['MarketName'], coin['Ask'], old_coin['Ask'],
-                                                   str(coin['Ask'] / old_coin['Ask'] * 100) + '%'))
+                                                   coin['Ask'] / old_coin['Ask'] * 100))
 
                 # for index in range(0, ITERATIONS_COUNT - 1):
                 #     previous_coins_snapshot = self.coins_snapshots_list[index]
@@ -61,9 +58,9 @@ class BittrexDetector:
                 #                 for unwanted_key in unwanted_keys:
                 #                     del current_snapshot_coin[unwanted_key]
 
-                print('Possible coin names at the end: ')
-                for possible_coin in possible_coins:
-                    print(possible_coin)
+                if possible_coins:
+                    for possible_coin in possible_coins:
+                        print(datetime.now().time(), possible_coin)
 
                 # delete the oldest coins snapshot
                 del self.coins_snapshots_list[0]
