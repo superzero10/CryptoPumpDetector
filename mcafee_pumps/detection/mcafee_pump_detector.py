@@ -9,8 +9,8 @@ from detection.bittrex_detector import BittrexService
 from mcafee_pumps.evaluation.text_evaluator import extract_mentioned_coin_abbr
 from mcafee_pumps.trading.pump_trader import trade_market
 
-TRACKED_USER = 'haydart_'
-TRACKED_USER_ID = ['913148816668454912']
+TRACKED_USER = 'officialmcafee'
+TRACKED_USER_ID = ['961445378']
 LANGUAGES = ['en', 'pl']
 alphanumerics_pattern = re.compile('([^\s\w]|_)+')
 
