@@ -14,6 +14,9 @@ class BittrexDetector:
     coins_snapshots_list = []
 
     def detect(self):
+
+        print('Bittrex detection started')
+
         while True:
             active_btc_pairs = self.apiService.fetch_active_btc_pairs()
             possible_coin_names = []
