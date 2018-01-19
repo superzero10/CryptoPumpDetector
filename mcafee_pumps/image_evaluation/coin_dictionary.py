@@ -2,9 +2,9 @@ import time
 
 from psycopg2._json import Json
 
-from database.database_connection import obtain_db_connection
-from exchange_services.bittrex_service import BittrexService
-from mcafee_pumps.evaluation.words_api_service import fetch_word_definitions_count
+from common.database.database_connection import obtain_db_connection
+from common.exchange_services import BittrexService
+from mcafee_pumps.image_evaluation.words_api_service import fetch_word_definitions_count
 
 COIN_SUFFIX = 'coin'
 WORD_VALUE_DENOMINATOR = 35

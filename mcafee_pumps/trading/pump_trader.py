@@ -1,8 +1,6 @@
-import threading
 import time
 
-from exchange_services.bittrex_wrapper import Bittrex, TIMEINEFFECT_IMMEDIATE_OR_CANCEL, ORDERTYPE_MARKET, \
-    TIMEINEFFECT_GOOD_TIL_CANCELLED, ORDERTYPE_LIMIT
+from common.exchange_services import Bittrex
 
 BTC_PREFIX = "BTC-"
 BTC_TRADE_SIZE = 0.0025

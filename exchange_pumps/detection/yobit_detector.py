@@ -1,9 +1,7 @@
-import datetime
-import time
 import queue
 
 from detection.yobit_constants import MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD
-from exchange_services.yobit_service import YobitService
+from common.exchange_services import YobitService
 
 
 class YobitDetector:

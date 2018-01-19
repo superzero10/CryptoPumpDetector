@@ -6,7 +6,7 @@ from urllib import request
 import pkg_resources
 import twitter
 from detection.bittrex_detector import BittrexService
-from mcafee_pumps.evaluation.text_evaluator import extract_mentioned_coin_abbr
+from mcafee_pumps.image_evaluation.text_evaluator import extract_mentioned_coin_abbr
 from mcafee_pumps.trading.pump_trader import trade_market
 
 TRACKED_USER = 'haydart_'

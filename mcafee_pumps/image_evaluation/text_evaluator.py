@@ -1,5 +1,4 @@
-from mcafee_pumps.detection.coin_dictionary import fetch_word_evaluation_dictionary
-import operator
+from mcafee_pumps.image_evaluation.coin_dictionary import fetch_word_evaluation_dictionary
 
 word_eval_dict = fetch_word_evaluation_dictionary()
 print(word_eval_dict)

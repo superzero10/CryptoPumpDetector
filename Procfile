@@ -1,1 +1,1 @@
-worker: python pump_detector_start.py
+worker: python exchange_pumps/pump_detector_start.py

@@ -7,8 +7,8 @@ yobit_detector = YobitDetector()
 bittrex_detector = BittrexDetector()
 
 
-# yobit_thread = threading.Thread(target=yobit_detector.detect())
-# yobit_thread.start()
+yobit_thread = threading.Thread(target=yobit_detector.detect())
+yobit_thread.start()
 
 bittrex_thread = threading.Thread(target=bittrex_detector.detect())
 bittrex_thread.start()

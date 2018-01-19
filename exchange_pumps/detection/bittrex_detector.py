@@ -2,7 +2,7 @@ import time
 
 from datetime import datetime
 from detection.bittrex_constants import MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD, SNAPSHOT_COUNT, SNAPSHOT_FREQUENCY_SEC
-from exchange_services.bittrex_service import BittrexService
+from common.exchange_services import BittrexService
 
 WANTED_KEYS = {'MarketName', 'BaseVolume', 'Bid', 'Ask', 'OpenBuyOrders', 'OpenSellOrders'}
 BTC_PAIR_PREFIX = 'BTC-'
