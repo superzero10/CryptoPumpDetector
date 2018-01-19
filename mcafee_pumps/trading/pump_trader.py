@@ -13,10 +13,10 @@ BUY_OVERSHOOT = 1.1
 def trade_market(coin):
     print('MARKET TRADE ', coin)
 
-    buy_thread = threading.Thread(target=_buy(coin))
-    buy_thread.start()
-    sell_thread = threading.Thread(target=_sell(coin))
-    sell_thread.start()
+    # buy_thread = threading.Thread(target=_buy(coin))
+    # buy_thread.start()
+    # sell_thread = threading.Thread(target=_sell(coin))
+    # sell_thread.start()
 
 
 def _buy(coin_symbol):

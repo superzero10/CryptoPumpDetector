@@ -1,9 +1,7 @@
 import threading
-import time
 
-from detection.bittrex_detector import BittrexDetector
-from detection.bittrex_constants import SNAPSHOT_FREQUENCY_SEC
-from detection.yobit_detector import YobitDetector
+from exchange_pumps.detection.bittrex_detector import BittrexDetector
+from exchange_pumps.detection.yobit_detector import YobitDetector
 
 yobit_detector = YobitDetector()
 bittrex_detector = BittrexDetector()

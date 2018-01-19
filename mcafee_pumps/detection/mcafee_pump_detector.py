@@ -9,8 +9,8 @@ from detection.bittrex_detector import BittrexService
 from mcafee_pumps.evaluation.text_evaluator import extract_mentioned_coin_abbr
 from mcafee_pumps.trading.pump_trader import trade_market
 
-TRACKED_USER = 'officialmcafee'
-TRACKED_USER_ID = ['961445378']
+TRACKED_USER = 'haydart_'
+TRACKED_USER_ID = ['913148816668454912']
 LANGUAGES = ['en', 'pl']
 alphanumerics_pattern = re.compile('([^\s\w]|_)+')
 
@@ -51,6 +51,7 @@ def analyse_ocr(url):
         request.urlretrieve(url, 'mcafeecoin.jpg')
         api.SetImageFile('mcafeecoin.jpg')
         recognized_text = api.GetUTF8Text()
+        print(recognized_text)
         print(api.AllWordConfidences())
         coin_to_buy = extract_mentioned_coin_abbr(recognized_text)
         trade_market(coin_to_buy)
