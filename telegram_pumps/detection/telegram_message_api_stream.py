@@ -3,6 +3,8 @@ from getpass import getpass
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
 from telethon.tl.types import UpdateNewChannelMessage
+import cv2.text as cv
+
 
 user_phone = '+048698393574'
 
@@ -15,6 +17,8 @@ def initialize_client():
         proxy=None,
         update_workers=4
     )
+
+    cv.computeNMChannels(None, None, None) # only to test the cv2.text existence
 
     print('INFO: Connecting to Telegram Servers...', end='', flush=True)
     client.connect()

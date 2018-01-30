@@ -3,4 +3,4 @@ python-twitter
 requests
 psycopg2
 telethon
-opencv-python
+opencv-contrib-python
