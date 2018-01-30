@@ -18,7 +18,7 @@ def initialize_client():
         update_workers=4
     )
 
-    cv.computeNMChannels(None, None, None) # only to test the cv2.text existence
+    cv.computeNMChannels(13245, 134, 435) # only to test the cv2.text existence
 
     print('INFO: Connecting to Telegram Servers...', end='', flush=True)
     client.connect()
