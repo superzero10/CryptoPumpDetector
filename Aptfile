@@ -6,4 +6,5 @@ libpng12-dev
 libatlas-base-dev
 gfortran
 libsm6
+libice6
 libxext6
