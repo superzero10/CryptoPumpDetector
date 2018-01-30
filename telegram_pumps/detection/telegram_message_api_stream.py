@@ -18,10 +18,9 @@ def initialize_client():
 
     print('INFO: Connecting to Telegram Servers...', end='', flush=True)
     client.connect()
-    print('Done!')
 
     if not client.is_user_authorized():
-        print('INFO: Unauthorized user')
+        print('Unauthorized user')
         client.send_code_request(user_phone)
         code_ok = False
         while not code_ok:
@@ -31,10 +30,9 @@ def initialize_client():
             except SessionPasswordNeededError:
                 password = getpass('Two step verification enabled. Please enter your password: ')
                 code_ok = client.sign_in(password=password)
-    print('INFO: Client initialized successfully!')
+    print('Client initialized')
 
     client.add_update_handler(update_handler)
-    input('Press Enter to stop this!\n')
 
 
 def update_handler(update):

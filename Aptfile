@@ -1,1 +1,5 @@
 libleptonica-dev
+libjpeg8-dev
+libtiff4-dev
+libjasper-dev
+libpng12-dev

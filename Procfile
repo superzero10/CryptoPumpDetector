@@ -1,1 +1,1 @@
-worker: python exchange_pumps/pump_detector_start.py
+worker: python telegram_pumps/detection/telegram_message_api_stream.py
