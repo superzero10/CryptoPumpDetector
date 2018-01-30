@@ -3,3 +3,5 @@ libjpeg8-dev
 libtiff4-dev
 libjasper-dev
 libpng12-dev
+libatlas-base-dev
+gfortran
