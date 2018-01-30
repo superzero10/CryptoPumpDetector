@@ -5,3 +5,5 @@ libjasper-dev
 libpng12-dev
 libatlas-base-dev
 gfortran
+libsm6
+libxext6
