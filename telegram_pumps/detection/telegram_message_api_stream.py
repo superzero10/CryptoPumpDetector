@@ -37,7 +37,7 @@ def initialize_client():
 
     client.add_update_handler(update_handler)
 
-    img = cv_core.imread("image1.jpg")
+    img = cv_core.imread("test_images/image6.jpg")
     text_spotter = cv_ext.TextDetectorCNN_create("textbox.prototxt", "TextBoxes_icdar13.caffemodel")
     rects, out_probs = text_spotter.detect(img)
     vis = img.copy()
@@ -49,6 +49,7 @@ def initialize_client():
             cv_core.rectangle(vis, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (255, 0, 0), 2)
 
     cv_core.imshow("Text detection result", vis)
+    cv_core.waitKey(0)
 
 
 def update_handler(update):
