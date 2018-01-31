@@ -3,8 +3,9 @@ from getpass import getpass
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
 from telethon.tl.types import UpdateNewChannelMessage
-import cv2.text as cv
-
+import numpy as np
+import cv2.text as cv_ext
+import cv2 as cv_core
 
 user_phone = '+048698393574'
 
@@ -17,8 +18,6 @@ def initialize_client():
         proxy=None,
         update_workers=4
     )
-
-    cv.computeNMChannels(13245, 134, 435) # only to test the cv2.text existence
 
     print('INFO: Connecting to Telegram Servers...', end='', flush=True)
     client.connect()
@@ -37,6 +36,19 @@ def initialize_client():
     print('Client initialized')
 
     client.add_update_handler(update_handler)
+
+    img = cv_core.imread("image1.jpg")
+    text_spotter = cv_ext.TextDetectorCNN_create("textbox.prototxt", "TextBoxes_icdar13.caffemodel")
+    rects, out_probs = text_spotter.detect(img)
+    vis = img.copy()
+    threshold = 0.6
+
+    for r in range(np.shape(rects)[0]):
+        if out_probs[r] > threshold:
+            rect = rects[r]
+            cv_core.rectangle(vis, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (255, 0, 0), 2)
+
+    cv_core.imshow("Text detection result", vis)
 
 
 def update_handler(update):
