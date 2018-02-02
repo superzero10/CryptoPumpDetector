@@ -1,5 +1,5 @@
-import requests
 import math
+import requests
 
 BTC_POSTFIX = '_btc'
 PAIRS_PER_REQUEST = 57

@@ -8,7 +8,6 @@ import cv2.text as cv_ext
 import cv2 as cv_core
 import os
 
-
 user_phone = '+048698393574'
 
 
@@ -38,32 +37,6 @@ def initialize_client():
     print('Client initialized')
 
     client.add_update_handler(update_handler)
-
-    process_all_images()
-
-
-def process_all_images():
-
-    for file_name in os.listdir(os.path.join(os.getcwd(), 'test_images')):
-        print(file_name)
-        relative_file_path = 'test_images/' + file_name
-        print(relative_file_path)
-        if file_name.endswith(".jpg"):
-            img = cv_core.imread(relative_file_path, 1)
-
-            text_spotter = cv_ext.TextDetectorCNN_create("textbox.prototxt", "TextBoxes_icdar13.caffemodel")
-            vis = img.copy()
-            rects, out_probs = text_spotter.detect(img)
-            threshold = 0.6
-
-            for r in range(np.shape(rects)[0]):
-                if out_probs[r] > threshold:
-                    rect = rects[r]
-                    cv_core.rectangle(vis, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (255, 0, 0), 2)
-
-            result_file_path = os.path.join(os.getcwd(), 'test_results/' + file_name)
-            print(result_file_path)
-            cv_core.imwrite(result_file_path, vis)
 
 
 def update_handler(update):
