@@ -37,7 +37,9 @@ def initialize_client():
     print('Client initialized')
 
     client.add_update_handler(update_handler)
-    input()
+
+    while True:
+        pass
 
 
 def update_handler(update):
