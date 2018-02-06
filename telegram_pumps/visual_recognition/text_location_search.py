@@ -1,6 +1,7 @@
 import os
 import cv2.text as cv_ext
 import cv2 as cv_core
+import numpy as np
 
 
 def process_all_images():
