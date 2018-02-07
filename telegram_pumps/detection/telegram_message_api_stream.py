@@ -1,5 +1,6 @@
+from getpass import getpass
 from telethon import TelegramClient
-from time import time
+from telethon.errors import SessionPasswordNeededError
 
 user_phone = '+048698393574'
 
@@ -16,28 +17,23 @@ def initialize_client():
     print('INFO: Connecting to Telegram Servers...', end='', flush=True)
     client.connect()
 
-    # if not client.is_user_authorized():
-    #     print('Unauthorized user')
-    #     client.send_code_request(user_phone)
-    #     code_ok = False
-    #     while not code_ok:
-    #         code = input('Enter the auth code: ')
-    #         try:
-    #             code_ok = client.sign_in(user_phone, code)
-    #         except SessionPasswordNeededError:
-    #             password = getpass('Two step verification enabled. Please enter your password: ')
-    #             code_ok = client.sign_in(password=password)
+    if not client.is_user_authorized():
+        print('Unauthorized user')
+        client.send_code_request(user_phone)
+        code_ok = False
+        while not code_ok:
+            code = input('Enter the auth code: ')
+            try:
+                code_ok = client.sign_in(user_phone, code)
+            except SessionPasswordNeededError:
+                password = getpass('Two step verification enabled. Please enter your password: ')
+                code_ok = client.sign_in(password=password)
     print('Client initialized')
 
     client.add_update_handler(update_handler)
 
-    start_time = time()
-
-    while time() > start_time:
-        print('in da lup')
+    while True:
         pass
-
-    print('not in da lup')
 
 
 def update_handler(update):
