@@ -34,7 +34,10 @@ def initialize_client():
     start_time = time()
 
     while time() > start_time:
+        print('in da lup')
         pass
+
+    print('not in da lup')
 
 
 def update_handler(update):
