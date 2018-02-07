@@ -1,12 +1,5 @@
-from getpass import getpass
-
 from telethon import TelegramClient
-from telethon.errors import SessionPasswordNeededError
-from telethon.tl.types import UpdateNewChannelMessage
-import numpy as np
-import cv2.text as cv_ext
-import cv2 as cv_core
-import os
+from time import time
 
 user_phone = '+048698393574'
 
@@ -38,8 +31,9 @@ def initialize_client():
 
     client.add_update_handler(update_handler)
 
-    # don't let the program end, listening to the stream
-    while True:
+    start_time = time()
+
+    while time() > start_time:
         pass
 
 
