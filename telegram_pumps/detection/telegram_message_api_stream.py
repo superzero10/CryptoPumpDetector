@@ -38,13 +38,13 @@ def initialize_client():
 
     client.add_update_handler(update_handler)
 
-    while True:
-        pass
+    # # don't let the program end, listening to the stream
+    # while True:
+    #     pass
 
 
 def update_handler(update):
-    if isinstance(update, UpdateNewChannelMessage):
-        print(update)
+    print(update)
 
 
 if __name__ == '__main__':
