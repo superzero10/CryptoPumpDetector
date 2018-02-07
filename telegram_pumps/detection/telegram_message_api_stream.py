@@ -22,7 +22,7 @@ def initialize_client():
         client.send_code_request(user_phone)
         code_ok = False
         while not code_ok:
-            code = input('Enter the auth code: ')
+            code = 1234
             try:
                 code_ok = client.sign_in(user_phone, code)
             except SessionPasswordNeededError:
