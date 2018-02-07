@@ -38,9 +38,9 @@ def initialize_client():
 
     client.add_update_handler(update_handler)
 
-    # # don't let the program end, listening to the stream
-    # while True:
-    #     pass
+    # don't let the program end, listening to the stream
+    while True:
+        pass
 
 
 def update_handler(update):
