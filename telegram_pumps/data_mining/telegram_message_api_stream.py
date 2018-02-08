@@ -1,6 +1,5 @@
 from getpass import getpass
 
-import sys
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
 
@@ -10,7 +9,7 @@ from telegram_pumps.data_mining.telegram_data_filter import handle_data_updates
 user_phone = '+048698393574'
 
 
-def initialize_client():
+def _initialize_client():
     client = TelegramClient(
         'examplesession',
         136572,
@@ -38,23 +37,23 @@ def initialize_client():
             client.send_code_request(user_phone)
             print('A fresh auth code has been sent. Please update the value in db and deploy')
 
-            # launch an infinite loop to prevent Heroku from retarting over and over again resulting in telegram API ban
-            launch_infinite_loop()
+            # launch an infinite loop to prevent Heroku from restarting the script resulting in a telegram API ban
+            _launch_infinite_loop()
 
     print('Client initialized')
     client.add_update_handler(update_handler)
 
-    launch_infinite_loop()
+    _launch_infinite_loop()
 
 
-def launch_infinite_loop():
+def _launch_infinite_loop():
     while True:
         pass
 
 
-def update_handler(update):
+def _update_handler(update):
     handle_data_updates(update)
 
 
 if __name__ == '__main__':
-    initialize_client()
+    _initialize_client()
