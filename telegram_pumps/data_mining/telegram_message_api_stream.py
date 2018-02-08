@@ -5,6 +5,7 @@ from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
 
 from telegram_pumps.data_mining.launch_mode_provider import is_auth_code_available, obtain_auth_code_from_db
+from telegram_pumps.data_mining.telegram_data_filter import handle_data_updates
 
 user_phone = '+048698393574'
 
@@ -46,7 +47,7 @@ def initialize_client():
 
 
 def update_handler(update):
-    print(update)
+    handle_data_updates(update)
 
 
 if __name__ == '__main__':
