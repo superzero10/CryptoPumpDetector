@@ -1,1 +1,1 @@
-worker: python telegram_pumps/detection/telegram_message_api_stream.py
+worker: python telegram_pumps/data_mining/telegram_message_api_stream.py
