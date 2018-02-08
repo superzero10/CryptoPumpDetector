@@ -34,7 +34,7 @@ def initialize_client():
                     password = getpass('Two step verification enabled. Please enter your password: ')
                     code_ok = client.sign_in(password=password)
         else:
-            # client.send_code_request(user_phone)
+            client.send_code_request(user_phone)
             print('A fresh auth code has been sent. Please update the value in db and deploy')
             sys.exit()
 

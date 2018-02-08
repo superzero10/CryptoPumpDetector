@@ -17,6 +17,7 @@ def __fetch_auth_data(auth_code_requested):
     db_connection.close()
 
     if auth_code_requested:
-        return auth_data[0]
+        # a list containing one tuple
+        return auth_data[0][0]
     else:
-        return auth_data[1]
+        return auth_data[0][1]
