@@ -37,11 +37,17 @@ def initialize_client():
         else:
             client.send_code_request(user_phone)
             print('A fresh auth code has been sent. Please update the value in db and deploy')
-            sys.exit()
+
+            # launch an infinite loop to prevent Heroku from retarting over and over again resulting in telegram API ban
+            launch_infinite_loop()
 
     print('Client initialized')
     client.add_update_handler(update_handler)
 
+    launch_infinite_loop()
+
+
+def launch_infinite_loop():
     while True:
         pass
 
