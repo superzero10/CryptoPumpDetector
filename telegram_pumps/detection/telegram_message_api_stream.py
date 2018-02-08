@@ -22,6 +22,7 @@ def initialize_client():
         client.send_code_request(user_phone)
         code_ok = False
         while not code_ok:
+            print('the code is: ', open('auth_code.txt').readline())
             code = open('auth_code.txt').readline()
             try:
                 code_ok = client.sign_in(user_phone, code)
