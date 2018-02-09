@@ -1,11 +1,11 @@
-from common.database.database_connection import obtain_db_connection
+from common.database.database_connection import create_db_connection
 
 
 def fetch_all_groups(fresh_state_needed):
     groups_list = []
 
     if fresh_state_needed:
-        db_connection = obtain_db_connection()
+        db_connection = create_db_connection()
         db_cursor = db_connection.cursor()
         db_cursor.execute('SELECT group_id, signal_type FROM pump_groups')
         groups_list = db_cursor.fetchall()

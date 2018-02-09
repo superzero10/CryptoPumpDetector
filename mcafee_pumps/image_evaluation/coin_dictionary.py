@@ -1,7 +1,7 @@
 import time
 
 from psycopg2._json import Json
-from common.database.database_connection import obtain_db_connection
+from common.database.database_connection import create_db_connection
 from mcafee_pumps.image_evaluation.words_api_service import fetch_word_definitions_count
 
 COIN_SUFFIX = 'coin'
@@ -11,7 +11,7 @@ FORBIDDEN_PART_WORDS = ['Breakout', 'Ethereum', 'Internet', 'Basic', 'Status', '
 
 def create_coin_keywords_eval_dict():
     market_names_list = BittrexService().fetch_active_btc_pairs_with_names()
-    db_connection = obtain_db_connection()
+    db_connection = create_db_connection()
     markets_eval_dict = []
 
     for market in market_names_list:
@@ -58,7 +58,7 @@ def create_coin_keywords_eval_dict():
 
 
 def fetch_word_evaluation_dictionary():
-    db_connection = obtain_db_connection()
+    db_connection = create_db_connection()
     db_cursor = db_connection.cursor()
     db_cursor.execute('SELECT dict FROM coins')
     word_eval_dict = db_cursor.fetchone()

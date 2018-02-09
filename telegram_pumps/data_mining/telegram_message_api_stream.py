@@ -3,7 +3,7 @@ from getpass import getpass
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
 
-from telegram_pumps.data_mining.launch_mode_provider import is_auth_code_available, obtain_auth_code_from_db
+from telegram_pumps.data_mining.launch_mode_provider import is_auth_code_available, fetch_auth_code_from_db
 from telegram_pumps.data_mining.telegram_data_filter import handle_data_updates
 
 user_phone = '+048698393574'
@@ -27,7 +27,7 @@ def _initialize_client():
         if is_auth_code_available():
             code_ok = False
             while not code_ok:
-                auth_code = obtain_auth_code_from_db()
+                auth_code = fetch_auth_code_from_db()
                 try:
                     code_ok = client.sign_in(user_phone, auth_code)
                 except SessionPasswordNeededError:
