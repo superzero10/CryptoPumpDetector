@@ -14,6 +14,7 @@ def __fetch_auth_data(auth_code_requested):
     db_cursor = db_connection.cursor()
     db_cursor.execute('SELECT code, launch FROM auth_code')
     auth_data = db_cursor.fetchall()
+    print('auth_data = ', auth_data, 'auth_code_requested = ', auth_code_requested)
     db_connection.close()
 
     if auth_code_requested:
