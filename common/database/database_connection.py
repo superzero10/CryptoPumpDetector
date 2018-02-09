@@ -19,7 +19,7 @@ def create_db_connection():
         database=url_path,
         user=url.username,
         password=url.password,
-        host=url.hostname,
+        host="/tmp/",
         port=url.port
     )
 
