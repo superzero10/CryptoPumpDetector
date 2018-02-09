@@ -24,7 +24,7 @@ def _initialize_client():
     if not client.is_user_authorized():
         print('Unauthorized user')
 
-        if is_auth_code_available():
+        if not is_auth_code_available():
             code_ok = False
             while not code_ok:
                 auth_code = fetch_auth_code_from_db()
