@@ -30,7 +30,7 @@ def create_db_connection():
             database=url_path,
             user=url.username,
             password=url.password,
-            host="/tmp/",
+            host="/tmp",
             port=url.port
         )
 
