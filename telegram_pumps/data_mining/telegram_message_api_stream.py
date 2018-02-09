@@ -41,7 +41,7 @@ def _initialize_client():
             _launch_infinite_loop()
 
     print('Client initialized')
-    client.add_update_handler(update_handler)
+    client.add_update_handler(_update_handler)
 
     _launch_infinite_loop()
 

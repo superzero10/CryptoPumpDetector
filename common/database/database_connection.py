@@ -1,6 +1,7 @@
 import os
 from urllib import parse
 import psycopg2
+from psycopg2._psycopg import OperationalError
 
 parse.uses_netloc.append('postgres')
 db_name = os.environ.get('DATABASE_URL')
@@ -15,12 +16,22 @@ def create_db_connection():
         url_path = url.path
 
     print(url_path)
-    connection = psycopg2.connect(
-        database=url_path,
-        user=url.username,
-        password=url.password,
-        host="/tmp/",
-        port=url.port
-    )
+
+    try:
+        connection = psycopg2.connect(
+            database=url_path,
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+    except OperationalError:
+        connection = psycopg2.connect(
+            database=url_path,
+            user=url.username,
+            password=url.password,
+            host="/tmp/",
+            port=url.port
+        )
 
     return connection
