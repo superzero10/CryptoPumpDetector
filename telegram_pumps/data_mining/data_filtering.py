@@ -26,18 +26,18 @@ class MessagesHandler:
     def handle_data_updates(self, message):
         group_id = message.to_id.channel_id
 
-        if group_id not in self._all_groups_id_list:
-            print('- Message from a non-listed group, saving message and group to db..')
-            save_unlisted_group(group_id)
-            self.__refresh_fetched_groups()
-            save_unknown_group_message(message)
-
-        if group_id in self._unknown_signal_groups:
-            print('- Message from a group whose signal type is unknown, saving message to db..')
-            save_unknown_group_message(message)
-
         if group_id in self._text_signal_groups:
             self.__process_text_signal_group_message(message)
 
         if group_id in self._image_signal_groups:
             self.__process_image_signal_group_message(message)
+
+        if group_id in self._unknown_signal_groups:
+            print('- Message from a group whose signal type is unknown, saving message to db..')
+            save_unknown_group_message(message)
+
+        if group_id not in self._all_groups_id_list:
+            print('- Message from a non-listed group, saving message and group to db..')
+            save_unlisted_group(group_id)
+            self.__refresh_fetched_groups()
+            save_unknown_group_message(message)
