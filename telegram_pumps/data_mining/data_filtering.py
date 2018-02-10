@@ -11,7 +11,7 @@ def handle_data_updates(message):
     group_id = message.to_id.channel_id
 
     if group_id not in all_groups_id_list:
-        print('- Message from non-listed group, saving message to db..')
+        print('- Message from a non-listed group, saving message to db..')
         save_unlisted_group(group_id)
         save_unknown_group_message(message)
 

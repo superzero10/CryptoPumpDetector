@@ -5,7 +5,7 @@ from telethon.errors import SessionPasswordNeededError
 from telethon.tl.types import UpdateNewChannelMessage
 
 from telegram_pumps.data_mining.launch_mode_provider import is_auth_code_available, fetch_auth_code_from_db
-from telegram_pumps.data_mining.telegram_data_filter import handle_data_updates
+from telegram_pumps.data_mining.data_filtering import handle_data_updates
 
 user_phone = '+048698393574'
 
