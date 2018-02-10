@@ -16,15 +16,15 @@ def handle_data_updates(message):
         print('Message from non-listed group or from a group whose signal type is unknown, saving message to db..')
 
     if message_channel_id in text_signal_groups:
-        process_text_signal_group_message(message)
+        _process_text_signal_group_message(message)
 
     if message_channel_id in image_signal_groups:
-        process_image_signal_group_message(message)
+        _process_image_signal_group_message(message)
 
 
-def process_text_signal_group_message(message):
-    pass
+def _process_text_signal_group_message(message):
+    print('Processing a message from a text signal group')
 
 
-def process_image_signal_group_message(message):
-    pass
+def _process_image_signal_group_message(message):
+    print('Processing a message from an image signal group')
