@@ -5,9 +5,10 @@ from telethon.errors import SessionPasswordNeededError
 from telethon.tl.types import UpdateNewChannelMessage
 
 from telegram_pumps.data_mining.launch_mode_provider import is_auth_code_available, fetch_auth_code_from_db
-from telegram_pumps.data_mining.data_filtering import handle_data_updates
+from telegram_pumps.data_mining.data_filtering import MessagesHandler
 
 user_phone = '+048698393574'
+messages_handler = MessagesHandler()
 
 
 def _initialize_client():
@@ -56,7 +57,7 @@ def _launch_infinite_loop():
 
 def _update_handler(update):
     if isinstance(update, UpdateNewChannelMessage):
-        handle_data_updates(update.message)
+        messages_handler.handle_data_updates(update.message)
 
 
 if __name__ == '__main__':

@@ -33,4 +33,9 @@ def _clean_message(message_dict):
 
 
 def save_unlisted_group(group_id):
-    pass
+    db_connection = create_db_connection()
+    db_cursor = db_connection.cursor()
+    db_cursor.execute('INSERT into pump_groups (group_id, name, signal_type) values (%s, %s, %s)',
+                      [group_id, 'ADDED USING BOT', 'unknown'])
+    db_connection.commit()
+    db_connection.close()
