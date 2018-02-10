@@ -1,3 +1,5 @@
+import time
+
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.unknown_tracing.unknown_group_message_tracer import save_unknown_group_message
 
@@ -9,6 +11,7 @@ unknown_signal_groups = fetch_unknown_signal_groups(True)
 
 def handle_data_updates(message):
     print(message)
+
     message_channel_id = message.to_id.channel_id
 
     if message_channel_id not in all_groups_id_list:
