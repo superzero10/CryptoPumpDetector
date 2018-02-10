@@ -2,11 +2,11 @@ from common.database.database_connection import create_db_connection
 
 
 def is_auth_code_available():
-    __fetch_auth_data(False)
+    return __fetch_auth_data(False)
 
 
 def fetch_auth_code_from_db():
-    __fetch_auth_data(True)
+    return __fetch_auth_data(True)
 
 
 def __fetch_auth_data(auth_code_requested):
