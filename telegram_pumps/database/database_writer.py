@@ -3,7 +3,7 @@ from psycopg2._json import Json
 from time import time
 
 keys_to_remove = ['fwd_from', 'date', 'to_id', 'media_unread', 'out', 'mentioned', 'via_bot_id', 'reply_to_msg_id',
-                  'id', 'edit_date', 'post_author', 'views', 'from_id', 'entities']
+                  'id', 'edit_date', 'post_author', 'views', 'from_id', 'entities', 'bytes']
 
 
 def save_unknown_group_message(cleaned_message):
