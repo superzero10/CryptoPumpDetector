@@ -1,11 +1,10 @@
 from getpass import getpass
 
-import psycopg2
+import os
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
 from telethon.tl.types import UpdateNewChannelMessage
 
-from common.database.database_connection import create_db_connection
 from telegram_pumps.data_mining.launch_mode_provider import is_auth_code_available, fetch_auth_code_from_db, \
     save_session_file, save_phone_code_hash, fetch_phone_code_hash_from_db
 from telegram_pumps.data_mining.message_handler import MessagesHandler
@@ -22,6 +21,13 @@ def _initialize_client():
         proxy=None,
         update_workers=4
     )
+
+    # print('INFO: Fetching session file from database if existent...', end='')
+    # open('telegram.session', 'wb').write(fetch_session_file_content())
+
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    for f in files:
+        print(f)
 
     print('INFO: Connecting to Telegram Servers...', end='', flush=True)
     client.connect()

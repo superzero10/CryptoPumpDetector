@@ -14,6 +14,16 @@ def save_session_file():
     db_connection.close()
 
 
+def fetch_session_file_content():
+    db_connection = create_db_connection()
+    cursor = db_connection.cursor()
+    cursor.execute("SELECT (session_blob) FROM session_blob LIMIT 1;")
+    session_file_content = cursor.fetchone()
+    print(session_file_content[0])
+    db_connection.close()
+    return session_file_content[0]
+
+
 def save_phone_code_hash(hash):
     db_connection = create_db_connection()
     cursor = db_connection.cursor()
