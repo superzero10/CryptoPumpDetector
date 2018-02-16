@@ -42,6 +42,8 @@ def _initialize_client():
                 phone_code_hash = fetch_phone_code_hash_from_db()
                 print(phone_code_hash)
                 try:
+                    print('authcode used = ', auth_code)
+                    print('codehash used = ', phone_code_hash)
                     code_ok = client.sign_in(user_phone, auth_code, phone_code_hash=phone_code_hash)
                 except SessionPasswordNeededError:
                     password = getpass('Two step verification enabled. Please enter your password: ')
