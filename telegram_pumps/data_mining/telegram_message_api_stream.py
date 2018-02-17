@@ -11,29 +11,28 @@ from telegram_pumps.data_mining.message_handler import MessagesHandler
 from telegram_pumps.data_mining.remote_session import retrieve_remote_session
 
 user_phone = os.environ.get('USER_PHONE')
-print(os.environ.get('USER_PHONE'))
 messages_handler = MessagesHandler()
 
 
 def _initialize_client():
-    retrieve_remote_session()
-    print_directory_files()
+    # retrieve_remote_session()
+    # print_directory_files()
 
-    client = TelegramClient(
-        session='login',
-        api_id=os.environ.get('API_ID'),
-        api_hash=os.environ.get('API_HASH'),
-        proxy=None,
-        update_workers=4
-    )
+    client = TelegramClient('login.session', os.environ["API_ID"], os.environ["API_HASH"]).start()
 
-    print('INFO: Connecting to Telegram Servers...', end='', flush=True)
-    client.connect()
+    # client = TelegramClient(
+    #     session='login',
+    #     api_id=os.environ.get('API_ID'),
+    #     api_hash=os.environ.get('API_HASH'),
+    #     proxy=None,
+    #     update_workers=4
+    # )
+    #
+    # print('INFO: Connecting to Telegram Servers...', end='', flush=True)
+    # client.connect()
 
-    if not client.is_user_authorized():
-        print('Unauthorized user')
-
-
+    # if not client.is_user_authorized():
+    # print('Unauthorized user')
     #
     #     if is_auth_code_available():
     #         code_ok = False
@@ -61,7 +60,7 @@ def _initialize_client():
     #         _launch_infinite_loop()
 
     print('Client initialized, waiting for updates.')
-    client.add_update_handler(_update_handler)
+    # client.add_update_handler(_update_handler)
     _launch_infinite_loop()
 
 
