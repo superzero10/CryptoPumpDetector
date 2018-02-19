@@ -1,5 +1,6 @@
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import save_unknown_group_message, save_unlisted_group
+from telegram_pumps.pump_coin_extraction.signal_message_recognition import PumpCoinExtractor
 
 
 class MessagesHandler:
@@ -7,6 +8,7 @@ class MessagesHandler:
     _text_signal_groups = []
     _image_signal_groups = []
     _unknown_signal_groups = []
+    _coin_extractor = PumpCoinExtractor()
 
     def __init__(self):
         self.__refresh_fetched_groups()
@@ -18,7 +20,7 @@ class MessagesHandler:
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
     def __process_text_signal_group_message(self, message):
-        print('- Message from a text signal group \n')
+        self._coin_extractor.is_probable_pump_time_announcement(message)
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')
