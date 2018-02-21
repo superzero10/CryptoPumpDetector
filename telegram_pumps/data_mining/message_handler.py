@@ -28,6 +28,8 @@ class MessagesHandler:
         if 'joinchat' in message:
             return None
 
+        print("Processing message")
+
         self.__process_text_signal_group_message(message_text)
 
         # if group_id in self._text_signal_groups:
