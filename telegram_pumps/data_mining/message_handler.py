@@ -44,7 +44,13 @@ class MessagesHandler:
 
     def __process_text_signal_group_message(self, message_text):
         self._coin_extractor.extract_pump_signal(message_text)
-        self._coin_extractor.extract_minutes_to_pump(message_text)
+
+        minutes_to_pump = self._coin_extractor.extract_minutes_to_pump(message_text)
+        if minutes_to_pump:
+            print(
+                '/////////////////////////////////////////////////////////////////////////////////\nFOUND PUMP ANNOUNCEMENT: ',
+                minutes_to_pump,
+                ' MINUTES TO PUMP\n/////////////////////////////////////////////////////////////////////////////////')
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')

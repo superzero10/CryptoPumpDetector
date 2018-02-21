@@ -6,4 +6,3 @@ def retrieve_remote_session():
         response = requests.get("https://raw.githubusercontent.com/Haydart/PDsession/master/telegram_pumps"
                                 "/data_mining/login.session", verify=False)
         f.write(response.content)
-
