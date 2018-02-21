@@ -1,14 +1,11 @@
 import os
-from getpass import getpass
-from telegram_pumps.print_cwd_files import print_directory_files
+
 from telethon import TelegramClient
-from telethon.errors import SessionPasswordNeededError
 from telethon.tl.types import UpdateNewChannelMessage
 
-from telegram_pumps.data_mining.launch_mode_provider import is_auth_code_available, fetch_auth_code_from_db, \
-    save_session_file, save_phone_code_hash, fetch_phone_code_hash_from_db
 from telegram_pumps.data_mining.message_handler import MessagesHandler
 from telegram_pumps.data_mining.remote_session import retrieve_remote_session
+from telegram_pumps.print_cwd_files import print_directory_files
 
 user_phone = os.environ.get('USER_PHONE')
 messages_handler = MessagesHandler()
@@ -71,6 +68,7 @@ def _launch_infinite_loop():
 
 def _update_handler(update):
     if isinstance(update, UpdateNewChannelMessage):
+        print(update)
         messages_handler.handle_data_updates(update.message)  # passing a whole Message object
 
 
