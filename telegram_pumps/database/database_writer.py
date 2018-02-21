@@ -2,11 +2,10 @@ from common.database.database_connection import create_db_connection
 from psycopg2._json import Json
 from time import time
 
-keys_to_remove = ['fwd_from', 'date', 'to_id', 'media_unread', 'out', 'mentioned', 'via_bot_id', 'reply_to_msg_id',
-                  'id', 'edit_date', 'post_author', 'views', 'from_id', 'entities', 'bytes']
-
 
 class DatabaseWriter:
+    _keys_to_remove = ['fwd_from', 'date', 'to_id', 'media_unread', 'out', 'mentioned', 'via_bot_id', 'reply_to_msg_id',
+                      'id', 'edit_date', 'post_author', 'views', 'from_id', 'entities', 'bytes']
 
     def save_unknown_group_message(self, cleaned_message):
         message_dict = cleaned_message.to_dict(recursive=True)
@@ -29,7 +28,7 @@ class DatabaseWriter:
         if not isinstance(message_dict, dict):
             return message_dict
         return {key: value for key, value in ((key, self.__clean_message(value)) for key, value in message_dict.items()) if
-                key not in keys_to_remove}
+                key not in self._keys_to_remove}
 
     def save_unlisted_group(self, group_id):
         db_connection = create_db_connection()
