@@ -4,7 +4,7 @@ import re
 class PumpCoinExtractor:
     _letters_pattern = r'([^\s\w]|_)+'
     _emoji_removing_pattern = r'\\[a-z0-9]{5}'
-    _pump_minutes_pattern = r'\d+[" "]*min|минут'
+    _pump_minutes_pattern = r'\d+[" "]*min|\d+[" "]*минут'
     _coin_extraction_pattern = r'(?<=\b\w)[ ]{1,}(?![ ]{0,}\w{2})'
 
     def extract_pump_signal(self, message_text):
@@ -35,3 +35,6 @@ class PumpCoinExtractor:
         if not found_substrings:
             return None
         return ''.join((filter(str.isdigit, found_substrings[0])))
+
+
+print(PumpCoinExtractor().extract_minutes_to_pump("5 минут до пампа Всем удачи 5 minutes to pump Good luck "))
