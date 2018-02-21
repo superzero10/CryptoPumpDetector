@@ -10,7 +10,6 @@ class PumpCoinExtractor:
     def extract_pump_signal(self, message_text):
         print(message_text)
         stripped_message_text = self.__remove_special_characters(message_text)
-        print(stripped_message_text)
         normalized_message_text = self.__normalize_message(stripped_message_text)
         print(normalized_message_text)
 
@@ -35,6 +34,5 @@ class PumpCoinExtractor:
             return None
         return ''.join((filter(str.isdigit, found_substrings[0])))
 
-
-PumpCoinExtractor().extract_pump_signal("минут минут\\ude80минут \\ude80A \\ude80C\\ude80   S ++ / //b/[t;yj][3")
+# PumpCoinExtractor().extract_pump_signal("минут минут\\ude80минут \\ude80A \\ude80C\\ude80   S ++ / //b/[t;yj][3")
 # PumpCoinExtractor().extract_pump_signal("минут \\ude80")

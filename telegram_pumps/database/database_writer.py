@@ -15,7 +15,7 @@ class DatabaseWriter:
 
         try:
             cleaned_message_dict = self.__clean_message(message_dict)
-            print('Message after cleaning', cleaned_message_dict, '\n')
+            # print('Message after cleaning', cleaned_message_dict, '\n')
 
             db_cursor = db_connection.cursor()
             db_cursor.execute('INSERT into traced_messages (timestamp, chat_id, full_message) values (%s, %s, %s)',
