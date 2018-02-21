@@ -25,8 +25,10 @@ class MessagesHandler:
         group_id = message.to_id.channel_id
         message_text = message.message
 
-        if group_id in self._text_signal_groups:
-            self.__process_text_signal_group_message(message_text)
+        self.__process_text_signal_group_message(message_text)
+
+        # if group_id in self._text_signal_groups:
+        # self.__process_text_signal_group_message(message_text)
 
         if group_id in self._image_signal_groups:
             self.__process_image_signal_group_message(message)
