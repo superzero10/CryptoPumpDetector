@@ -14,8 +14,8 @@ class PumpCoinExtractor:
         print('MESSAGE AFTER PROCESSING:', normalized_message_text)
 
     def __remove_special_characters(self, message):
-        message_without_emoji = re.sub(self._emoji_removing_pattern, '', message).strip()
-        message_without_special_characters = re.sub(self._letters_pattern, '', message_without_emoji)
+        message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
+        message_without_special_characters = re.sub(self._letters_pattern, ' ', message_without_emoji)
         message_without_newlines = message_without_special_characters.replace('\n', ' ').replace('\r', '')
         return re.sub('[ \t\n]+', ' ', message_without_newlines)
 
