@@ -25,10 +25,8 @@ class MessagesHandler:
         group_id = message.to_id.channel_id
         message_text = message.message
 
-        if 'joinchat' in message:
+        if 'joinchat' in message_text:
             return None
-
-        print("Processing message")
 
         self.__process_text_signal_group_message(message_text)
 
