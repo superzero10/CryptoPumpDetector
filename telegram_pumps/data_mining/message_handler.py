@@ -1,5 +1,5 @@
 from telegram_pumps.database.database_retriever import *
-from telegram_pumps.database.database_writer import save_unknown_group_message, save_unlisted_group
+from telegram_pumps.database.database_writer import DatabaseWriter
 from telegram_pumps.pump_coin_extraction.signal_message_recognition import PumpCoinExtractor
 
 
@@ -8,7 +8,9 @@ class MessagesHandler:
     _text_signal_groups = []
     _image_signal_groups = []
     _unknown_signal_groups = []
+
     _coin_extractor = PumpCoinExtractor()
+    _database_writer = DatabaseWriter()
 
     def __init__(self):
         self.__refresh_fetched_groups()
@@ -21,25 +23,26 @@ class MessagesHandler:
 
     def handle_data_updates(self, message):
         group_id = message.to_id.channel_id
+        message_text = message.message
 
         if group_id in self._text_signal_groups:
-            self.__process_text_signal_group_message(message)
+            self.__process_text_signal_group_message(message_text)
 
         if group_id in self._image_signal_groups:
             self.__process_image_signal_group_message(message)
 
         if group_id in self._unknown_signal_groups:
-            print('- Message from a group whose signal type is unknown, saving message to db..')
-            save_unknown_group_message(message)
+            self._database_writer.save_unknown_group_message(message)
 
         if group_id not in self._all_groups_id_list:
             print('- Message from a non-listed group, saving message and group to db..')
-            save_unlisted_group(group_id)
+            self._database_writer.save_unlisted_group(group_id)
             self.__refresh_fetched_groups()
-            save_unknown_group_message(message)
+            self._database_writer.save_unknown_group_message(message)
 
     def __process_text_signal_group_message(self, message):
-        self._coin_extractor.extract_minutes_to_pump(message)
+        self._coin_extractor.extract_pump_signal(message.message)
+        self._coin_extractor.extract_minutes_to_pump(message.message)
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')

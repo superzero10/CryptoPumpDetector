@@ -70,8 +70,8 @@ def _launch_infinite_loop():
 
 
 def _update_handler(update):
-    # if isinstance(update, UpdateNewChannelMessage):
-    messages_handler.handle_data_updates(update.message)
+    if isinstance(update, UpdateNewChannelMessage):
+        messages_handler.handle_data_updates(update.message)  # passing a whole Message object
 
 
 if __name__ == '__main__':
