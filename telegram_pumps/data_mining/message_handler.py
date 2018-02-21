@@ -25,8 +25,6 @@ class MessagesHandler:
         group_id = message.to_id.channel_id
         message_text = message.message
 
-        print(message_text, end=" ")
-
         self.__process_text_signal_group_message(message_text)
 
         # if group_id in self._text_signal_groups:
@@ -44,9 +42,9 @@ class MessagesHandler:
             self.__refresh_fetched_groups()
             self._database_writer.save_unknown_group_message(message)
 
-    def __process_text_signal_group_message(self, message):
-        self._coin_extractor.extract_pump_signal(message.message)
-        self._coin_extractor.extract_minutes_to_pump(message.message)
+    def __process_text_signal_group_message(self, message_text):
+        self._coin_extractor.extract_pump_signal(message_text)
+        self._coin_extractor.extract_minutes_to_pump(message_text)
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')
