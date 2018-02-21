@@ -31,8 +31,6 @@ class PumpCoinExtractor:
             return self.__find_minutes_to_pump(normalized_message_text)
 
     def __find_minutes_to_pump(self, message):
-        if 'joinchat' in message:
-            return None
         found_substrings = re.findall(self._pump_minutes_pattern, message)
         if not found_substrings:
             return None
