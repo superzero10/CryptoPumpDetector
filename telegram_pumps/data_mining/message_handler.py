@@ -19,12 +19,6 @@ class MessagesHandler:
         self._image_signal_groups = fetch_image_signal_groups(True)
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
-    def __process_text_signal_group_message(self, message):
-        self._coin_extractor.is_probable_pump_time_announcement(message)
-
-    def __process_image_signal_group_message(self, message):
-        print('- Message from an image signal group \n')
-
     def handle_data_updates(self, message):
         group_id = message.to_id.channel_id
 
@@ -43,3 +37,9 @@ class MessagesHandler:
             save_unlisted_group(group_id)
             self.__refresh_fetched_groups()
             save_unknown_group_message(message)
+
+    def __process_text_signal_group_message(self, message):
+        self._coin_extractor.extract_minutes_to_pump(message)
+
+    def __process_image_signal_group_message(self, message):
+        print('- Message from an image signal group \n')
