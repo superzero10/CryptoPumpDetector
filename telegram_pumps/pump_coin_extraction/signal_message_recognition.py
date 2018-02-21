@@ -15,7 +15,8 @@ class PumpCoinExtractor:
 
     def __remove_special_characters(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, '', message)
-        return re.sub(self._letters_pattern, '', message_without_emoji)
+        message_without_special_characters = re.sub(self._letters_pattern, '', message_without_emoji)
+        return message_without_special_characters.replace('\n', ' ').replace('\r', '')
 
     def __normalize_message(self, message):
         return re.sub(self._coin_extraction_pattern, '', message)
@@ -33,6 +34,3 @@ class PumpCoinExtractor:
         if not found_substrings:
             return None
         return ''.join((filter(str.isdigit, found_substrings[0])))
-
-# PumpCoinExtractor().extract_pump_signal("минут минут\\ude80минут \\ude80A \\ude80C\\ude80   S ++ / //b/[t;yj][3")
-# PumpCoinExtractor().extract_pump_signal("минут \\ude80")
