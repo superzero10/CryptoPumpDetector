@@ -23,18 +23,15 @@ class PumpCoinExtractor:
         return re.sub(self._coin_extraction_pattern, '', message)
 
     def extract_minutes_to_pump(self, message_text):
-        normalized_message_text = self.__remove_special_characters(message_text).lower().strip()
+        cleaned_message_text = self.__remove_special_characters(message_text).lower().strip()
 
-        if normalized_message_text.isdigit():
-            return normalized_message_text  # some groups like countdown using messages which contain only the minutes
+        if cleaned_message_text.isdigit() and 0 < int(cleaned_message_text) < 200:
+            return cleaned_message_text  # some groups like countdown using messages which contain only the minutes
         else:
-            return self.__find_minutes_to_pump(normalized_message_text)
+            return self.__find_minutes_to_pump(cleaned_message_text)
 
     def __find_minutes_to_pump(self, message):
         found_substrings = re.findall(self._pump_minutes_pattern, message)
         if not found_substrings:
             return None
         return ''.join((filter(str.isdigit, found_substrings[0])))
-
-
-print(PumpCoinExtractor().extract_minutes_to_pump("5 минут до пампа Всем удачи 5 minutes to pump Good luck "))
