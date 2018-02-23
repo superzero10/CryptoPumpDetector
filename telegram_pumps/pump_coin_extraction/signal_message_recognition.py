@@ -8,7 +8,6 @@ class MessageInfoExtractor:
     _coin_extraction_pattern = r'(?<=\b\w)[ ]{1,}(?![ ]{0,}\w{2})'
 
     def extract_pump_signal(self, message_text):
-        print('MESSAGE BEFORE PROCESSING:', message_text)
         stripped_message_text = self.__remove_special_characters(message_text)
         normalized_message_text = self.__normalize_message(stripped_message_text)
         print('MESSAGE AFTER PROCESSING:', normalized_message_text)

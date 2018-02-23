@@ -14,7 +14,7 @@ class MessageProcessor:
     _expected_pump_timestamps = {}  # (group_id, timestamp)
     _expected_pump_exchanges = {}  # (group_id, dict{ex1, ex2, ex3])
 
-    _coin_extractor = MessageInfoExtractor()
+    _info_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
 
     def __init__(self):
@@ -51,13 +51,13 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def __process_text_signal_group_message(self, message_text, group_id):
-        self._coin_extractor.extract_pump_signal(message_text)
+        self._info_extractor.extract_pump_signal(message_text)
 
         self.__handle_expected_pump_time(group_id, message_text)
         self.__handle_expected_pump_exchange(group_id, message_text)
 
     def __handle_expected_pump_time(self, group_id, message_text):
-        minutes_to_pump = self._coin_extractor.extract_minutes_to_pump(message_text)
+        minutes_to_pump = self._info_extractor.extract_minutes_to_pump(message_text)
         if minutes_to_pump:
             print('FOUND PUMP ANNOUNCEMENT: ', minutes_to_pump, ' MINUTES TO PUMP\n')
             self._expected_pump_timestamps.pop(group_id, None)
