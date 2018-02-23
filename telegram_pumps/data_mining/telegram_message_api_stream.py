@@ -3,7 +3,7 @@ import os
 from telethon import TelegramClient
 from telethon.tl.types import UpdateNewChannelMessage
 
-from telegram_pumps.data_mining.message_handler import MessagesHandler
+from telegram_pumps.data_mining.message_processor import MessagesHandler
 from telegram_pumps.data_mining.remote_session import retrieve_remote_session
 from telegram_pumps.print_cwd_files import print_directory_files
 

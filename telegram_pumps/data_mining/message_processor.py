@@ -9,6 +9,8 @@ class MessagesHandler:
     _image_signal_groups = []
     _unknown_signal_groups = []
 
+    _expected_pumps = {}
+
     _coin_extractor = PumpCoinExtractor()
     _database_writer = DatabaseWriter()
 
@@ -28,7 +30,7 @@ class MessagesHandler:
         if 'joinchat' in message_text or 't.me/' in message_text or not message_text:
             return None
 
-        self.__process_text_signal_group_message(message_text)
+        self.__process_text_signal_group_message(message_text, group_id)
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -45,15 +47,22 @@ class MessagesHandler:
             self.__refresh_fetched_groups()
             self._database_writer.save_unknown_group_message(message)
 
-    def __process_text_signal_group_message(self, message_text):
+    def __process_text_signal_group_message(self, message_text, group_id):
         self._coin_extractor.extract_pump_signal(message_text)
 
+        self.__handle_expected_pump_time(group_id, message_text)
+        self.__handle_expected_pump_exchange(group_id, message_text)
+
+    def __handle_expected_pump_time(self, group_id, message_text):
         minutes_to_pump = self._coin_extractor.extract_minutes_to_pump(message_text)
         if minutes_to_pump:
-            print(
-                '/////////////////////////////////////////////////////////////////////////////////\nFOUND PUMP ANNOUNCEMENT: ',
-                minutes_to_pump,
-                ' MINUTES TO PUMP\n/////////////////////////////////////////////////////////////////////////////////')
+            print('FOUND PUMP ANNOUNCEMENT: ', minutes_to_pump, ' MINUTES TO PUMP\n')
+            self._expected_pumps.pop(group_id, None)
+            self._expected_pumps.update({group_id, minutes_to_pump})
+            print("EXPECTED PUMPS SET: ", self._expected_pumps)
+
+    def __handle_expected_pump_exchange(self, group_id, message_text):
+        pass
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')
