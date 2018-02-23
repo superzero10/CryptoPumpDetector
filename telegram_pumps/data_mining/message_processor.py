@@ -9,7 +9,10 @@ class MessageProcessor:
     _image_signal_groups = []
     _unknown_signal_groups = []
 
-    _exchange_names = ['yobit', 'coinexchange', 'cryptopia']
+    _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign']
+    _exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
+    _exchange_coin_links_prefixes = ['https://yobit', 'https://www.coinexchange.io', 'https://www.cryptopia',
+                                     'https://www.binance.com']
 
     _expected_pump_timestamps = {}  # (group_id, timestamp)
     _expected_pump_exchanges = {}  # (group_id, dict{ex1, ex2, ex3])
@@ -30,7 +33,7 @@ class MessageProcessor:
         group_id = message.to_id.channel_id
         message_text = message.message
 
-        if 'joinchat' in message_text or 't.me/' in message_text or not message_text:
+        if any(unwanted in message_text for unwanted in self._waste_message_fragments):
             return None
 
         self.__process_text_signal_group_message(message_text, group_id)
@@ -61,15 +64,17 @@ class MessageProcessor:
         if minutes_to_pump:
             print('FOUND PUMP ANNOUNCEMENT: ', minutes_to_pump, ' MINUTES TO PUMP\n')
             self._expected_pump_timestamps.pop(group_id, None)
-            self._expected_pump_timestamps.update({group_id, minutes_to_pump})
-            print("EXPECTED PUMPS SET: ", self._expected_pump_timestamps)
+            print('debug_time')
+            self._expected_pump_timestamps[group_id] = minutes_to_pump
+            print('EXPECTED PUMPS SET: ', self._expected_pump_timestamps)
 
     def __handle_expected_pump_exchange(self, group_id, message_text):
         for exchange_name in self._exchange_names:
             if exchange_name in message_text.lower():
                 print('FOUND PUMP EXCHANGE: ', exchange_name, '\n')
                 self._expected_pump_exchanges.pop(group_id, None)
-                self._expected_pump_exchanges.update({group_id, exchange_name})
+                print('debug_exchange')
+                self._expected_pump_exchanges[group_id] = exchange_name
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')
