@@ -1,7 +1,7 @@
 import re
 
 
-class PumpCoinExtractor:
+class MessageInfoExtractor:
     _letters_pattern = r'([^\s\w]|_)+'
     _emoji_removing_pattern = r'\\[a-z0-9]{5}'
     _pump_minutes_pattern = r'\d+[" "]*min|\d+[" "]*минут'

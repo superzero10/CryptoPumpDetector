@@ -1,17 +1,20 @@
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
-from telegram_pumps.pump_coin_extraction.signal_message_recognition import PumpCoinExtractor
+from telegram_pumps.pump_coin_extraction.signal_message_recognition import MessageInfoExtractor
 
 
-class MessagesHandler:
+class MessageProcessor:
     _all_groups_id_list = []
     _text_signal_groups = []
     _image_signal_groups = []
     _unknown_signal_groups = []
 
-    _expected_pumps = {}
+    _exchange_names = ['yobit, coinexchange, cryptopia']
 
-    _coin_extractor = PumpCoinExtractor()
+    _expected_pump_timestamps = {}  # (group, timestamp)
+    _expected_pump_exchanges = {}  # (group, timestamp)
+
+    _coin_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
 
     def __init__(self):
@@ -57,12 +60,16 @@ class MessagesHandler:
         minutes_to_pump = self._coin_extractor.extract_minutes_to_pump(message_text)
         if minutes_to_pump:
             print('FOUND PUMP ANNOUNCEMENT: ', minutes_to_pump, ' MINUTES TO PUMP\n')
-            self._expected_pumps.pop(group_id, None)
-            self._expected_pumps.update({group_id, minutes_to_pump})
-            print("EXPECTED PUMPS SET: ", self._expected_pumps)
+            self._expected_pump_timestamps.pop(group_id, None)
+            self._expected_pump_timestamps.update({group_id, minutes_to_pump})
+            print("EXPECTED PUMPS SET: ", self._expected_pump_timestamps)
 
     def __handle_expected_pump_exchange(self, group_id, message_text):
-        pass
+        for exchange_name in self._exchange_names:
+            if exchange_name in message_text.lower():
+                print('FOUND PUMP EXCHANGE: ', exchange_name, '\n')
+                self._expected_pump_exchanges.pop(group_id, None)
+                self._expected_pump_exchanges.update({group_id, exchange_name})
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')

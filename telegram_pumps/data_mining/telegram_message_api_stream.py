@@ -3,12 +3,12 @@ import os
 from telethon import TelegramClient
 from telethon.tl.types import UpdateNewChannelMessage
 
-from telegram_pumps.data_mining.message_processor import MessagesHandler
+from telegram_pumps.data_mining.message_processor import MessageProcessor
 from telegram_pumps.data_mining.remote_session import retrieve_remote_session
 from telegram_pumps.print_cwd_files import print_directory_files
 
 user_phone = os.environ.get('USER_PHONE')
-messages_handler = MessagesHandler()
+messages_handler = MessageProcessor()
 
 
 def _initialize_client():
@@ -68,7 +68,7 @@ def _launch_infinite_loop():
 
 def _update_handler(update):
     if isinstance(update, UpdateNewChannelMessage):
-        messages_handler.handle_data_updates(update.message)  # passing a whole Message object
+        messages_handler.handle_data_updates(update.message)  # whole Message object
 
 
 if __name__ == '__main__':
