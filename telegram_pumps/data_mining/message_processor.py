@@ -9,10 +9,10 @@ class MessageProcessor:
     _image_signal_groups = []
     _unknown_signal_groups = []
 
-    _exchange_names = ['yobit, coinexchange, cryptopia']
+    _exchange_names = ['yobit', 'coinexchange', 'cryptopia']
 
-    _expected_pump_timestamps = {}  # (group, timestamp)
-    _expected_pump_exchanges = {}  # (group, timestamp)
+    _expected_pump_timestamps = {}  # (group_id, timestamp)
+    _expected_pump_exchanges = {}  # (group_id, dict{ex1, ex2, ex3])
 
     _coin_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
