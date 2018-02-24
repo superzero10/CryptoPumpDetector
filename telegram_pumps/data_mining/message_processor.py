@@ -1,3 +1,5 @@
+from time import time
+
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
 from telegram_pumps.pump_coin_extraction.signal_message_recognition import MessageInfoExtractor
@@ -54,18 +56,17 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def __process_text_signal_group_message(self, message_text, group_id):
-        self._info_extractor.extract_pump_signal(message_text)
-
         self.__handle_expected_pump_time(group_id, message_text)
         self.__handle_expected_pump_exchange(group_id, message_text)
+
+        self._info_extractor.extract_pump_signal(message_text)
 
     def __handle_expected_pump_time(self, group_id, message_text):
         minutes_to_pump = self._info_extractor.extract_minutes_to_pump(message_text)
         if minutes_to_pump:
             print('FOUND PUMP ANNOUNCEMENT: ', minutes_to_pump, ' MINUTES TO PUMP\n')
             self._expected_pump_timestamps.pop(group_id, None)
-            print('debug_time')
-            self._expected_pump_timestamps[group_id] = minutes_to_pump
+            self._expected_pump_timestamps[group_id] = time() + minutes_to_pump * 60
             print('EXPECTED PUMPS SET: ', self._expected_pump_timestamps)
 
     def __handle_expected_pump_exchange(self, group_id, message_text):
@@ -73,7 +74,6 @@ class MessageProcessor:
             if exchange_name in message_text.lower():
                 print('FOUND PUMP EXCHANGE: ', exchange_name, '\n')
                 self._expected_pump_exchanges.pop(group_id, None)
-                print('debug_exchange')
                 self._expected_pump_exchanges[group_id] = exchange_name
 
     def __process_image_signal_group_message(self, message):
