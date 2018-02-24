@@ -33,7 +33,7 @@ class MessageProcessor:
         group_id = message.to_id.channel_id
         message_text = message.message
 
-        if any(unwanted in message_text for unwanted in self._waste_message_fragments):
+        if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
             return None
 
         self.__process_text_signal_group_message(message_text, group_id)
