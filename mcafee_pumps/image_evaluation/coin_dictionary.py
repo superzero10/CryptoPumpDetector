@@ -1,7 +1,9 @@
 import time
 
 from psycopg2._json import Json
+
 from common.database.database_connection import create_db_connection
+from common.exchange_services.bittrex_service import BittrexService
 from mcafee_pumps.image_evaluation.words_api_service import fetch_word_definitions_count
 
 COIN_SUFFIX = 'coin'
@@ -14,7 +16,7 @@ def create_coin_keywords_eval_dict():
     db_connection = create_db_connection()
     markets_eval_dict = []
 
-    for market in market_names_list:
+    for market in market_names_list[:10]:
 
         # create different permutations of the coin names that are plausible to be used in the tweeted image
         if market[1].lower().endswith(COIN_SUFFIX):
@@ -51,7 +53,7 @@ def create_coin_keywords_eval_dict():
     print(markets_eval_dict)
 
     db_cursor = db_connection.cursor()
-    db_cursor.execute('INSERT into coins (timestamp, dict) values (%s, %s)',
+    db_cursor.execute('INSERT into coins_dictionary (timestamp, dict) values (%s, %s)',
                       [time.time(), Json(markets_eval_dict)])
     db_connection.commit()
     db_connection.close()
@@ -79,3 +81,5 @@ def fetch_word_evaluation_dictionary():
 #
 #
 # save_to_db()
+
+create_coin_keywords_eval_dict()
