@@ -30,10 +30,10 @@ def fetch_all_cryptopia_coins(fresh_state_needed):
         coins_list = db_cursor.fetchone()[0]
         db_connection.close()
     else:
-        if not _yobit_coins_list:
+        if not _cryptopia_coins_list:
             coins_list = fetch_all_cryptopia_coins(True)
         else:
-            coins_list = _yobit_coins_list
+            coins_list = _cryptopia_coins_list
 
     return coins_list
 
