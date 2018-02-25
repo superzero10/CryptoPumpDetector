@@ -1,5 +1,7 @@
 import re
 
+from telegram_pumps.database.database_retriever import fetch_all_cryptopia_coins, fetch_all_yobit_coins
+
 
 class MessageInfoExtractor:
     _letters_pattern = r'([^\s\w]|_)+'
@@ -7,10 +9,21 @@ class MessageInfoExtractor:
     _pump_minutes_pattern = r'\d+[" "]*min|\d+[" "]*минут'
     _coin_extraction_pattern = r'(?<=\b\w)[ ]{1,}(?![ ]{0,}\w{2})'
 
+    _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
+    _yobit_coins = fetch_all_yobit_coins(fresh_state_needed=False)
+
     def extract_pump_signal(self, message_text):
         stripped_message_text = self.__remove_special_characters(message_text)
         normalized_message_text = self.__normalize_message(stripped_message_text)
         print('MESSAGE AFTER PROCESSING:', normalized_message_text)
+
+        found_cryptopia_coins = [coin for coin in self._cryptopia_coins if coin in normalized_message_text.lower()]
+        found_yobit_coins = [coin for coin in self._yobit_coins if coin in normalized_message_text.lower()]
+
+        if found_cryptopia_coins:
+            print("------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
+        if found_yobit_coins:
+            print("------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
 
     def __remove_special_characters(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
