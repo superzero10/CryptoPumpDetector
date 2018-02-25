@@ -56,10 +56,10 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def __process_text_signal_group_message(self, message_text, group_id):
+        self._info_extractor.extract_pump_signal(message_text)
+
         self.__handle_expected_pump_time(group_id, message_text)
         self.__handle_expected_pump_exchange(group_id, message_text)
-
-        self._info_extractor.extract_pump_signal(message_text)
 
     def __handle_expected_pump_time(self, group_id, message_text):
         minutes_to_pump = self._info_extractor.extract_minutes_to_pump(message_text)
