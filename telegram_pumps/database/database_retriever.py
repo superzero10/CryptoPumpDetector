@@ -9,7 +9,7 @@ def fetch_all_yobit_coins(fresh_state_needed):
         db_connection = create_db_connection()
         db_cursor = db_connection.cursor()
         db_cursor.execute('SELECT coins_list FROM coins WHERE exchange = %s', ['yobit'])
-        coins_list = db_cursor.fetchone()[0]
+        coins_list = [coin.center(len(coin) + 2) for coin in db_cursor.fetchone()[0]]
         db_connection.close()
     else:
         if not _yobit_coins_list:
@@ -27,7 +27,7 @@ def fetch_all_cryptopia_coins(fresh_state_needed):
         db_connection = create_db_connection()
         db_cursor = db_connection.cursor()
         db_cursor.execute('SELECT coins_list FROM coins WHERE exchange = %s', ['cryptopia'])
-        coins_list = db_cursor.fetchone()[0]
+        coins_list = [coin.center(len(coin) + 2) for coin in db_cursor.fetchone()[0]]
         db_connection.close()
     else:
         if not _cryptopia_coins_list:

@@ -15,7 +15,7 @@ class MessageInfoExtractor:
     def extract_pump_signal(self, message_text):
         stripped_message_text = self.__remove_special_characters(message_text)
         normalized_message_text = self.__normalize_message(stripped_message_text)
-        print('MESSAGE AFTER PROCESSING:', normalized_message_text)
+        print('MESSAGE AFTER PROCESSING: "', normalized_message_text, '"')
 
         found_cryptopia_coins = [coin for coin in self._cryptopia_coins if coin in normalized_message_text.lower()]
         found_yobit_coins = [coin for coin in self._yobit_coins if coin in normalized_message_text.lower()]
@@ -32,7 +32,8 @@ class MessageInfoExtractor:
         return re.sub('[ \t\n]+', ' ', message_without_newlines)
 
     def __normalize_message(self, message):
-        return re.sub(self._coin_extraction_pattern, '', message)
+        normalized_message = re.sub(self._coin_extraction_pattern, '', message)
+        return normalized_message.center(len(normalized_message) + 2)
 
     def extract_minutes_to_pump(self, message_text):
         cleaned_message_text = self.__remove_special_characters(message_text).lower().strip()
