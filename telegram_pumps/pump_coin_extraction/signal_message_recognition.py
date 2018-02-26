@@ -22,7 +22,7 @@ class MessageInfoExtractor:
         if found_links:
             link, exchange = self.__search_for_coin_in_link(found_links)
 
-            if link and exchange:  # if found coin & exchange from link, return it immediately
+            if link and exchange:  # if found coin & exchange from link, return it immediately to the trading module
                 return link, exchange
 
         stripped_message_text = self.__remove_special_characters(message_without_links)
