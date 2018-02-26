@@ -13,7 +13,9 @@ class MessageInfoExtractor:
     _yobit_coins = fetch_all_yobit_coins(fresh_state_needed=False)
 
     def extract_pump_signal(self, message_text):
-        stripped_message_text = self.__remove_special_characters(message_text)
+        found_links, message_without_links = self.__extract_message_links(message_text)
+
+        stripped_message_text = self.__remove_special_characters(message_without_links)
         normalized_message_text = self.__normalize_message(stripped_message_text)
         print('MESSAGE AFTER PROCESSING: "', normalized_message_text, '"')
 
@@ -24,6 +26,10 @@ class MessageInfoExtractor:
             print("------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
         if found_yobit_coins:
             print("------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
+
+    def __extract_message_links(self, message_text):
+        found_links = re.findall("(?P<url>https?://[^\s]+)", message_text)
+        return found_links, re.sub("(?P<url>https?://[^\s]+)", '', message_text)
 
     def __remove_special_characters(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
