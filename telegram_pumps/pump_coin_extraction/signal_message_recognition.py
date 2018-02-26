@@ -8,7 +8,7 @@ class MessageInfoExtractor:
     _emoji_removing_pattern = r'\\[a-z0-9]{5}'
     _pump_minutes_pattern = r'\d+[" "]*min|\d+[" "]*минут'
     _coin_extraction_pattern = r'(?<=\b\w)[ ]{1,}(?![ ]{0,}\w{2})'
-    _serviced_exchange_names = ['yobit', 'cryptopia']
+    _serviced_exchange_names = ['yobit.', 'cryptopia.']
 
     _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
