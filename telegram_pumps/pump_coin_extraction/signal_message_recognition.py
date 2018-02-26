@@ -37,6 +37,8 @@ class MessageInfoExtractor:
         if found_yobit_coins:
             print("------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
 
+        return None, None
+
     def __extract_message_links(self, message_text):
         found_links = re.findall("(?P<url>https?://[^\s]+)", message_text)
         return found_links, re.sub("(?P<url>https?://[^\s]+)", '', message_text)
@@ -50,6 +52,7 @@ class MessageInfoExtractor:
             coin_from_reverse_link = link[:-4].split('/')[-1].split('=')[-1][::-1]
 
             for exchange_name in self._serviced_exchange_names:
+                print("++++++ FOUND EXCHANGE LINK", link)
                 if exchange_name in link:
                     pumped_coin = next(reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
                                        if reverse_coin == coin_from_reverse_link)

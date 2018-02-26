@@ -57,7 +57,9 @@ class MessageProcessor:
 
     def __process_text_signal_group_message(self, message_text, group_id):
         exchange, coin = self._info_extractor.extract_pump_signal(message_text)
-        print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin)
+
+        if exchange and coin:
+            print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin)
 
         self.__handle_expected_pump_time(group_id, message_text)
         self.__handle_expected_pump_exchange(group_id, message_text)
