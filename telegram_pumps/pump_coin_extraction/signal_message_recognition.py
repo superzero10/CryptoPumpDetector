@@ -47,12 +47,12 @@ class MessageInfoExtractor:
             # extracts coin if link points to the exchange
             # "https://yobit.net/en/trade/LKC/BTC"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
-            coin_from_link = link[:-4].split('/')[-1].split('=')[-1][::-1]
+            coin_from_reverse_link = link[:-4].split('/')[-1].split('=')[-1][::-1]
 
             for exchange_name in self._serviced_exchange_names:
                 if exchange_name in link:
                     pumped_coin = next(reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
-                                       if reverse_coin == coin_from_link)
+                                       if reverse_coin == coin_from_reverse_link)
 
                     return exchange_name, pumped_coin
         return None, None
@@ -83,3 +83,7 @@ class MessageInfoExtractor:
         if not found_substrings:
             return None
         return ''.join((filter(str.isdigit, found_substrings[0])))
+
+
+print(MessageInfoExtractor().extract_pump_signal(
+    "Coin name is LKC, below is provided a link: https://yobit.net/en/trade/LKC/BTC"))
