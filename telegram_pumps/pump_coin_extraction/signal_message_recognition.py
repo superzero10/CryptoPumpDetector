@@ -52,8 +52,8 @@ class MessageInfoExtractor:
             coin_from_reverse_link = link[:-4].split('/')[-1].split('=')[-1][::-1]
 
             for exchange_name in self._serviced_exchange_names:
-                print("++++++ FOUND EXCHANGE LINK", link)
                 if exchange_name in link:
+                    print("++++++ FOUND EXCHANGE LINK", link)
                     pumped_coin = next(reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
                                        if reverse_coin == coin_from_reverse_link)
 
