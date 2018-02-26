@@ -15,6 +15,9 @@ class MessageInfoExtractor:
     def extract_pump_signal(self, message_text):
         found_links, message_without_links = self.__extract_message_links(message_text)
 
+        if found_links:
+            link, exchange = self.__search_for_coin_in_link(found_links)
+
         stripped_message_text = self.__remove_special_characters(message_without_links)
         normalized_message_text = self.__normalize_message(stripped_message_text)
         print('MESSAGE AFTER PROCESSING: "', normalized_message_text, '"')
@@ -30,6 +33,9 @@ class MessageInfoExtractor:
     def __extract_message_links(self, message_text):
         found_links = re.findall("(?P<url>https?://[^\s]+)", message_text)
         return found_links, re.sub("(?P<url>https?://[^\s]+)", '', message_text)
+
+    def __search_for_coin_in_link(self, found_links):
+        return None, None
 
     def __remove_special_characters(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
