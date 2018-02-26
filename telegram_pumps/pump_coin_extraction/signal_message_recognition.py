@@ -8,15 +8,22 @@ class MessageInfoExtractor:
     _emoji_removing_pattern = r'\\[a-z0-9]{5}'
     _pump_minutes_pattern = r'\d+[" "]*min|\d+[" "]*минут'
     _coin_extraction_pattern = r'(?<=\b\w)[ ]{1,}(?![ ]{0,}\w{2})'
+    _serviced_exchange_names = ['yobit', 'cryptopia']
 
     _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
+    _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
+
     _yobit_coins = fetch_all_yobit_coins(fresh_state_needed=False)
+    _yobit_search_reverse_list = [coin.strip().upper()[::-1] for coin in _yobit_coins]
 
     def extract_pump_signal(self, message_text):
         found_links, message_without_links = self.__extract_message_links(message_text)
 
         if found_links:
             link, exchange = self.__search_for_coin_in_link(found_links)
+
+            if link and exchange:  # if found coin & exchange from link, return it immediately
+                return link, exchange
 
         stripped_message_text = self.__remove_special_characters(message_without_links)
         normalized_message_text = self.__normalize_message(stripped_message_text)
@@ -35,7 +42,23 @@ class MessageInfoExtractor:
         return found_links, re.sub("(?P<url>https?://[^\s]+)", '', message_text)
 
     def __search_for_coin_in_link(self, found_links):
+        for link in found_links:
+
+            # extracts coin if link points to the exchange
+            # "https://yobit.net/en/trade/LKC/BTC"
+            # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
+            coin_from_link = link[:-4].split('/')[-1].split('=')[-1][::-1]
+
+            for exchange_name in self._serviced_exchange_names:
+                if exchange_name in link:
+                    pumped_coin = next(reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
+                                       if reverse_coin == coin_from_link)
+
+                    return exchange_name, pumped_coin
         return None, None
+
+    def __search_reverse_list(self, exchange_name):
+        return self._yobit_search_reverse_list if exchange_name == 'yobit' else self._cryptopia_coins_search_list
 
     def __remove_special_characters(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
