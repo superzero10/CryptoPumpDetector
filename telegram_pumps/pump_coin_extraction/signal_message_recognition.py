@@ -61,7 +61,7 @@ class MessageInfoExtractor:
         return None, None
 
     def __search_reverse_list(self, exchange_name):
-        return self._yobit_search_reverse_list if exchange_name == 'yobit' else self._cryptopia_coins_search_list
+        return self._yobit_search_reverse_list if exchange_name == 'yobit.' else self._cryptopia_coins_search_list
 
     def __remove_special_characters(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
