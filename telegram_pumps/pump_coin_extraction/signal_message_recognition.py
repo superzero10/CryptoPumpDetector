@@ -5,10 +5,12 @@ from telegram_pumps.database.database_retriever import fetch_all_cryptopia_coins
 
 class MessageInfoExtractor:
     _letters_pattern = r'([^\s\w]|_)+'
+    _alphanumerics_pattern = r'[\W_]+'
     _emoji_removing_pattern = r'\\[a-z0-9]{5}'
     _pump_minutes_pattern = r'\d+[" "]*min|\d+[" "]*минут'
     _coin_extraction_pattern = r'(?<=\b\w)[ ]{1,}(?![ ]{0,}\w{2})'
     _serviced_exchange_names = ['yobit.', 'cryptopia.']
+    _coin_link_pattern = r'[A-Z0-9]{2,}'
 
     _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
@@ -49,13 +51,16 @@ class MessageInfoExtractor:
             # extracts coin if link points to the exchange
             # "https://yobit.net/en/trade/LKC/BTC"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
-            coin_from_reverse_link = link[:-4].split('/')[-1].split('=')[-1][::-1]
+
+            processed_link = re.sub(self._alphanumerics_pattern, '', link.replace('BTC', '')[::-1])
+            reversed_coin_from_link = re.findall(self._coin_link_pattern, processed_link)[0]
+            print("Coin from link", reversed_coin_from_link)
 
             for exchange_name in self._serviced_exchange_names:
                 if exchange_name in link:
                     print("++++++ FOUND EXCHANGE LINK", link)
                     pumped_coin = next(reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
-                                       if reverse_coin == coin_from_reverse_link)
+                                       if reverse_coin == reversed_coin_from_link)
 
                     return exchange_name, pumped_coin
         return None, None
@@ -89,4 +94,4 @@ class MessageInfoExtractor:
 
 
 print(MessageInfoExtractor().extract_pump_signal(
-    "Coin name is LKC, below is provided a link: https://yobit.net/en/trade/LKC/BTC"))
+    "Coin name is LKC, below is provided a link: https://yobit.net/Market/Index?MarketName=BTC-WAVES"))
