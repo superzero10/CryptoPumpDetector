@@ -54,13 +54,13 @@ class MessageInfoExtractor:
 
             processed_link = re.sub(self._alphanumerics_pattern, '', link.replace('BTC', '')[::-1])
             reversed_coin_from_link = re.findall(self._coin_link_pattern, processed_link)[0]
-            print("Coin from link", reversed_coin_from_link)
 
             for exchange_name in self._serviced_exchange_names:
                 if exchange_name in link:
                     print("++++++ FOUND EXCHANGE LINK", link)
-                    pumped_coin = next(reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
-                                       if reverse_coin == reversed_coin_from_link)
+                    detected_coins = [reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
+                                      if reverse_coin == reversed_coin_from_link]
+                    pumped_coin = detected_coins and detected_coins[0] or None
 
                     return exchange_name, pumped_coin
         return None, None
@@ -94,4 +94,4 @@ class MessageInfoExtractor:
 
 
 print(MessageInfoExtractor().extract_pump_signal(
-    "Coin name is LKC, below is provided a link: https://yobit.net/Market/Index?MarketName=BTC-WAVES"))
+    "Coin name is LKC, below is provided a link: https://yobit.io/ru/trade/2BACCO/BTC"))
