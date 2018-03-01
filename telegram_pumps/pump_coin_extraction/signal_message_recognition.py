@@ -82,7 +82,9 @@ class MessageInfoExtractor:
         return normalized_message.center(len(normalized_message) + 2).lower()
 
     def extract_pump_minutes_and_exchange_if_present(self, message_text):
-        cleaned_message_text = self.__clear_message(message_text).lower().strip()
+        print(message_text)
+        cleaned_message_text = self.__clear_message(message_text)
+        print('"', cleaned_message_text, '"')
 
         if cleaned_message_text.isdigit() and 0 < int(cleaned_message_text) < 200:
             return cleaned_message_text, None  # some groups count down with messages which contain only minutes to pump
@@ -104,4 +106,4 @@ class MessageInfoExtractor:
 
 
 print(MessageInfoExtractor().extract_pump_minutes_and_exchange_if_present(
-    "Coin name is LKC, below is provided a link: https://yobit.com/Market/Index?MarketName=BTC-WAVES"))
+    "Coin name is L K C, below is provided a \\u3657 link: https://yobit.com/Market/Index?MarketName=BTC-WAVES"))

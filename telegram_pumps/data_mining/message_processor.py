@@ -76,7 +76,7 @@ class MessageProcessor:
 
         minutes_to_pump, pump_exchange = self._info_extractor.extract_pump_minutes_and_exchange_if_present(message_text)
         self._expected_pumps_handler.save_expected_pump_time_if_present(group_id, minutes_to_pump)
-        self._expected_pumps_handler.save_expected_pump_exchange_if_present(group_id, minutes_to_pump)
+        self._expected_pumps_handler.save_expected_pump_exchange_if_present(group_id, pump_exchange)
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')
