@@ -1,6 +1,3 @@
-from datetime import datetime
-from time import time
-
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
@@ -62,18 +59,7 @@ class MessageProcessor:
         if coin:  # if no exchange found, it will be extracted by "extract_pump_minutes_and_exchange_if_present"
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
             if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
-                current_time = time()
-
-                expected_lower_range_date = datetime.utcfromtimestamp(
-                    self._expected_pump_timestamps[group_id] - self._sec_epsilon).strftime(
-                    "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
-                expected_higher_range_date = datetime.utcfromtimestamp(
-                    self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
-                    "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
-
-                print('|||||||||| PUMP DETECTED at: ', exchange_from_direct_link, 'coin: ', coin, 'expected time was',
-                      expected_lower_range_date, '-', expected_higher_range_date, 'actual time ',
-                      datetime.utcfromtimestamp(current_time).strftime("%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
+                print('|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange_from_direct_link)
 
         minutes_to_pump, pump_exchange = self._info_extractor.extract_pump_minutes_and_exchange_if_present(message_text)
         self._expected_pumps_handler.save_expected_pump_time_if_present(group_id, minutes_to_pump)

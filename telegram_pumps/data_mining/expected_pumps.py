@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import time
 
 
@@ -26,7 +27,21 @@ class ExpectedPumpsHandler:
         expected_pump_time = self._expected_pump_timestamps.get(group_id, None)
         current_time = time()
         if expected_pump_time:
-            return expected_pump_time - self._sec_epsilon <= current_time <= expected_pump_time + self._sec_epsilon
+            result = expected_pump_time - self._sec_epsilon <= current_time <= expected_pump_time + self._sec_epsilon
+
+            if result:
+                expected_lower_range_date = datetime.utcfromtimestamp(
+                    self._expected_pump_timestamps[group_id] - self._sec_epsilon).strftime(
+                    "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
+                expected_higher_range_date = datetime.utcfromtimestamp(
+                    self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
+                    "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
+
+                print('|||||||||| PUMP DETECTED, expected time was',
+                      expected_lower_range_date, '-', expected_higher_range_date, 'actual time ',
+                      datetime.utcfromtimestamp(current_time).strftime("%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
+
+            return result
         else:
             return False
 
