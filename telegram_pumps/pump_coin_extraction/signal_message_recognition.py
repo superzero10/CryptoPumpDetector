@@ -29,12 +29,11 @@ class MessageInfoExtractor:
             if pumped_coin and exchange:  # if found coin & exchange from link, return to the trading module
                 return pumped_coin, exchange
 
-        stripped_message_text = self.__remove_special_characters(message_without_links)
-        normalized_message_text = self.__normalize_message(stripped_message_text)
-        print('MESSAGE AFTER PROCESSING: "', normalized_message_text, '"')
+        cleaned_message = self.__clear_message(message_without_links)
+        print('MESSAGE AFTER PROCESSING: "', cleaned_message, '"')
 
-        found_cryptopia_coins = [coin for coin in self._cryptopia_coins if coin in normalized_message_text]
-        found_yobit_coins = [coin for coin in self._yobit_coins if coin in normalized_message_text]
+        found_cryptopia_coins = [coin for coin in self._cryptopia_coins if coin in cleaned_message]
+        found_yobit_coins = [coin for coin in self._yobit_coins if coin in cleaned_message]
 
         if found_cryptopia_coins:
             print("------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
@@ -72,18 +71,18 @@ class MessageInfoExtractor:
     def __search_reverse_list(self, exchange_name):
         return self._yobit_search_reverse_list if exchange_name == 'yobit.' else self._cryptopia_coins_search_list
 
-    def __remove_special_characters(self, message):
+    def __clear_message(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
-        message_without_special_characters = re.sub(self._letters_pattern, ' ', message_without_emoji)
-        message_without_newlines = message_without_special_characters.replace('\n', ' ').replace('\r', '')
-        return re.sub('[ \t\n]+', ' ', message_without_newlines)
+        message_without_special_chars = re.sub(self._letters_pattern, ' ', message_without_emoji)
+        message_without_newlines = message_without_special_chars.replace('\n', ' ').replace('\r', '').replace('\t', '')
+        return self.__apply_coin_extraction_pattern(message_without_newlines)
 
-    def __normalize_message(self, message):
+    def __apply_coin_extraction_pattern(self, message):
         normalized_message = re.sub(self._coin_extraction_pattern, '', message)
         return normalized_message.center(len(normalized_message) + 2).lower()
 
     def extract_pump_minutes_and_exchange_if_present(self, message_text):
-        cleaned_message_text = self.__remove_special_characters(message_text).lower().strip()
+        cleaned_message_text = self.__clear_message(message_text).lower().strip()
 
         if cleaned_message_text.isdigit() and 0 < int(cleaned_message_text) < 200:
             return cleaned_message_text, None  # some groups count down with messages which contain only minutes to pump
