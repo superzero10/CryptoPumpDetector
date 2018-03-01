@@ -89,7 +89,7 @@ class MessageInfoExtractor:
         found_substrings = re.findall(self._pump_minutes_pattern, message)
         if not found_substrings:
             return None
-        return ''.join((filter(str.isdigit, found_substrings[0])))
+        return int(''.join((filter(str.isdigit, found_substrings[0]))))
 
 
 print(MessageInfoExtractor().extract_possible_pump_signal(

@@ -41,7 +41,7 @@ class MessageProcessor:
         if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
             return None
 
-        self.__process_text_signal_group_message(message_text, group_id)
+        self.process_text_signal_group_message(message_text, group_id)
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -58,7 +58,7 @@ class MessageProcessor:
             self.__refresh_fetched_groups()
             self._database_writer.save_unknown_group_message(message)
 
-    def __process_text_signal_group_message(self, message_text, group_id):
+    def process_text_signal_group_message(self, message_text, group_id):
         exchange, coin = self._info_extractor.extract_possible_pump_signal(message_text)
 
         if exchange and coin and self.__is_expected_timely_pump_signal(group_id):
@@ -70,10 +70,13 @@ class MessageProcessor:
                 self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
                 "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
             print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin, 'expected time was',
-                  expected_lower_range_date, '-', expected_higher_range_date)
+                  expected_lower_range_date, '-', expected_higher_range_date, 'actual time ',
+                  datetime.utcfromtimestamp(
+                      self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
+                      "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
 
         self.__handle_expected_pump_time(group_id, message_text)
-        self.__handle_expected_pump_exchange(group_id, message_text)
+        self.handle_expected_pump_exchange(group_id, message_text)
 
     def __is_expected_timely_pump_signal(self, group_id):
         expected_pump_time = self._expected_pump_timestamps.get(group_id, None)
@@ -91,7 +94,7 @@ class MessageProcessor:
             self._expected_pump_timestamps[group_id] = time() + minutes_to_pump * 60
             print('EXPECTED PUMPS SET: ', self._expected_pump_timestamps)
 
-    def __handle_expected_pump_exchange(self, group_id, message_text):
+    def handle_expected_pump_exchange(self, group_id, message_text):
         for exchange_name in self._exchange_names:
             if exchange_name in message_text.lower():
                 print('FOUND PUMP EXCHANGE: ', exchange_name, '\n')
@@ -100,3 +103,7 @@ class MessageProcessor:
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')
+
+# MessageProcessor().process_text_signal_group_message(
+#     "15 minutes to go Exchange YOBIT Remember buy and hold and troll Let the price increase 15 минут Обмен YOBIT "
+#     "Помните покупку и удержание и тролль Пусть цена будет расти", 123)
