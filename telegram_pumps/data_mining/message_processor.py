@@ -1,6 +1,7 @@
 from datetime import datetime
 from time import time
 
+from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
 from telegram_pumps.pump_coin_extraction.signal_message_recognition import MessageInfoExtractor
@@ -12,18 +13,14 @@ class MessageProcessor:
     _image_signal_groups = []
     _unknown_signal_groups = []
 
-    _sec_epsilon = 30  #
-
     _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign', 'timeanddate', 'youtu.be']
-    _exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
+
     _exchange_coin_links_prefixes = ['https://yobit', 'https://www.coinexchange.io', 'https://www.cryptopia',
                                      'https://www.binance.com']
 
-    _expected_pump_timestamps = {}  # (group_id, timestamp)
-    _expected_pump_exchanges = {}  # (group_id, dict{ex1, ex2, ex3])
-
     _info_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
+    _expected_pumps_handler = ExpectedPumpsHandler(_info_extractor)
 
     def __init__(self):
         self.__refresh_fetched_groups()
@@ -59,12 +56,11 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def process_text_signal_group_message(self, message_text, group_id):
-        exchange, coin = self._info_extractor.extract_possible_pump_signal(message_text)
+        exchange_from_direct_link, coin = self._info_extractor.extract_possible_pump_signal(message_text)
+        # exchange will only be present if it is from a direct link containing both the exchange and the coin
 
-        if exchange and coin:
-            self.__delete_obsolete_expected_pump_timestamps()
-
-            if self.__is_expected_timely_pump_signal(group_id):
+        if coin:  # if no coin found, the exchange will be extracted by "extract_pump_minutes_and_exchange_if_present"
+            if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
                 current_time = time()
 
                 expected_lower_range_date = datetime.utcfromtimestamp(
@@ -74,48 +70,13 @@ class MessageProcessor:
                     self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
                     "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
 
-                print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin, 'expected time was',
+                print('|||||||||| PUMP DETECTED at: ', exchange_from_direct_link, 'coin: ', coin, 'expected time was',
                       expected_lower_range_date, '-', expected_higher_range_date, 'actual time ',
                       datetime.utcfromtimestamp(current_time).strftime("%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
 
-        self.__handle_expected_pump_time(group_id, message_text)
-        self.handle_expected_pump_exchange(group_id, message_text)
-
-    def __is_expected_timely_pump_signal(self, group_id):
-        expected_pump_time = self._expected_pump_timestamps.get(group_id, None)
-        current_time = time()
-        if expected_pump_time:
-            return expected_pump_time - self._sec_epsilon <= current_time <= expected_pump_time + self._sec_epsilon
-        else:
-            return False
-
-    def __delete_obsolete_expected_pump_timestamps(self):
-        current_time = time()
-        print('\ncurrent time is: ', current_time, "\n")
-
-        for channel_id, expected_timestamp in self._expected_pump_timestamps.items():
-            if expected_timestamp + self._sec_epsilon < current_time:
-                del self._expected_pump_timestamps[channel_id]
-                print('deleted obsolete expected pump, new state is: ', self._expected_pump_timestamps)
-
-    def __handle_expected_pump_time(self, group_id, message_text):
-        minutes_to_pump = self._info_extractor.extract_minutes_to_pump(message_text)
-        if minutes_to_pump:
-            print('FOUND PUMP ANNOUNCEMENT: ', minutes_to_pump, ' MINUTES TO PUMP\n')
-            self._expected_pump_timestamps.pop(group_id, None)
-            self._expected_pump_timestamps[group_id] = time() + minutes_to_pump * 60
-            print('EXPECTED PUMPS SET: ', self._expected_pump_timestamps)
-
-    def handle_expected_pump_exchange(self, group_id, message_text):
-        for exchange_name in self._exchange_names:
-            if exchange_name in message_text.lower():
-                print('FOUND PUMP EXCHANGE: ', exchange_name, '\n')
-                self._expected_pump_exchanges.pop(group_id, None)
-                self._expected_pump_exchanges[group_id] = exchange_name
+        minutes_to_pump, pump_exchange = self._info_extractor.extract_pump_minutes_and_exchange_if_present(message_text)
+        self._expected_pumps_handler.save_expected_pump_time_if_present(group_id, minutes_to_pump)
+        self._expected_pumps_handler.save_expected_pump_exchange_if_present(group_id, minutes_to_pump)
 
     def __process_image_signal_group_message(self, message):
         print('- Message from an image signal group \n')
-
-# MessageProcessor().process_text_signal_group_message(
-#     "15 minutes to go Exchange YOBIT Remember buy and hold and troll Let the price increase 15 минут Обмен YOBIT "
-#     "Помните покупку и удержание и тролль Пусть цена будет расти", 123)
