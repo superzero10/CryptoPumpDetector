@@ -20,7 +20,7 @@ class MessageProcessor:
 
     _info_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
-    _expected_pumps_handler = ExpectedPumpsHandler(_info_extractor)
+    _expected_pumps_handler = ExpectedPumpsHandler()
 
     def __init__(self):
         self.__refresh_fetched_groups()
@@ -57,9 +57,10 @@ class MessageProcessor:
 
     def process_text_signal_group_message(self, message_text, group_id):
         exchange_from_direct_link, coin = self._info_extractor.extract_possible_pump_signal(message_text)
-        # exchange will only be present if it is from a direct link containing both the exchange and the coin
+        # exchange will only be present here if it is from a direct link containing both the exchange and the coin
 
-        if coin:  # if no coin found, the exchange will be extracted by "extract_pump_minutes_and_exchange_if_present"
+        if coin:  # if no exchange found, it will be extracted by "extract_pump_minutes_and_exchange_if_present"
+            # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
             if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
                 current_time = time()
 

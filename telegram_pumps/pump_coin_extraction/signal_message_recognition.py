@@ -104,6 +104,5 @@ class MessageInfoExtractor:
         else:
             return None
 
-
-print(MessageInfoExtractor().extract_pump_minutes_and_exchange_if_present(
-    "Coin name is L K C, below is provided a \\u3657 link: https://yobit.com/Market/Index?MarketName=BTC-WAVES"))
+# print(MessageInfoExtractor().extract_pump_minutes_and_exchange_if_present(
+#     "Coin name is L K C, below is provided a \\u3657 link: https://yobit.com/Market/Index?MarketName=BTC-WAVES"))
