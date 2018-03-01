@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import time
 
 from telegram_pumps.database.database_retriever import *
@@ -10,6 +11,8 @@ class MessageProcessor:
     _text_signal_groups = []
     _image_signal_groups = []
     _unknown_signal_groups = []
+
+    _sec_epsilon = 30  #
 
     _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign', 'timeanddate', 'youtu.be']
     _exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
@@ -31,7 +34,7 @@ class MessageProcessor:
         self._image_signal_groups = fetch_image_signal_groups(True)
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
-    def handle_data_updates(self, message):
+    def handle_channel_updates(self, message):
         group_id = message.to_id.channel_id
         message_text = message.message
 
@@ -56,13 +59,29 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def __process_text_signal_group_message(self, message_text, group_id):
-        exchange, coin = self._info_extractor.extract_pump_signal(message_text)
+        exchange, coin = self._info_extractor.extract_possible_pump_signal(message_text)
 
-        if exchange and coin:
-            print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin)
+        if exchange and coin and self.__is_expected_timely_pump_signal(group_id):
+            current_time = time()
+            expected_lower_range_date = datetime.utcfromtimestamp(
+                self._expected_pump_timestamps[group_id] - self._sec_epsilon).strftime(
+                "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
+            expected_higher_range_date = datetime.utcfromtimestamp(
+                self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
+                "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
+            print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin, 'expected time was',
+                  expected_lower_range_date, '-', expected_higher_range_date)
 
         self.__handle_expected_pump_time(group_id, message_text)
         self.__handle_expected_pump_exchange(group_id, message_text)
+
+    def __is_expected_timely_pump_signal(self, group_id):
+        expected_pump_time = self._expected_pump_timestamps.get(group_id, None)
+        current_time = time()
+        if expected_pump_time:
+            return expected_pump_time - self._sec_epsilon <= current_time <= expected_pump_time + self._sec_epsilon
+        else:
+            return False
 
     def __handle_expected_pump_time(self, group_id, message_text):
         minutes_to_pump = self._info_extractor.extract_minutes_to_pump(message_text)

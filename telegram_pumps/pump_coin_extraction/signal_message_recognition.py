@@ -18,7 +18,7 @@ class MessageInfoExtractor:
     _yobit_coins = fetch_all_yobit_coins(fresh_state_needed=False)
     _yobit_search_reverse_list = [coin.strip().upper()[::-1] for coin in _yobit_coins]
 
-    def extract_pump_signal(self, message_text):
+    def extract_possible_pump_signal(self, message_text):
         found_links, message_without_links = self.__extract_message_links(message_text)
 
         if found_links:
@@ -47,7 +47,6 @@ class MessageInfoExtractor:
 
     def __search_for_coin_in_link(self, found_links):
         for link in found_links:
-
             # extracts coin if link points to the exchange
             # "https://yobit.net/en/trade/LKC/BTC"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
@@ -93,5 +92,5 @@ class MessageInfoExtractor:
         return ''.join((filter(str.isdigit, found_substrings[0])))
 
 
-print(MessageInfoExtractor().extract_pump_signal(
-    "Coin name is LKC, below is provided a link: https://yobit.io/ru/trade/2BACCO/BTC"))
+print(MessageInfoExtractor().extract_possible_pump_signal(
+    "Coin name is LKC, below is provided a link: https://yobit.com/Market/Index?MarketName=BTC-WAVES"))
