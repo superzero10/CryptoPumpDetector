@@ -61,19 +61,22 @@ class MessageProcessor:
     def process_text_signal_group_message(self, message_text, group_id):
         exchange, coin = self._info_extractor.extract_possible_pump_signal(message_text)
 
-        if exchange and coin and self.__is_expected_timely_pump_signal(group_id):
-            current_time = time()
-            expected_lower_range_date = datetime.utcfromtimestamp(
-                self._expected_pump_timestamps[group_id] - self._sec_epsilon).strftime(
-                "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
-            expected_higher_range_date = datetime.utcfromtimestamp(
-                self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
-                "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
-            print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin, 'expected time was',
-                  expected_lower_range_date, '-', expected_higher_range_date, 'actual time ',
-                  datetime.utcfromtimestamp(
-                      self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
-                      "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
+        if exchange and coin:
+            self.__delete_obsolete_expected_pump_timestamps()
+
+            if self.__is_expected_timely_pump_signal(group_id):
+                current_time = time()
+
+                expected_lower_range_date = datetime.utcfromtimestamp(
+                    self._expected_pump_timestamps[group_id] - self._sec_epsilon).strftime(
+                    "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
+                expected_higher_range_date = datetime.utcfromtimestamp(
+                    self._expected_pump_timestamps[group_id] + self._sec_epsilon).strftime(
+                    "%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)")
+
+                print('|||||||||| PUMP DETECTED at: ', exchange, 'coin: ', coin, 'expected time was',
+                      expected_lower_range_date, '-', expected_higher_range_date, 'actual time ',
+                      datetime.utcfromtimestamp(current_time).strftime("%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
 
         self.__handle_expected_pump_time(group_id, message_text)
         self.handle_expected_pump_exchange(group_id, message_text)
@@ -85,6 +88,15 @@ class MessageProcessor:
             return expected_pump_time - self._sec_epsilon <= current_time <= expected_pump_time + self._sec_epsilon
         else:
             return False
+
+    def __delete_obsolete_expected_pump_timestamps(self):
+        current_time = time()
+        print('\ncurrent time is: ', current_time, "\n")
+
+        for channel_id, expected_timestamp in self._expected_pump_timestamps.items():
+            if expected_timestamp + self._sec_epsilon < current_time:
+                del self._expected_pump_timestamps[channel_id]
+                print('deleted obsolete expected pump, new state is: ', self._expected_pump_timestamps)
 
     def __handle_expected_pump_time(self, group_id, message_text):
         minutes_to_pump = self._info_extractor.extract_minutes_to_pump(message_text)
