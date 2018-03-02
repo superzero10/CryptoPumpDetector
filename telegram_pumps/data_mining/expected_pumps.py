@@ -26,7 +26,7 @@ class ExpectedPumpsHandler:
 
         for channel_id, expected_timestamp in self._expected_pump_timestamps.items():
             if expected_timestamp + self._sec_epsilon < current_time:
-                del self._expected_pump_timestamps[channel_id]
+                self._expected_pump_timestamps.pop(channel_id)
 
         print('deleted obsolete expected pump, new state is: ', self._expected_pump_timestamps)
 

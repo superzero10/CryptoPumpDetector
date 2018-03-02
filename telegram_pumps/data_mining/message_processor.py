@@ -59,14 +59,16 @@ class MessageProcessor:
         if coin:  # if no exchange found, it will be extracted by "extract_pump_minutes_and_exchange_if_present"
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
 
-            print('++ Found some coin, now determining if we expected it.')
+            print('++ Found some coin, now determining if we expected it now.')
 
             if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
                 print('|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange_from_direct_link)
+            else:
+                print('++ Nope, didn\'t expect a pump here')
 
         minutes_to_pump, pump_exchange = self._info_extractor.extract_pump_minutes_and_exchange_if_present(message_text)
         self._expected_pumps_handler.save_expected_pump_time_if_present(group_id, minutes_to_pump)
         self._expected_pumps_handler.save_expected_pump_exchange_if_present(group_id, pump_exchange)
 
     def __process_image_signal_group_message(self, message):
-        print('- Message from an image signal group \n')
+        print('- Message from an image signal group')
