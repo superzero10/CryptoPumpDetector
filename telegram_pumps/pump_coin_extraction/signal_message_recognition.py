@@ -37,8 +37,10 @@ class MessageInfoExtractor:
 
         if found_cryptopia_coins:
             print("------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
+            return found_cryptopia_coins[0], None  # return first element only to check if expected pump is working
         if found_yobit_coins:
             print("------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
+            return found_yobit_coins[0], None
 
         # filter out coins that are english words and then make sure to return only one coin name. if ambiguous,
         # it is possible that's no pump coin announcement

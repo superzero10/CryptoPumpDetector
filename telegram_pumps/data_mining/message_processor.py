@@ -58,6 +58,9 @@ class MessageProcessor:
 
         if coin:  # if no exchange found, it will be extracted by "extract_pump_minutes_and_exchange_if_present"
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
+
+            print('++ Found some coin, now determining if we expected it.')
+
             if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
                 print('|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange_from_direct_link)
 
