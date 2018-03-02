@@ -1,3 +1,5 @@
+from time import time
+
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
@@ -29,6 +31,9 @@ class MessageProcessor:
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
     def handle_channel_updates(self, message):
+
+        start_time = time()
+
         group_id = message.to_id.channel_id
         message_text = message.message
 
@@ -37,6 +42,8 @@ class MessageProcessor:
             return None
 
         self.process_text_signal_group_message(message_text, group_id)
+
+        print('Processing the message took', time() - start_time, ' seconds.')
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
