@@ -53,7 +53,7 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def process_text_signal_group_message(self, message_text, group_id):
-        exchange_from_direct_link, coin = self._info_extractor.extract_possible_pump_signal(message_text)
+        coin, exchange_from_direct_link = self._info_extractor.extract_possible_pump_signal(message_text)
         # exchange will only be present here if it is from a direct link containing both the exchange and the coin
 
         if coin:  # if no exchange found, it will be extracted by "extract_pump_minutes_and_exchange_if_present"
