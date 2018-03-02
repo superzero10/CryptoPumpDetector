@@ -10,7 +10,7 @@ class MessageProcessor:
     _image_signal_groups = []
     _unknown_signal_groups = []
 
-    _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign', 'timeanddate', 'youtu.be']
+    _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign', 'timeanddate', 'youtu.be', 'promo']
 
     _exchange_coin_links_prefixes = ['https://yobit', 'https://www.coinexchange.io', 'https://www.cryptopia',
                                      'https://www.binance.com']
