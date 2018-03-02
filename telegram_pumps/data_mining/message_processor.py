@@ -33,6 +33,7 @@ class MessageProcessor:
         message_text = message.message
 
         if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
+            print('Message was empty or had not wanted parts, dropping...')
             return None
 
         self.process_text_signal_group_message(message_text, group_id)
