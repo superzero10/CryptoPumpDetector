@@ -82,9 +82,7 @@ class MessageInfoExtractor:
         return normalized_message.center(len(normalized_message) + 2).lower()
 
     def extract_pump_minutes_and_exchange_if_present(self, message_text):
-        print(message_text)
         cleaned_message_text = self.__clear_message(message_text)
-        print('"', cleaned_message_text, '"')
 
         if cleaned_message_text.isdigit() and 0 < int(cleaned_message_text) < 200:
             return cleaned_message_text, None  # some groups count down with messages which contain only minutes to pump
