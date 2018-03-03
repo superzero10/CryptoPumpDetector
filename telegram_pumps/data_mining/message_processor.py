@@ -38,12 +38,11 @@ class MessageProcessor:
         message_text = message.message
 
         if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
-            print('Message was empty or had not wanted parts, dropping...')
             return None
 
         self.process_text_signal_group_message(message_text, group_id)
 
-        print('Processing the message took', time() - start_time, ' seconds.')
+        # print('Processing the message took', time() - start_time, ' seconds.')
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -66,8 +65,6 @@ class MessageProcessor:
 
         if coin:  # if no exchange found, it will be extracted by "extract_pump_minutes_and_exchange_if_present"
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
-
-            print('++ Found some coin, now determining if we expected it now.')
 
             if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
                 print('|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange_from_direct_link)
