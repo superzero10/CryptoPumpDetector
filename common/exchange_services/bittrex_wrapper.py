@@ -2,10 +2,12 @@
    See https://bittrex.com/Home/Api
 """
 
-import time
-import hmac
 import hashlib
+import hmac
+import time
 import urllib
+
+from datetime import datetime
 
 try:
     from urllib import urlencode
@@ -113,7 +115,7 @@ class Bittrex(object):
             now = time.time()
             passed = now - self.last_call
             if passed < self.call_rate:
-                # print("sleep")
+                # print(datetime.time(datetime.now()), "sleep")
                 time.sleep(self.call_rate - passed)
 
             self.last_call = time.time()
@@ -143,7 +145,7 @@ class Bittrex(object):
             request_url = "{0}apikey={1}&nonce={2}&".format(request_url, self.api_key, nonce)
 
         request_url += urllib.parse.urlencode(options)
-        print('Request URL: ', request_url)
+        print(datetime.time(datetime.now()), 'Request URL: ', request_url)
 
         try:
             signature = hmac.new(self.api_secret.encode('utf-8'), request_url.encode('utf-8'),

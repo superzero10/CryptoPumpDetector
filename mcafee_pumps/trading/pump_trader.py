@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 from common.exchange_services import Bittrex
 
@@ -9,7 +10,7 @@ BUY_OVERSHOOT = 1.1
 
 
 def trade_market(coin):
-    print('MARKET TRADE ', coin)
+    print(datetime.time(datetime.now()), 'MARKET TRADE ', coin)
 
     # buy_thread = threading.Thread(target=_buy(coin))
     # buy_thread.start()
@@ -19,43 +20,43 @@ def trade_market(coin):
 
 def _buy(coin_symbol):
     market_name = BTC_PREFIX + coin_symbol
-    print('Buy thread started')
+    print(datetime.time(datetime.now()), 'Buy thread started')
     start_time = time.time()
     coin_price_response = bittrex_trader.get_marketsummary(market_name)
     if coin_price_response['result'][0]['MarketName'] == market_name:
         last_ask_price = coin_price_response['result'][0]['Ask']
-        print(coin_price_response)
-        print('Last Ask', last_ask_price)
+        print(datetime.time(datetime.now()), coin_price_response)
+        print(datetime.time(datetime.now()), 'Last Ask', last_ask_price)
 
         buy_quantity = BTC_TRADE_SIZE / (last_ask_price * BUY_OVERSHOOT)
-        print('Buy quantity: ', buy_quantity)
+        print(datetime.time(datetime.now()), 'Buy quantity: ', buy_quantity)
 
         buy_order_response = bittrex_trader.buy_limit(market=market_name, quantity=buy_quantity, rate=last_ask_price * BUY_OVERSHOOT)
-        print('Buy order: ', buy_order_response)
-        print('buy request took', time.time() - start_time, ' seconds')
+        print(datetime.time(datetime.now()), 'Buy order: ', buy_order_response)
+        print(datetime.time(datetime.now()), 'buy request took', time.time() - start_time, ' seconds')
 
         # cancel the request if not successful
         uuid = buy_order_response['result']['uuid']
         time.sleep(4)
         cancel_response = bittrex_trader.cancel(uuid)
-        print('Buy request cancel response: ', cancel_response)
+        print(datetime.time(datetime.now()), 'Buy request cancel response: ', cancel_response)
 
 
 def _sell(coin_symbol):
     market_name = BTC_PREFIX + coin_symbol
-    print('Sell thread started')
+    print(datetime.time(datetime.now()), 'Sell thread started')
     time.sleep(14)
     bought_amount_response = bittrex_trader.get_balance(currency=coin_symbol)
-    print('CURRENCY BALANCE RESPONSE', bought_amount_response)
-    print('Selling now..')
+    print(datetime.time(datetime.now()), 'CURRENCY BALANCE RESPONSE', bought_amount_response)
+    print(datetime.time(datetime.now()), 'Selling now..')
     sell_quantity = bought_amount_response['result']['Available']
 
     coin_price_response = bittrex_trader.get_marketsummary(market_name)
 
     if coin_price_response['result'][0]['MarketName'] == market_name:
         last_ask_price = coin_price_response['result'][0]['Ask']
-        print(coin_price_response)
-        print('Last Ask', last_ask_price)
+        print(datetime.time(datetime.now()), coin_price_response)
+        print(datetime.time(datetime.now()), 'Last Ask', last_ask_price)
 
         sell_order_response = bittrex_trader.sell_limit(market=market_name, quantity=sell_quantity, rate=last_ask_price)
-        print('Sell order: ', sell_order_response)
+        print(datetime.time(datetime.now()), 'Sell order: ', sell_order_response)

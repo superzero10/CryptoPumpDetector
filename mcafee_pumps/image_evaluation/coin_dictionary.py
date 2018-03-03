@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 from psycopg2._json import Json
 
@@ -36,7 +37,7 @@ def create_coin_keywords_eval_dict():
         # convert to definition count punishment partial dictionary
         current_market_dictionary = []
         for index, market_alias in enumerate(market):
-            print(index, market_alias)
+            print(datetime.time(datetime.now()), index, market_alias)
             if market_alias.lower().endswith(COIN_SUFFIX):
                 # coins with names "*coin" are definitely not proper english words
                 current_market_coin_tuple = (market_alias, 1)
@@ -45,12 +46,12 @@ def create_coin_keywords_eval_dict():
                 current_market_word_value = 1 - fetch_word_definitions_count(market_alias) / WORD_VALUE_DENOMINATOR
                 current_market_coin_tuple = (market_alias, current_market_word_value)
             current_market_dictionary.append(current_market_coin_tuple)
-        print("Punishment dictionary for current coin: ", current_market_dictionary)
-        print("")
+        print(datetime.time(datetime.now()), "Punishment dictionary for current coin: ", current_market_dictionary)
+        print(datetime.time(datetime.now()), "")
 
         markets_eval_dict.append(current_market_dictionary)
 
-    print(markets_eval_dict)
+    print(datetime.time(datetime.now()), markets_eval_dict)
 
     db_cursor = db_connection.cursor()
     db_cursor.execute('INSERT into coins_dictionary (timestamp, dict) values (%s, %s)',

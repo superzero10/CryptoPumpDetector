@@ -1,14 +1,16 @@
 import os
-import cv2.text as cv_ext
+from datetime import datetime
+
 import cv2 as cv_core
+import cv2.text as cv_ext
 import numpy as np
 
 
 def process_all_images():
     for file_name in os.listdir(os.path.join(os.getcwd(), 'test_images')):
-        print(file_name)
+        print(datetime.time(datetime.now()), file_name)
         relative_file_path = 'test_images/' + file_name
-        print(relative_file_path)
+        print(datetime.time(datetime.now()), relative_file_path)
         if file_name.endswith(".jpg"):
 
             img = cv_core.imread(relative_file_path, cv_core.CV_64FC3)
@@ -27,5 +29,5 @@ def process_all_images():
                     cv_core.rectangle(vis, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (255, 0, 0), 2)
 
             result_file_path = os.path.join(os.getcwd(), 'test_results/' + file_name)
-            print(result_file_path)
+            print(datetime.time(datetime.now()), result_file_path)
             cv_core.imwrite(result_file_path, vis)

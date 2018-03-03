@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import time
 
 from psycopg2._json import Json
@@ -15,13 +16,13 @@ class DatabaseWriter:
 
         try:
             cleaned_message_dict = self.__clean_message(message_dict)
-            # print('Message after cleaning', cleaned_message_dict, '\n')
+            # print(datetime.time(datetime.now()), 'Message after cleaning', cleaned_message_dict, '\n')
 
             db_cursor = db_connection.cursor()
             db_cursor.execute('INSERT into traced_messages (timestamp, chat_id, full_message) values (%s, %s, %s)',
                               [time(), cleaned_message.to_id.channel_id, Json(cleaned_message_dict)])
         except Exception as err:
-            print(err)
+            print(datetime.time(datetime.now()), err)
         finally:
             db_connection.commit()
             db_connection.close()

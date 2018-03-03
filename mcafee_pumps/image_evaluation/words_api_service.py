@@ -5,7 +5,7 @@ import requests
 
 
 def fetch_word_definitions_count(word):
-    # print(word)
+    # print(datetime.time(datetime.now()), word)
     response = requests.get(
         "https://wordsapiv1.p.mashape.com/words/" + word + "/definitions",
         headers={

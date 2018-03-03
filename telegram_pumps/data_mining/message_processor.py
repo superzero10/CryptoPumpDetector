@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import time
 
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
@@ -42,7 +43,7 @@ class MessageProcessor:
 
         self.process_text_signal_group_message(message_text, group_id)
 
-        # print('Processing the message took', time() - start_time, ' seconds.')
+        # print(datetime.time(datetime.now()), 'Processing the message took', time() - start_time, ' seconds.')
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -54,7 +55,7 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
         if group_id not in self._all_groups_id_list:
-            print('- Message from a non-listed group, saving message and group to db..')
+            print(datetime.time(datetime.now()), '- Message from a non-listed group, saving message and group to db..')
             self._database_writer.save_unlisted_group(group_id)
             self.__refresh_fetched_groups()
             self._database_writer.save_unknown_group_message(message)
@@ -67,13 +68,14 @@ class MessageProcessor:
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
 
             if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
-                print('|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange_from_direct_link)
+                print(datetime.time(datetime.now()), '|||||||||| PUMP DETECTED, coin:', coin, 'exchange:',
+                      exchange_from_direct_link)
             else:
-                print('++ Nope, didn\'t expect a pump here')
+                print(datetime.time(datetime.now()), '++ Nope, didn\'t expect a pump here')
 
         minutes_to_pump, pump_exchange = self._info_extractor.extract_pump_minutes_and_exchange_if_present(message_text)
         self._expected_pumps_handler.save_expected_pump_time_if_present(group_id, minutes_to_pump)
         self._expected_pumps_handler.save_expected_pump_exchange_if_present(group_id, pump_exchange)
 
     def __process_image_signal_group_message(self, message):
-        print('- Message from an image signal group')
+        print(datetime.time(datetime.now()), '- Message from an image signal group')

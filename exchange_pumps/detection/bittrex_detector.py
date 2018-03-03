@@ -1,7 +1,8 @@
 import time
-
 from datetime import datetime
+
 from detection.bittrex_constants import MIN_BTC_VOLUME, MIN_SOAR_THRESHOLD, SNAPSHOT_COUNT, SNAPSHOT_FREQUENCY_SEC
+
 from common.exchange_services import BittrexService
 
 WANTED_KEYS = {'MarketName', 'BaseVolume', 'Bid', 'Ask', 'OpenBuyOrders', 'OpenSellOrders'}
@@ -15,7 +16,7 @@ class BittrexDetector:
 
     def detect(self):
 
-        print('Bittrex detection started')
+        print(datetime.time(datetime.now()), 'Bittrex detection started')
 
         while True:
             active_btc_pairs = self.apiService.fetch_active_btc_pairs()
@@ -35,7 +36,8 @@ class BittrexDetector:
 
                 for coin in last_coins_snapshot:
                     if coin['BaseVolume'] >= MIN_BTC_VOLUME:
-                        old_coin = next(item for item in first_coins_snapshot if item['MarketName'] == coin['MarketName'])
+                        old_coin = next(
+                            item for item in first_coins_snapshot if item['MarketName'] == coin['MarketName'])
                         if old_coin is not None and coin['Ask'] > old_coin['Ask'] * MIN_SOAR_THRESHOLD:
                             if old_coin['Ask'] == 0:
                                 old_coin['Ask'] = 1  # to prevent zero division
@@ -49,12 +51,12 @@ class BittrexDetector:
                 #     for current_snapshot_coin in current_coins_snapshot:
                 #         if current_snapshot_coin['BaseVolume'] >= MIN_BTC_VOLUME:
                 #             previous_snapshot_coin = next((item for item in previous_coins_snapshot if item['MarketName'] == current_snapshot_coin['MarketName']))
-                #             # print("")
-                #             # print('Previous snapshot coin', previous_snapshot_coin)
-                #             # print('Current snapshot coin', current_snapshot_coin)
+                #             # print(datetime.time(datetime.now()), "")
+                #             # print(datetime.time(datetime.now()), 'Previous snapshot coin', previous_snapshot_coin)
+                #             # print(datetime.time(datetime.now()), 'Current snapshot coin', current_snapshot_coin)
                 #
                 #             if previous_snapshot_coin is not None and current_snapshot_coin['Ask'] > previous_snapshot_coin['Ask'] * MIN_SOAR_THRESHOLD:
-                #                 print('Bittrex pump: ', previous_snapshot_coin['MarketName'], ', was: ', previous_snapshot_coin['Ask'], ', is: ',
+                #                 print(datetime.time(datetime.now()), 'Bittrex pump: ', previous_snapshot_coin['MarketName'], ', was: ', previous_snapshot_coin['Ask'], ', is: ',
                 #                       current_snapshot_coin['Ask'])
                 #
                 #                 unwanted_keys = set(current_snapshot_coin.keys()) - WANTED_KEYS
@@ -63,7 +65,7 @@ class BittrexDetector:
 
                 if possible_coins:
                     for possible_coin in possible_coins:
-                        print(datetime.now().time(), possible_coin)
+                        print(datetime.time(datetime.now()), possible_coin)
 
                 # delete the oldest coins snapshot
                 del self.coins_snapshots_list[0]

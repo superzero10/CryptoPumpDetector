@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from common.database.database_connection import create_db_connection
 
 
 def save_session_file():
-    print('saving session file')
+    print(datetime.time(datetime.now()), 'saving session file')
     db_connection = create_db_connection()
     session_file_content = open('telegram.session', 'rb').read()
     cursor = db_connection.cursor()
@@ -19,7 +21,7 @@ def fetch_session_file_content():
     cursor = db_connection.cursor()
     cursor.execute("SELECT (session_blob) FROM session_blob LIMIT 1;")
     session_file_content = cursor.fetchone()
-    print(session_file_content[0])
+    print(datetime.time(datetime.now()), session_file_content[0])
     db_connection.close()
     return session_file_content[0]
 

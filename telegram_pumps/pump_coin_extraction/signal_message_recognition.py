@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from telegram_pumps.database.database_retriever import fetch_all_cryptopia_coins, fetch_all_yobit_coins
 
@@ -30,16 +31,16 @@ class MessageInfoExtractor:
                 return pumped_coin, exchange
 
         cleaned_message = self.__clear_message(message_without_links)
-        print('MESSAGE AFTER PROCESSING: "', cleaned_message, '"')
+        print(datetime.time(datetime.now()), 'MESSAGE AFTER PROCESSING: "', cleaned_message, '"')
 
         found_cryptopia_coins = [coin for coin in self._cryptopia_coins if coin in cleaned_message]
         found_yobit_coins = [coin for coin in self._yobit_coins if coin in cleaned_message]
 
         if found_cryptopia_coins:
-            print("------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
+            print(datetime.time(datetime.now()), "------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
             return found_cryptopia_coins[0], None  # return first element only to check if expected pump is working
         if found_yobit_coins:
-            print("------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
+            print(datetime.time(datetime.now()), "------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
             return found_yobit_coins[0], None
 
         # filter out coins that are english words and then make sure to return only one coin name. if ambiguous,
@@ -62,7 +63,7 @@ class MessageInfoExtractor:
 
             for exchange_name in self._serviced_exchange_names_url_parts:
                 if exchange_name in link:
-                    print("++++++ FOUND EXCHANGE LINK", link)
+                    print(datetime.time(datetime.now()), "++++++ FOUND EXCHANGE LINK", link)
                     detected_coins = [reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
                                       if reverse_coin == reversed_coin_from_link]
                     pumped_coin = detected_coins and detected_coins[0] or None
@@ -106,4 +107,6 @@ class MessageInfoExtractor:
 
 
 print(MessageInfoExtractor().extract_pump_minutes_and_exchange_if_present(
-    "last 45 minutes exchange is yobit buy  hold  troll  chat  let price to up up up  and then we all sell    последние 45 минут обмен   yobit купите  держите  тролль  чат  позвольте цене подняться вверх  и тогда мы все продаем"))
+    "last 45 minutes exchange is yobit buy  hold  troll  chat  let price to up up up  and then we all sell    "
+    "последние 45 минут обмен   yobit купите  держите  тролль  чат  позвольте цене подняться вверх  и тогда мы все "
+    "продаем"))

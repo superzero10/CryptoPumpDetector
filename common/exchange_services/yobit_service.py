@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import math
 import requests
 
@@ -29,6 +31,6 @@ class YobitService:
                 market_response = market_response.json()
                 result.update(market_response)
             except:
-                print(market_response.content)
+                print(datetime.time(datetime.now()), market_response.content)
 
         return result

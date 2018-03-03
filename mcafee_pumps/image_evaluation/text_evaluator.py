@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from mcafee_pumps.image_evaluation.coin_dictionary import fetch_word_evaluation_dictionary
 
 word_eval_dict = fetch_word_evaluation_dictionary()
-print(word_eval_dict)
-print('')
+print(datetime.time(datetime.now()), word_eval_dict)
+print(datetime.time(datetime.now()), '')
 
 
 def extract_mentioned_coin_abbr(text):
@@ -16,12 +18,13 @@ def extract_mentioned_coin_abbr(text):
                 occurrence_count = count_occurrences(coin_name, text)
                 coin_abbr = coin_name_variants[0][0]
                 coin_occurrence_points[coin_abbr] += coin_name_variants[0][1] * occurrence_count
-                print(coin_name, ' found ', occurrence_count, ' times at value ', coin_value_tuple[1])
+                print(datetime.time(datetime.now()), coin_name, ' found ', occurrence_count, ' times at value ',
+                      coin_value_tuple[1])
 
-    print("")
-    print(coin_occurrence_points)
+    print(datetime.time(datetime.now()), "")
+    print(datetime.time(datetime.now()), coin_occurrence_points)
     coin_to_buy = max(coin_occurrence_points.keys(), key=(lambda key: coin_occurrence_points[key]))
-    print('Coin to buy is: ', coin_to_buy)
+    print(datetime.time(datetime.now()), 'Coin to buy is: ', coin_to_buy)
     return coin_to_buy
 
 

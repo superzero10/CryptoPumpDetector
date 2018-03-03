@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from common.database.database_connection import create_db_connection
 
 chat_id = input('Input chat ID:')
@@ -8,7 +10,7 @@ db_cursor = db_connection.cursor()
 db_cursor.execute('SELECT full_message FROM traced_messages WHERE chat_id = %s', [chat_id])
 rows = db_cursor.fetchall()
 
-print(rows)
+print(datetime.time(datetime.now()), rows)
 chat_signal_type = input('Input chat signal type:')
 
 db_cursor.execute('DELETE FROM traced_messages WHERE chat_id = %s', [chat_id])
