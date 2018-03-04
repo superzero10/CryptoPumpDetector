@@ -66,3 +66,6 @@ class ExpectedPumpsHandler:
                 return result
             else:
                 return False
+
+    def get_expected_exchange(self, group_id):
+        return self._expected_pump_exchanges.pop(group_id, None)
