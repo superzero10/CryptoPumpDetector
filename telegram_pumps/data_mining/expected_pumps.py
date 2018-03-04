@@ -22,16 +22,20 @@ class ExpectedPumpsHandler:
                 print(datetime.time(datetime.now()), 'EXPECTED PUMPS SET: ', self._expected_pump_timestamps)
 
     def __delete_obsolete_expected_pump_timestamps(self):
-        current_time = time()
-        print(datetime.time(datetime.now()), '\nsearching for and deleting obsolete expected pumps, current time is: ',
-              current_time, "\n")
+        try:
+            current_time = time()
+            print(datetime.time(datetime.now()),
+                  '\nsearching for and deleting obsolete expected pumps, current time is: ',
+                  current_time, "\n")
 
-        for channel_id, expected_timestamp in self._expected_pump_timestamps.items():
-            if expected_timestamp + self._sec_epsilon < current_time:
-                self._expected_pump_timestamps.pop(channel_id)
+            for channel_id, expected_timestamp in list(self._expected_pump_timestamps):
+                if expected_timestamp + self._sec_epsilon < current_time:
+                    self._expected_pump_timestamps.pop(channel_id, None)
 
-        print(datetime.time(datetime.now()), 'deleted obsolete expected pump, new state is: ',
-              self._expected_pump_timestamps)
+            print(datetime.time(datetime.now()), 'deleted obsolete expected pump, new state is: ',
+                  self._expected_pump_timestamps)
+        except Exception as e:
+            print(datetime.time(datetime.now()), "ENCOUNTERED AN EXCEPTION", e)
 
     def save_expected_pump_exchange_if_present(self, group_id, exchange_name):
         if exchange_name:

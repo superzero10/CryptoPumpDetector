@@ -107,6 +107,4 @@ class MessageInfoExtractor:
 
 
 print(MessageInfoExtractor().extract_pump_minutes_and_exchange_if_present(
-    "last 45 minutes exchange is yobit buy  hold  troll  chat  let price to up up up  and then we all sell    "
-    "последние 45 минут обмен   yobit купите  держите  тролль  чат  позвольте цене подняться вверх  и тогда мы все "
-    "продаем"))
+    "https://yobit.net/ru/trade/ARNA/BTC"))
