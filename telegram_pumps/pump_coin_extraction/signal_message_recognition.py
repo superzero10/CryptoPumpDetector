@@ -58,7 +58,7 @@ class MessageInfoExtractor:
             # "https://yobit.net/en/trade/LKC/BTC"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
 
-            processed_link = re.sub(self._alphanumerics_pattern, '', link.replace('BTC', '')[::-1])
+            processed_link = re.sub(self._alphanumerics_pattern, '', link.split('#')[0].replace('BTC', '')[::-1])
             reversed_coin_from_link = re.findall(self._coin_link_pattern, processed_link)[0]
 
             for exchange_name in self._serviced_exchange_names_url_parts:
@@ -106,5 +106,5 @@ class MessageInfoExtractor:
             return None
 
 
-print(MessageInfoExtractor().extract_pump_minutes_and_exchange_if_present(
-    "https://yobit.net/ru/trade/ARNA/BTC"))
+print(MessageInfoExtractor().extract_possible_pump_signal(
+    "https://yobit.net/ru/trade/WAVES/BTC#12H"))

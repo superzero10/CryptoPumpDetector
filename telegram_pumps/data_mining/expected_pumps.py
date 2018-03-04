@@ -28,8 +28,8 @@ class ExpectedPumpsHandler:
                   '\nsearching for and deleting obsolete expected pumps, current time is: ',
                   current_time, "\n")
 
-            for channel_id, expected_timestamp in list(self._expected_pump_timestamps):
-                if expected_timestamp + self._sec_epsilon < current_time:
+            for channel_id in list(self._expected_pump_timestamps):
+                if self._expected_pump_timestamps[channel_id] + self._sec_epsilon < current_time:
                     self._expected_pump_timestamps.pop(channel_id, None)
 
             print(datetime.time(datetime.now()), 'deleted obsolete expected pump, new state is: ',
