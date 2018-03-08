@@ -77,7 +77,7 @@ class MessageInfoExtractor:
         return self._yobit_search_reverse_list if exchange_name == 'yobit.' else self._cryptopia_coins_search_list
 
     def __clear_message(self, message):
-        message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).strip()
+        message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).replace('\'', '').strip()
         message_without_special_chars = re.sub(self._letters_pattern, ' ', message_without_emoji)
         message_without_newlines = message_without_special_chars.replace('\n', ' ').replace('\r', '').replace('\t', '')
         return self.__apply_coin_extraction_pattern(message_without_newlines)
