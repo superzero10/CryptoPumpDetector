@@ -20,6 +20,7 @@ def fetch_all_yobit_coins(fresh_state_needed):
     return coins_list
 
 
+# get Cryptopia coins paired with BTC
 def fetch_all_cryptopia_coins(fresh_state_needed):
     coins_list = []
 

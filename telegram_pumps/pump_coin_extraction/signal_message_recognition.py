@@ -1,7 +1,8 @@
 import re
 from datetime import datetime
 
-from telegram_pumps.database.database_retriever import fetch_all_cryptopia_coins, fetch_all_yobit_coins
+from common.exchange_services.cryptopia_service import CryptopiaService
+from common.exchange_services.yobit_service import YobitService
 
 
 class MessageInfoExtractor:
@@ -18,10 +19,10 @@ class MessageInfoExtractor:
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'red', 'today', 'time', 'off', 'buy', 'go', 'start', 'hodl',
                       'post', 'net', 'send', 'can', 'best', 'hope', 'soon', 'btc', 'fly', 'net', 'money', 'max', 'team']
 
-    _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
+    _cryptopia_coins = [coin.center(len(coin) + 2) for coin in CryptopiaService().fetch_active_btc_pairs()]
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
 
-    _yobit_coins = fetch_all_yobit_coins(fresh_state_needed=False)
+    _yobit_coins = [coin.center(len(coin) + 2) for coin in YobitService().fetch_active_btc_pairs()]
     _yobit_search_reverse_list = [coin.strip().upper()[::-1] for coin in _yobit_coins]
 
     def extract_possible_pump_signal(self, message_text):
@@ -109,5 +110,6 @@ class MessageInfoExtractor:
         else:
             return None
 
-# print(MessageInfoExtractor().extract_possible_pump_signal(
-#     "https://yobit.net/ru/trade/WAVES/BTC#12H"))
+
+print(
+    MessageInfoExtractor().extract_possible_pump_signal("FOUND EXCHANGE LINK https://yobit.io/en/trade/2BACCO/BTC#12H"))
