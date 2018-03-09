@@ -17,7 +17,8 @@ class MessageInfoExtractor:
     _serviced_exchange_names_url_parts = ['yobit.', 'cryptopia.']
     _serviced_exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'red', 'today', 'time', 'off', 'buy', 'go', 'start', 'hodl',
-                      'post', 'net', 'send', 'can', 'best', 'hope', 'soon', 'btc', 'fly', 'net', 'money', 'max', 'team']
+                      'post', 'net', 'send', 'can', 'best', 'hope', 'soon', 'btc', 'fly', 'net', 'money', 'max', 'team',
+                      'rise', 'gain']
 
     _cryptopia_coins = [coin.center(len(coin) + 2) for coin in CryptopiaService().fetch_active_btc_pairs()]
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
@@ -111,6 +112,4 @@ class MessageInfoExtractor:
         else:
             return None
 
-
-print(
-    MessageInfoExtractor().extract_possible_pump_signal("FOUND EXCHANGE LINK https://yobit.io/en/trade/2BACCO/BTC#12H"))
+# print(MessageInfoExtractor().extract_possible_pump_signal("EXCHANGE LINK https://yobit.io/en/trade/2BACCO/BTC#12H"))
