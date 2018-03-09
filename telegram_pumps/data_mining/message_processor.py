@@ -32,7 +32,6 @@ class MessageProcessor:
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
     def handle_channel_updates(self, message):
-
         start_time = time()
 
         group_id = message.to_id.channel_id
@@ -61,7 +60,6 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def process_text_signal_group_message(self, message_text, group_id):
-
         coin, exchange_from_direct_link = self._info_extractor.extract_possible_pump_signal(message_text)
         # exchange will only be present here if it is from a direct link containing both the exchange and the coin
 
