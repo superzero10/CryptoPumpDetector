@@ -44,7 +44,7 @@ class MessageInfoExtractor:
         if found_yobit_coins:
             print(datetime.time(datetime.now()), "------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
 
-        all_coins = map(lambda x: x.xtrip(), found_yobit_coins + found_cryptopia_coins)
+        all_coins = list(map(lambda x: x.strip(), found_yobit_coins + found_cryptopia_coins))
         found_coins = list(set([coin for coin in all_coins if coin not in self._ignored_coins]))
 
         # if multiple coins are present, it is possible that's no pump coin announcement
