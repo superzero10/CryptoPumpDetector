@@ -16,7 +16,7 @@ class MessageInfoExtractor:
     _serviced_exchange_names_url_parts = ['yobit.', 'cryptopia.']
     _serviced_exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'hope', 'today', 'time', 'off', 'buy', 'go', 'start',
-                      'post', 'net', 'send', 'can', 'best', 'red', 'soon', 'btc']
+                      'post', 'net', 'send', 'can', 'best', 'red', 'soon', 'btc', 'fly']
 
     _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
