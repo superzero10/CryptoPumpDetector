@@ -16,7 +16,7 @@ class MessageInfoExtractor:
     _serviced_exchange_names_url_parts = ['yobit.', 'cryptopia.']
     _serviced_exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'hope', 'today', 'time', 'off', 'buy', 'go', 'start',
-                      'post', 'net', 'send', 'can', 'best', 'red', 'soon', 'btc', 'fly', 'net']
+                      'post', 'net', 'send', 'can', 'best', 'red', 'soon', 'btc', 'fly', 'net', 'money', 'max']
 
     _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
@@ -44,12 +44,12 @@ class MessageInfoExtractor:
         if found_yobit_coins:
             print(datetime.time(datetime.now()), "------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
 
-        found_coins = list(
-            set([coin for coin in found_yobit_coins + found_cryptopia_coins if coin not in self._ignored_coins]))
+        all_coins = list(map(lambda x: x.strip(), found_yobit_coins + found_cryptopia_coins))
+        found_coins = list(set([coin for coin in all_coins if coin not in self._ignored_coins]))
 
-        # filter out coins that are english words and then make sure to return only one coin name.
         # if multiple coins are present, it is possible that's no pump coin announcement
 
+        print("-------- OVERALL FOUND COINS", found_coins)
         return (found_coins and found_coins[0]) or None, None
 
     def __extract_message_links(self, message_text):

@@ -9,7 +9,7 @@ name = "pypi"
 
 python-twitter = "*"
 requests = "*"
-"psycopg2" = "*"
+"psycopg2-binary" = "*"
 telethon = "*"
 opencv-contrib-python = "*"
 
