@@ -109,6 +109,5 @@ class MessageInfoExtractor:
         else:
             return None
 
-
-print(MessageInfoExtractor().extract_possible_pump_signal(
-    "https://yobit.net/ru/trade/WAVES/BTC#12H"))
+# print(MessageInfoExtractor().extract_possible_pump_signal(
+#     "https://yobit.net/ru/trade/WAVES/BTC#12H"))
