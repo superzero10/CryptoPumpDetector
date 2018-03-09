@@ -8,3 +8,4 @@ gfortran
 libsm6
 libice6
 libxext6
+tesseract
