@@ -44,12 +44,12 @@ class MessageInfoExtractor:
         if found_yobit_coins:
             print(datetime.time(datetime.now()), "------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
 
-        found_coins = list(
-            set([coin for coin in found_yobit_coins + found_cryptopia_coins if coin not in self._ignored_coins]))
+        all_coins = map(lambda x: x.xtrip(), found_yobit_coins + found_cryptopia_coins)
+        found_coins = list(set([coin for coin in all_coins if coin not in self._ignored_coins]))
 
-        # filter out coins that are english words and then make sure to return only one coin name.
         # if multiple coins are present, it is possible that's no pump coin announcement
 
+        print("-------- OVERALL FOUND COINS", found_coins)
         return (found_coins and found_coins[0]) or None, None
 
     def __extract_message_links(self, message_text):
