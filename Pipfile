@@ -7,8 +7,6 @@ name = "pypi"
 
 [packages]
 
-numpy = "*"
-tesserocr = "*"
 python-twitter = "*"
 requests = "*"
 "psycopg2" = "*"
