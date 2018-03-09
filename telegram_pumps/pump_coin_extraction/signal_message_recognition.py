@@ -11,11 +11,12 @@ class MessageInfoExtractor:
     _pump_minutes_pattern = r'\d+[" "]*min|\d+[" "]*минут'
     _coin_extraction_pattern = r'(?<=\b\w)[ ]{1,}(?![ ]{0,}\w{2})'
     _coin_link_pattern = r'[A-Z0-9]{2,}'
+    _general_url_pattern = "(?P<url>https?://[^\s]+)"
 
     _serviced_exchange_names_url_parts = ['yobit.', 'cryptopia.']
     _serviced_exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'hope', 'today', 'time', 'off', 'buy', 'go', 'start',
-                      'post', 'net', 'send', 'can', 'best', 'red', 'soon', 'btc']
+                      'post', 'net', 'send', 'can', 'best', 'red', 'soon', 'btc', 'fly', 'net']
 
     _cryptopia_coins = fetch_all_cryptopia_coins(fresh_state_needed=False)
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
@@ -40,19 +41,20 @@ class MessageInfoExtractor:
 
         if found_cryptopia_coins:
             print(datetime.time(datetime.now()), "------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
-            return found_cryptopia_coins[0], None  # return first element only to check if expected pump is working
         if found_yobit_coins:
             print(datetime.time(datetime.now()), "------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
-            return found_yobit_coins[0], None
 
-        # filter out coins that are english words and then make sure to return only one coin name. if ambiguous,
-        # it is possible that's no pump coin announcement
+        found_coins = list(
+            set([coin for coin in found_yobit_coins + found_cryptopia_coins if coin not in self._ignored_coins]))
 
-        return None, None
+        # filter out coins that are english words and then make sure to return only one coin name.
+        # if multiple coins are present, it is possible that's no pump coin announcement
+
+        return (found_coins and found_coins[0]) or None, None
 
     def __extract_message_links(self, message_text):
-        found_links = re.findall("(?P<url>https?://[^\s]+)", message_text)
-        return found_links, re.sub("(?P<url>https?://[^\s]+)", '', message_text)
+        found_links = re.findall(self._general_url_pattern, message_text)
+        return found_links, re.sub(self._general_url_pattern, '', message_text)
 
     def __search_for_coin_in_link(self, found_links):
         for link in found_links:
@@ -107,6 +109,5 @@ class MessageInfoExtractor:
         else:
             return None
 
-
-print(MessageInfoExtractor().extract_possible_pump_signal(
-    "https://yobit.net/ru/trade/WAVES/BTC#12H"))
+# print(MessageInfoExtractor().extract_possible_pump_signal(
+#     "https://yobit.net/ru/trade/WAVES/BTC#12H"))
