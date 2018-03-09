@@ -1,3 +1,4 @@
+tesseract-ocr
 libleptonica-dev
 libjpeg8-dev
 libtiff4-dev
@@ -8,4 +9,3 @@ gfortran
 libsm6
 libice6
 libxext6
-tesseract
