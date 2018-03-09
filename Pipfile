@@ -1,16 +1,17 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
+
 [packages]
 
-YoBit = "*"
 numpy = "*"
-tesserocr = "2.2.2"
+tesserocr = "*"
 python-twitter = "*"
 requests = "*"
-psycopg2 = "*"
+"psycopg2" = "*"
 telethon = "*"
 opencv-contrib-python = "*"
 
