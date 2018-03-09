@@ -1,8 +1,0 @@
-YoBit
-numpy
-tesserocr==2.2.2
-python-twitter
-requests
-psycopg2
-telethon
-opencv-contrib-python
