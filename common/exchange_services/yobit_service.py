@@ -33,6 +33,3 @@ class YobitService:
                 print(datetime.time(datetime.now()), market_response.content)
 
         return result
-
-
-print(YobitService().fetch_active_btc_pairs())

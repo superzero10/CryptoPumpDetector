@@ -10,6 +10,3 @@ class CryptopiaService:
         active_pairs_data = active_pairs_response[self._RESULT]
         coin_symbols = [coin[self._COIN_NAME].lower() for coin in active_pairs_data]
         return coin_symbols
-
-
-CryptopiaService().fetch_active_btc_pairs()

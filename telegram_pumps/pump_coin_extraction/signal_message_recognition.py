@@ -61,6 +61,7 @@ class MessageInfoExtractor:
         for link in found_links:
             # extracts coin if link points to the exchange
             # "https://yobit.net/en/trade/LKC/BTC"
+            # "https://yobit.net/en/trade/BOSON/BTC#12H"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
 
             processed_link = re.sub(self._alphanumerics_pattern, '', link.split('#')[0].replace('BTC', '')[::-1])
