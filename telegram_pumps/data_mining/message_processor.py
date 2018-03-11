@@ -1,10 +1,10 @@
 from datetime import datetime
-from time import time
 
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
 from telegram_pumps.pump_coin_extraction.signal_message_recognition import MessageInfoExtractor
+from telegram_pumps.trading.pump_trader import PumpTrader
 
 
 class MessageProcessor:
@@ -15,13 +15,10 @@ class MessageProcessor:
 
     _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign', 'timeanddate', 'youtu.be', 'promo']
 
-    _exchange_coin_links_prefixes = ['https://yobit', 'https://www.coinexchange.io', 'https://www.cryptopia',
-                                     'https://www.binance.com']
-
     _info_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
     _expected_pumps_handler = ExpectedPumpsHandler()
-    _pump_trader =
+    _pump_trader = PumpTrader()
 
     def __init__(self):
         self.__refresh_fetched_groups()
@@ -33,8 +30,6 @@ class MessageProcessor:
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
     def handle_channel_updates(self, message):
-        start_time = time()
-
         group_id = message.to_id.channel_id
         message_text = message.message
 
@@ -42,8 +37,6 @@ class MessageProcessor:
             return None
 
         self.process_text_signal_group_message(message_text, group_id)
-
-        # print(datetime.time(datetime.now()), 'Processing the message took', time() - start_time, ' seconds.')
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -79,7 +72,7 @@ class MessageProcessor:
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
 
     def __trade_on_pump_signal(self, coin, exchange):
-        print(datetime.time(datetime.now()), '|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange)
+        self._pump_trader.trade_pumped_coin(coin, exchange)
 
     def __process_pump_if_was_expected(self, coin, exchange, group_id):
         if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
