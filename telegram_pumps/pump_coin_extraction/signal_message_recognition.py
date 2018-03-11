@@ -18,7 +18,7 @@ class MessageInfoExtractor:
     _serviced_exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'red', 'today', 'time', 'off', 'buy', 'go', 'start', 'hodl',
                       'post', 'net', 'send', 'can', 'best', 'hope', 'soon', 'btc', 'fly', 'net', 'money', 'max', 'team',
-                      'rise', 'gain', 'waves', 'who', 'yes', 'utc', 'chat']
+                      'rise', 'gain', 'waves', 'who', 'yes', 'utc', 'chat', 'hold', 'nice']
 
     _cryptopia_coins = [coin.center(len(coin) + 2) for coin in CryptopiaService().fetch_active_btc_pairs()]
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
@@ -26,15 +26,12 @@ class MessageInfoExtractor:
     _yobit_coins = [coin.center(len(coin) + 2) for coin in YobitService().fetch_active_btc_pairs()]
     _yobit_search_reverse_list = [coin.strip().upper()[::-1] for coin in _yobit_coins]
 
+    def extract_pump_signal_from_link(self, message_text):
+        found_links, _ = self.__extract_message_links(message_text)
+        return self.__search_for_coin_in_link(found_links)
+
     def extract_possible_pump_signal(self, message_text):
-        found_links, message_without_links = self.__extract_message_links(message_text)
-
-        if found_links:
-            pumped_coin, exchange = self.__search_for_coin_in_link(found_links)
-
-            if pumped_coin and exchange:  # if found coin & exchange from link, return to the trading module
-                return pumped_coin, exchange
-
+        _, message_without_links = self.__extract_message_links(message_text)
         cleaned_message = self.__clear_message(message_without_links)
         print(datetime.time(datetime.now()), 'MESSAGE AFTER PROCESSING: "', cleaned_message, '"')
 
@@ -52,7 +49,7 @@ class MessageInfoExtractor:
         # if multiple coins are present, it is possible that's no pump coin announcement
 
         print("-------- OVERALL FOUND COINS", found_coins)
-        return (found_coins and found_coins[0]) or None, None
+        return (found_coins and found_coins[0]) or None
 
     def __extract_message_links(self, message_text):
         found_links = re.findall(self._general_url_pattern, message_text)
