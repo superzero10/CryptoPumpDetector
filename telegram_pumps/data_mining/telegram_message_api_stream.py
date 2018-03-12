@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
+from time import time
 
 from telethon import TelegramClient
-from telethon.tl.types import UpdateNewChannelMessage
 
 from telegram_pumps.data_mining.message_processor import MessageProcessor
 from telegram_pumps.data_mining.remote_session import retrieve_remote_session
@@ -68,11 +68,18 @@ def _launch_infinite_loop():
 
 
 def _update_handler(update):
-    if isinstance(update, UpdateNewChannelMessage):
+    if update.message:
         print()
-        print(datetime.time(datetime.now()), "NEW MESSAGE")
 
-        print(str(update.message.date).split(' ')[-1])
+        message_receive_time = int(datetime.utcfromtimestamp(time()).strftime('%s'))
+        message_send_time = int(update.message.date.strftime('%s'))
+
+        if (message_receive_time - message_send_time) in range(3200, 4000):
+            message_send_time += 3600  # add 1 hour for the russian timezone
+
+        print(message_receive_time, 'RECEIVE TIME')
+        print(message_send_time, 'SEND TIME')
+        print(update.message.message.replace('\n', ''))
         print()
 
         # messages_handler.handle_channel_updates(update.message)  # whole Message object
