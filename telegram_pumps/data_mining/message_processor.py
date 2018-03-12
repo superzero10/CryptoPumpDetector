@@ -31,20 +31,21 @@ class MessageProcessor:
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
     def handle_channel_updates(self, message):
+        message_receive_timestamp = time()
         group_id = message.to_id.channel_id
         message_text = message.message
 
         if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
             return None
 
-        self.process_text_signal_group_message(message_text, group_id)
-        self.save_delayed_messages(message, message_text)
+        self.__process_text_signal_group_message(message_text, group_id)
+        self.__collect_message_statistics(message, message_receive_timestamp)
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
 
-        if group_id in self._image_signal_groups:
-            self.__process_image_signal_group_message(message)
+        # if group_id in self._image_signal_groups:
+        #     self.__process_image_signal_group_message(message)
 
         # if group_id in self._unknown_signal_groups:
         # self._database_writer.save_unknown_group_message(message)
@@ -55,7 +56,7 @@ class MessageProcessor:
             self.__refresh_fetched_groups()
             self._database_writer.save_unknown_group_message(message)
 
-    def process_text_signal_group_message(self, message_text, group_id):
+    def __process_text_signal_group_message(self, message_text, group_id):
         coin_from_link, exchange_from_link = self._info_extractor.extract_pump_signal_from_link(message_text)
 
         # if there's a pump signal with direct link to the exchange, trade it immediately without checking if pump was expected
@@ -75,14 +76,19 @@ class MessageProcessor:
                 pump_exchange = self._info_extractor.get_exchange_if_exclusive_coin(coin)
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
 
-    def save_delayed_messages(self, message, ):
-        message_receive_time = int(datetime.utcfromtimestamp(time()).strftime('%s'))
+    def __collect_message_statistics(self, message, receive_timestamp):
+        message_receive_time = int(datetime.utcfromtimestamp(receive_timestamp).strftime('%s'))
         message_send_time = int(message.date.strftime('%s'))
         if (message_receive_time - message_send_time) in range(3599, 86400):
             message_send_time += 3600  # add 1 hour for the russian timezone
-        print(message_receive_time, 'RECEIVE TIME')
-        print(message_send_time, 'SEND TIME')
-        print(message.message.replace('\n', ''))
+
+        self._database_writer.save_processed_message(
+            message_text=message.message.replace('\n', ''),
+            send_time=message_send_time,
+            receive_time=message_receive_time,
+            processing_time=time() - receive_timestamp,
+            delay_seconds=message_receive_time - message_send_time
+        )
 
     def __trade_on_pump_signal(self, coin, exchange):
         self._pump_trader.trade_pumped_coin(coin, exchange)

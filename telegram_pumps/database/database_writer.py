@@ -42,5 +42,10 @@ class DatabaseWriter:
         db_connection.commit()
         db_connection.close()
 
-    def save_processed_message(self, message_text):
-        pass
+    def save_processed_message(self, message_text, send_time, receive_time, delay_seconds, processing_time):
+        db_connection = create_db_connection()
+        db_cursor = db_connection.cursor()
+        db_cursor.execute('INSERT into message_statistics (group_id, name, signal_type) values (%s, %s, %s)',
+                          [group_id, 'ADDED USING BOT', 'unknown'])
+        db_connection.commit()
+        db_connection.close()
