@@ -8,7 +8,7 @@ class ExpectedPumpsHandler:
     _expected_pump_exchanges = {}  # (group_id, dict{ex1, ex2, ex3])
     _lock = Lock()
 
-    _sec_epsilon = 60
+    _sec_epsilon = 70
     _exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
 
     def save_expected_pump_time_if_present(self, group_id, minutes_to_pump):

@@ -69,6 +69,8 @@ class MessageProcessor:
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
             if not pump_exchange:
                 pump_exchange = self._expected_pumps_handler.get_expected_exchange(group_id)
+            if not pump_exchange:
+                pump_exchange = self._info_extractor.get_exchange_if_exclusive_coin(coin)
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
 
     def __trade_on_pump_signal(self, coin, exchange):
