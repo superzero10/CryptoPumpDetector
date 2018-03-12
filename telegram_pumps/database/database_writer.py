@@ -41,3 +41,6 @@ class DatabaseWriter:
                           [group_id, 'ADDED USING BOT', 'unknown'])
         db_connection.commit()
         db_connection.close()
+
+    def save_processed_message(self, message_text):
+        pass

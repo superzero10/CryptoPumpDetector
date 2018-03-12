@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import time
 
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
@@ -37,6 +38,7 @@ class MessageProcessor:
             return None
 
         self.process_text_signal_group_message(message_text, group_id)
+        self.save_delayed_messages(message, message_text)
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -44,8 +46,8 @@ class MessageProcessor:
         if group_id in self._image_signal_groups:
             self.__process_image_signal_group_message(message)
 
-        if group_id in self._unknown_signal_groups:
-            self._database_writer.save_unknown_group_message(message)
+        # if group_id in self._unknown_signal_groups:
+        # self._database_writer.save_unknown_group_message(message)
 
         if group_id not in self._all_groups_id_list:
             print(datetime.time(datetime.now()), '- Message from a non-listed group, saving message and group to db..')
@@ -72,6 +74,15 @@ class MessageProcessor:
             if not pump_exchange:
                 pump_exchange = self._info_extractor.get_exchange_if_exclusive_coin(coin)
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
+
+    def save_delayed_messages(self, message, ):
+        message_receive_time = int(datetime.utcfromtimestamp(time()).strftime('%s'))
+        message_send_time = int(message.date.strftime('%s'))
+        if (message_receive_time - message_send_time) in range(3599, 86400):
+            message_send_time += 3600  # add 1 hour for the russian timezone
+        print(message_receive_time, 'RECEIVE TIME')
+        print(message_send_time, 'SEND TIME')
+        print(message.message.replace('\n', ''))
 
     def __trade_on_pump_signal(self, coin, exchange):
         self._pump_trader.trade_pumped_coin(coin, exchange)
