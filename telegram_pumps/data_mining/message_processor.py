@@ -77,10 +77,8 @@ class MessageProcessor:
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
 
     def __collect_message_statistics(self, message, receive_timestamp):
-        message_receive_time = int(datetime.utcfromtimestamp(receive_timestamp).strftime('%s'))
-        message_send_time = int(message.date.strftime('%s'))
-        if (message_receive_time - message_send_time) in range(3599, 86400):
-            message_send_time += 3600  # add 1 hour for the russian timezone
+        message_receive_time = int(receive_timestamp)
+        message_send_time = int(message.date.timestamp())
 
         self._database_writer.save_processed_message(
             message_text=message.message.replace('\n', ''),
