@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import time
 
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
@@ -30,22 +31,24 @@ class MessageProcessor:
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
     def handle_channel_updates(self, message):
+        message_receive_timestamp = time()
         group_id = message.to_id.channel_id
         message_text = message.message
 
         if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
             return None
 
-        self.process_text_signal_group_message(message_text, group_id)
+        self.__process_text_signal_group_message(message_text, group_id)
+        self.__collect_message_statistics(message, message_receive_timestamp, group_id)
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
 
-        if group_id in self._image_signal_groups:
-            self.__process_image_signal_group_message(message)
+        # if group_id in self._image_signal_groups:
+        #     self.__process_image_signal_group_message(message)
 
-        if group_id in self._unknown_signal_groups:
-            self._database_writer.save_unknown_group_message(message)
+        # if group_id in self._unknown_signal_groups:
+        # self._database_writer.save_unknown_group_message(message)
 
         if group_id not in self._all_groups_id_list:
             print(datetime.time(datetime.now()), '- Message from a non-listed group, saving message and group to db..')
@@ -53,7 +56,7 @@ class MessageProcessor:
             self.__refresh_fetched_groups()
             self._database_writer.save_unknown_group_message(message)
 
-    def process_text_signal_group_message(self, message_text, group_id):
+    def __process_text_signal_group_message(self, message_text, group_id):
         coin_from_link, exchange_from_link = self._info_extractor.extract_pump_signal_from_link(message_text)
 
         # if there's a pump signal with direct link to the exchange, trade it immediately without checking if pump was expected
@@ -69,7 +72,26 @@ class MessageProcessor:
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
             if not pump_exchange:
                 pump_exchange = self._expected_pumps_handler.get_expected_exchange(group_id)
+            if not pump_exchange:
+                pump_exchange = self._info_extractor.get_exchange_if_exclusive_coin(coin)
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
+
+    def __collect_message_statistics(self, message, receive_timestamp, group_id):
+        message_receive_timestamp = int(receive_timestamp)
+        message_send_timestamp = int(message.date.timestamp())
+
+        if (message_receive_timestamp - message_send_timestamp) in range(3599, 3600 * 24):
+            message_send_timestamp += 3600  # add 1 hour in case of Moscow timezone
+
+        self._database_writer.save_processed_message(
+            message=message.message.replace('\n', ''),
+            group_id=group_id,
+            send_timestamp=message_send_timestamp,
+            receive_time=str(datetime.utcfromtimestamp(message_receive_timestamp)),
+            send_time=str(datetime.utcfromtimestamp(message_send_timestamp)),
+            processing_time=time() - receive_timestamp,
+            delay_seconds=message_receive_timestamp - message_send_timestamp
+        )
 
     def __trade_on_pump_signal(self, coin, exchange):
         self._pump_trader.trade_pumped_coin(coin, exchange)

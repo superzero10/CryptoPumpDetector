@@ -109,4 +109,8 @@ class MessageInfoExtractor:
         else:
             return None
 
+    def get_exchange_if_exclusive_coin(self, coin):
+        # return exchange name if the coin in param is sold only on a single exchange
+        pass
+
 # print(MessageInfoExtractor().extract_possible_pump_signal("EXCHANGE LINK https://yobit.io/en/trade/2BACCO/BTC#12H"))

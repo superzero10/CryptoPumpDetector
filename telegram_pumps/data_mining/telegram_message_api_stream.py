@@ -23,7 +23,7 @@ def _initialize_client():
         api_id=os.environ.get('API_ID'),
         api_hash=os.environ.get('API_HASH'),
         proxy=None,
-        update_workers=6
+        update_workers=4
     )
 
     print(datetime.time(datetime.now()), 'INFO: Connecting to Telegram Servers...', end='', flush=True)
