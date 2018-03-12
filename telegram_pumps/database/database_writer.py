@@ -42,10 +42,13 @@ class DatabaseWriter:
         db_connection.commit()
         db_connection.close()
 
-    def save_processed_message(self, message_text, send_time, receive_time, delay_seconds, processing_time):
+    def save_processed_message(self, message, group_id, send_timestamp, receive_time, send_time, processing_time,
+                               delay_seconds):
         db_connection = create_db_connection()
         db_cursor = db_connection.cursor()
-        db_cursor.execute('INSERT into message_statistics (group_id, name, signal_type) values (%s, %s, %s)',
-                          [group_id, 'ADDED USING BOT', 'unknown'])
+        db_cursor.execute(
+            'INSERT into message_statistics (message, group_id, send_timestamp, receive_time, send_time, processing_time, delay_seconds) '
+            'values (%s, %s, %s, %s, %s, %s, %s)',
+            [message, group_id, send_timestamp, receive_time, send_time, processing_time, delay_seconds])
         db_connection.commit()
         db_connection.close()

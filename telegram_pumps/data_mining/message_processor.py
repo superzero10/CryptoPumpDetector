@@ -39,7 +39,7 @@ class MessageProcessor:
             return None
 
         self.__process_text_signal_group_message(message_text, group_id)
-        self.__collect_message_statistics(message, message_receive_timestamp)
+        self.__collect_message_statistics(message, message_receive_timestamp, group_id)
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -76,16 +76,21 @@ class MessageProcessor:
                 pump_exchange = self._info_extractor.get_exchange_if_exclusive_coin(coin)
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
 
-    def __collect_message_statistics(self, message, receive_timestamp):
-        message_receive_time = int(receive_timestamp)
-        message_send_time = int(message.date.timestamp())
+    def __collect_message_statistics(self, message, receive_timestamp, group_id):
+        message_receive_timestamp = int(receive_timestamp)
+        message_send_timestamp = int(message.date.timestamp())
+
+        if (message_receive_timestamp - message_send_timestamp) in range(3599, 3600 * 24):
+            message_send_timestamp += 3600  # add 1 hour in case of Moscow timezone
 
         self._database_writer.save_processed_message(
-            message_text=message.message.replace('\n', ''),
-            send_time=message_send_time,
-            receive_time=message_receive_time,
+            message=message.message.replace('\n', ''),
+            group_id=group_id,
+            send_timestamp=message_send_timestamp,
+            receive_time=str(datetime.utcfromtimestamp(message_receive_timestamp)),
+            send_time=str(datetime.utcfromtimestamp(message_send_timestamp)),
             processing_time=time() - receive_timestamp,
-            delay_seconds=message_receive_time - message_send_time
+            delay_seconds=message_receive_timestamp - message_send_timestamp
         )
 
     def __trade_on_pump_signal(self, coin, exchange):
