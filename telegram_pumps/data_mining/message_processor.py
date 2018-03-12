@@ -1,10 +1,10 @@
 from datetime import datetime
-from time import time
 
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
 from telegram_pumps.pump_coin_extraction.signal_message_recognition import MessageInfoExtractor
+from telegram_pumps.trading.pump_trader import PumpTrader
 
 
 class MessageProcessor:
@@ -15,12 +15,10 @@ class MessageProcessor:
 
     _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign', 'timeanddate', 'youtu.be', 'promo']
 
-    _exchange_coin_links_prefixes = ['https://yobit', 'https://www.coinexchange.io', 'https://www.cryptopia',
-                                     'https://www.binance.com']
-
     _info_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
     _expected_pumps_handler = ExpectedPumpsHandler()
+    _pump_trader = PumpTrader()
 
     def __init__(self):
         self.__refresh_fetched_groups()
@@ -32,8 +30,6 @@ class MessageProcessor:
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
     def handle_channel_updates(self, message):
-        start_time = time()
-
         group_id = message.to_id.channel_id
         message_text = message.message
 
@@ -41,8 +37,6 @@ class MessageProcessor:
             return None
 
         self.process_text_signal_group_message(message_text, group_id)
-
-        # print(datetime.time(datetime.now()), 'Processing the message took', time() - start_time, ' seconds.')
 
         # if group_id in self._text_signal_groups:
         # self.__process_text_signal_group_message(message_text)
@@ -60,25 +54,29 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def process_text_signal_group_message(self, message_text, group_id):
-        coin, exchange_from_direct_link = self._info_extractor.extract_possible_pump_signal(message_text)
-        # exchange will only be present here if it is from a direct link containing both the exchange and the coin
+        coin_from_link, exchange_from_link = self._info_extractor.extract_pump_signal_from_link(message_text)
 
-        if coin and exchange_from_direct_link:
-            self.__process_pump_if_was_expected(coin, exchange_from_direct_link, group_id)
+        # if there's a pump signal with direct link to the exchange, trade it immediately without checking if pump was expected
+        if coin_from_link and exchange_from_link:
+            self.__trade_on_pump_signal(coin_from_link, exchange_from_link)
 
+        coin = self._info_extractor.extract_possible_pump_signal(message_text)
         minutes_to_pump, pump_exchange = self._info_extractor.extract_pump_minutes_and_exchange_if_present(message_text)
         self._expected_pumps_handler.save_expected_pump_time_if_present(group_id, minutes_to_pump)
         self._expected_pumps_handler.save_expected_pump_exchange_if_present(group_id, pump_exchange)
 
-        if coin:  # if no exchange found, it will be extracted by "extract_pump_minutes_and_exchange_if_present"
+        if coin:  # if no exchange found, it can be extracted from expected exchanges list
             # found a coin in the message, now need to check if a pump in this channel was expected at this exact time
             if not pump_exchange:
                 pump_exchange = self._expected_pumps_handler.get_expected_exchange(group_id)
             self.__process_pump_if_was_expected(coin, pump_exchange, group_id)
 
+    def __trade_on_pump_signal(self, coin, exchange):
+        self._pump_trader.trade_pumped_coin(coin, exchange)
+
     def __process_pump_if_was_expected(self, coin, exchange, group_id):
         if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
-            print(datetime.time(datetime.now()), '|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange)
+            self.__trade_on_pump_signal(coin, exchange)
         else:
             print(datetime.time(datetime.now()), '++ Nope, didn\'t expect a pump here')
 

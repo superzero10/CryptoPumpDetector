@@ -1,10 +1,22 @@
-from telegram_pumps.pump_coin_extraction.recent_trades_memory import RecentTradeMemoryQueue
+import time
+from datetime import datetime
 
 
 class PumpTrader:
-    recent_trades_queue = RecentTradeMemoryQueue()
 
-    coinexchange_coins = []
-    yobit_coins = []
-    cryptopia_coins = []
-    binance_coins = []
+    _PUMP_COIN_HOLD_SECONDS = 15
+
+    def trade_pumped_coin(self, coin, exchange):
+        print(datetime.time(datetime.now()), '|||||||||| PUMP DETECTED, coin:', coin, 'exchange:', exchange)
+        self.__buy_coin(coin, exchange)
+        time.sleep(self._PUMP_COIN_HOLD_SECONDS)
+        self.__sell_coin(coin, exchange)
+
+    def __buy_coin(self, coin, exchange):
+        time.sleep(3)
+        print('BOUGHT COIN', coin, 'ON EXCHANGE', exchange)
+        pass
+
+    def __sell_coin(self, coin, exchange):
+        time.sleep(3)
+        print('SOLD COIN', coin, 'ON EXCHANGE', exchange)
