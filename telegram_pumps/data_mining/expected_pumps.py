@@ -13,13 +13,10 @@ class ExpectedPumpsHandler:
 
     def save_expected_pump_time_if_present(self, group_id, minutes_to_pump):
         if minutes_to_pump:
-            print(datetime.time(datetime.now()), "SAVING EXPECTED PUMP")
             with self._lock:
-                print(datetime.time(datetime.now()), 'FOUND PUMP ANNOUNCEMENT: ', minutes_to_pump, ' MINUTES TO PUMP\n')
                 self.__delete_obsolete_expected_pump_timestamps()
                 self._expected_pump_timestamps.pop(group_id, None)
                 self._expected_pump_timestamps[group_id] = time() + minutes_to_pump * 60
-                print(datetime.time(datetime.now()), 'EXPECTED PUMPS SET: ', self._expected_pump_timestamps)
 
     def __delete_obsolete_expected_pump_timestamps(self):
         try:

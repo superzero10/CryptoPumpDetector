@@ -38,17 +38,13 @@ class MessageInfoExtractor:
         found_cryptopia_coins = [coin for coin in self._cryptopia_coins if coin in cleaned_message]
         found_yobit_coins = [coin for coin in self._yobit_coins if coin in cleaned_message]
 
-        if found_cryptopia_coins:
-            print(datetime.time(datetime.now()), "------ FOUND CRYPTOPIA PUMP COINS: ", found_cryptopia_coins)
-        if found_yobit_coins:
-            print(datetime.time(datetime.now()), "------ FOUND YOBIT PUMP COINS: ", found_yobit_coins)
-
         all_coins = list(map(lambda x: x.strip(), found_yobit_coins + found_cryptopia_coins))
         found_coins = list(set([coin for coin in all_coins if coin not in self._ignored_coins]))
 
         # if multiple coins are present, it is possible that's no pump coin announcement
 
-        print("-------- OVERALL FOUND COINS", found_coins)
+        if found_coins:
+            print("-------- OVERALL FOUND COINS", found_coins)
         return (found_coins and found_coins[0]) or None
 
     def __extract_message_links(self, message_text):
@@ -67,7 +63,6 @@ class MessageInfoExtractor:
 
             for exchange_name in self._serviced_exchange_names_url_parts:
                 if exchange_name in link:
-                    print(datetime.time(datetime.now()), "++++++ FOUND EXCHANGE LINK", link)
                     detected_coins = [reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
                                       if reverse_coin == reversed_coin_from_link]
                     pumped_coin = detected_coins and detected_coins[0] or None
