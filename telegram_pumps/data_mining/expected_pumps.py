@@ -39,7 +39,6 @@ class ExpectedPumpsHandler:
             with self._lock:
                 self._expected_pump_exchanges.pop(group_id, None)
                 self._expected_pump_exchanges[group_id] = exchange_name
-                print(datetime.time(datetime.now()), 'FOUND PUMP EXCHANGE: ', exchange_name, '\n')
 
     def is_within_expected_pump_date_range(self, group_id):
         with self._lock:
