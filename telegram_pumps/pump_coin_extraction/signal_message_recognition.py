@@ -58,6 +58,8 @@ class MessageInfoExtractor:
             # "https://yobit.net/en/trade/BOSON/BTC#12H"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
 
+            print(datetime.time(datetime.now()), "FOUND EXCHANGE LINK", link)
+
             processed_link = re.sub(self._alphanumerics_pattern, '', link.split('#')[0].replace('BTC', '')[::-1])
             reversed_coin_from_link = re.findall(self._coin_link_pattern, processed_link)[0]
 

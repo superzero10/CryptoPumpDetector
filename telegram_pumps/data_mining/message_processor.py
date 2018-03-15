@@ -62,6 +62,7 @@ class MessageProcessor:
         # if there's a pump signal with direct link to the exchange, trade it immediately without checking if pump was expected
         if coin_from_link and exchange_from_link:
             self.__trade_on_pump_signal(coin_from_link, exchange_from_link)
+            return
 
         coin = self._info_extractor.extract_possible_pump_signal(message_text)
         minutes_to_pump, pump_exchange = self._info_extractor.extract_pump_minutes_and_exchange_if_present(message_text)
@@ -94,7 +95,7 @@ class MessageProcessor:
         )
 
     def __trade_on_pump_signal(self, coin, exchange):
-        self._pump_trader.trade_pumped_coin(coin, exchange)
+        self._pump_trader.trade_pumped_coin_if_viable(coin, exchange)
 
     def __process_pump_if_was_expected(self, coin, exchange, group_id):
         if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
