@@ -95,7 +95,7 @@ class MessageProcessor:
         )
 
     def __trade_on_pump_signal(self, coin, exchange):
-        self._pump_trader.trade_pumped_coin(coin, exchange)
+        self._pump_trader.trade_pumped_coin_if_viable(coin, exchange)
 
     def __process_pump_if_was_expected(self, coin, exchange, group_id):
         if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
