@@ -44,7 +44,7 @@ class MessageInfoExtractor:
         # if multiple coins are present, it is possible that's no pump coin announcement
 
         if found_coins:
-            print("-------- OVERALL FOUND COINS", found_coins)
+            print("-------- OVERALL FOUND COINS", found_coins, 'C', found_cryptopia_coins, "Y", found_yobit_coins)
         return (found_coins and found_coins[0]) or None
 
     def __extract_message_links(self, message_text):
@@ -58,13 +58,13 @@ class MessageInfoExtractor:
             # "https://yobit.net/en/trade/BOSON/BTC#12H"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
 
-            print(datetime.time(datetime.now()), "FOUND EXCHANGE LINK", link)
-
             processed_link = re.sub(self._alphanumerics_pattern, '', link.split('#')[0].replace('BTC', '')[::-1])
             reversed_coin_from_link = re.findall(self._coin_link_pattern, processed_link)[0]
 
             for exchange_name in self._serviced_exchange_names_url_parts:
                 if exchange_name in link:
+                    print(datetime.time(datetime.now()), "FOUND EXCHANGE LINK", link)
+
                     detected_coins = [reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
                                       if reverse_coin == reversed_coin_from_link]
                     pumped_coin = detected_coins and detected_coins[0] or None
