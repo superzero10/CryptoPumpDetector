@@ -25,6 +25,3 @@ def create_db_connection():
     )
 
     return connection
-
-
-create_db_connection()

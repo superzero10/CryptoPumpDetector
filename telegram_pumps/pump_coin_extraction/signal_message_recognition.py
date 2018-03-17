@@ -65,14 +65,14 @@ class MessageInfoExtractor:
                 if exchange_name in link:
                     print(datetime.time(datetime.now()), "FOUND EXCHANGE LINK", link)
 
-                    detected_coins = [reverse_coin[::-1] for reverse_coin in self.__search_reverse_list(exchange_name)
+                    detected_coins = [reverse_coin[::-1] for reverse_coin in self.__get_coin_search_list(exchange_name)
                                       if reverse_coin == reversed_coin_from_link]
                     pumped_coin = detected_coins and detected_coins[0] or None
 
                     return pumped_coin, exchange_name
         return None, None
 
-    def __search_reverse_list(self, exchange_name):
+    def __get_coin_search_list(self, exchange_name):
         return self._yobit_search_reverse_list if exchange_name == 'yobit.' else self._cryptopia_coins_search_list
 
     def __clear_message(self, message):

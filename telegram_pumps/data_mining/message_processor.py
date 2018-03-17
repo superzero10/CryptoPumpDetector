@@ -1,4 +1,5 @@
 from datetime import datetime
+from itertools import count
 from time import time
 
 from telegram_pumps.data_mining.expected_pumps import ExpectedPumpsHandler
@@ -9,6 +10,8 @@ from telegram_pumps.trading.pump_trader import PumpTrader
 
 
 class MessageProcessor:
+    _ids = count(0)
+
     _all_groups_id_list = []
     _text_signal_groups = []
     _image_signal_groups = []
@@ -22,7 +25,9 @@ class MessageProcessor:
     _pump_trader = PumpTrader()
 
     def __init__(self):
+        self.id = next(self._ids)
         self.__refresh_fetched_groups()
+        print(self.id)
 
     def __refresh_fetched_groups(self):
         self._all_groups_id_list = [group[0] for group in fetch_all_group_ids(True)]
