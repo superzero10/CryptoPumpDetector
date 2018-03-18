@@ -27,8 +27,7 @@ class PumpTrader:
                 trade_thread = threading.Thread(target=self.__trade_coin(coin, exchange))
                 trade_thread.start()
             else:
-                print(datetime.time(datetime.now()), '|||||| COIN', coin, 'WAS TRADED RECENTLY ON', exchange,
-                      'ABORTING...')
+                print(datetime.time(datetime.now()), '|||||| COIN', coin, 'TRADED RECENTLY ON', exchange, 'ABORTING...')
 
     def __trade_coin(self, coin, exchange):
         self.__buy_coin(coin, exchange)
@@ -40,11 +39,3 @@ class PumpTrader:
 
     def __sell_coin(self, coin, exchange):
         print(datetime.time(datetime.now()), '||||||||| SOLD COIN', coin, 'ON EXCHANGE', exchange)
-
-# pt = PumpTrader()
-# pt.trade_pumped_coin_if_viable('b', 'yobit')
-# pt.trade_pumped_coin_if_viable('a', 'yobit')
-# pt.trade_pumped_coin_if_viable('a', 'yobit')
-# pt.trade_pumped_coin_if_viable('b', 'yobit')
-# pt.trade_pumped_coin_if_viable('a', 'yobit')
-# pt.trade_pumped_coin_if_viable('c', 'yobit')
