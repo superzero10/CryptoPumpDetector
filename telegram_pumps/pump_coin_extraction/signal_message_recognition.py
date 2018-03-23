@@ -18,7 +18,7 @@ class MessageInfoExtractor:
     _serviced_exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'red', 'today', 'time', 'off', 'buy', 'go', 'start', 'hodl',
                       'post', 'net', 'send', 'can', 'best', 'hope', 'soon', 'btc', 'fly', 'net', 'money', 'max', 'team',
-                      'rise', 'gain', 'waves', 'who', 'yes', 'utc', 'chat', 'hold', 'nice']
+                      'rise', 'gain', 'waves', 'who', 'yes', 'utc', 'chat', 'hold', 'nice', 'look', 'via']
 
     _cryptopia_coins = [coin.center(len(coin) + 2) for coin in CryptopiaService().fetch_active_btc_pairs()]
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
@@ -58,7 +58,9 @@ class MessageInfoExtractor:
             # "https://yobit.net/en/trade/BOSON/BTC#12H"
             # "https://www.cryptopia.co.nz/Exchange/?market=XBY_BTC"
 
-            processed_link = re.sub(self._alphanumerics_pattern, '', link.split('#')[0].replace('BTC', '')[::-1])
+            extracted_link = link.split("https")[1].split('#')[0].split("_")[0].split("BTC")[0][::-1]
+            processed_link = re.sub(self._alphanumerics_pattern, '', extracted_link)
+            print(processed_link)
             reversed_coin_from_link = re.findall(self._coin_link_pattern, processed_link)[0]
 
             for exchange_name in self._serviced_exchange_names_url_parts:
@@ -110,4 +112,7 @@ class MessageInfoExtractor:
         # return exchange name if the coin in param is sold only on a single exchange
         pass
 
-# print(MessageInfoExtractor().extract_possible_pump_signal("EXCHANGE LINK https://yobit.io/en/trade/2BACCO/BTC#12H"))
+
+# print(MessageInfoExtractor().extract_pump_signal_from_link("🚀PUMP TIME🚀https://yobit.net/en/trade/XPRO/BTC📈Buy as much quantity as possible in least time and buy it for x2 and x3 times its original price📈🏆Hold the Coin until price gets 200% at least🏆🔴Remember to BUY AS QUICK AS POSSIBLE🔴"))
+# print(MessageInfoExtractor().extract_pump_signal_from_link("🔥🚀 PUMP STARTS 🚀🔥The coin to pump is: 💎 RC 💎 RussiaCoin 🇷🇺Exchange: Cryptopia 📊Target: +150%  📈 Market URL: https://www.cryptopia.co.nz/Exchange/?market=RC_BTCTrollbox:https://www.cryptopia.co.nz/Chat"))
+print(MessageInfoExtractor().extract_pump_signal_from_link("https://www.yobit.net/en/trade/GSX/BTC"))
