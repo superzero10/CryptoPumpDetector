@@ -18,6 +18,7 @@ class MessageProcessor:
     _unknown_signal_groups = []
 
     _waste_message_fragments = ['joinchat', 't.me/', 'register', 'sign', 'timeanddate', 'youtu.be', 'promo']
+    _cross_promo_link_parts = ['joinchat', 't.me/']
 
     _info_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
@@ -41,6 +42,7 @@ class MessageProcessor:
         message_text = message.message
 
         if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
+            self.__save_unique_cross_promo_group_links(message_text)
             return None
 
         self.__process_text_signal_group_message(message_text, group_id)
@@ -60,6 +62,14 @@ class MessageProcessor:
             self._database_writer.save_unlisted_group(group_id)
             self.__refresh_fetched_groups()
             self._database_writer.save_unknown_group_message(message)
+
+    def __save_unique_cross_promo_group_links(self, message_text):
+        if any(promo_link_part in message_text for promo_link_part in self._cross_promo_link_parts):
+            self._database_writer.save_cross_promo_links_if_unique(self.__find_cross_promo_links(message_text))
+
+    def __find_cross_promo_links(self, message_text):
+        all_links = self._info_extractor.extract_message_links(message_text)
+        return [link for link in all_links if any(part in link for part in self._cross_promo_link_parts)]
 
     def __process_text_signal_group_message(self, message_text, group_id):
         coin_from_link, exchange_from_link = self._info_extractor.extract_pump_signal_from_link(message_text)
@@ -92,11 +102,11 @@ class MessageProcessor:
         self._database_writer.save_processed_message(
             message=message.message.replace('\n', ''),
             group_id=group_id,
-            send_timestamp=message_send_timestamp,
+            timestamp=message_send_timestamp,
             receive_time=str(datetime.utcfromtimestamp(message_receive_timestamp)),
             send_time=str(datetime.utcfromtimestamp(message_send_timestamp)),
             processing_time=time() - receive_timestamp,
-            delay_seconds=message_receive_timestamp - message_send_timestamp
+            delay_sec=message_receive_timestamp - message_send_timestamp
         )
 
     def __trade_on_pump_signal(self, coin, exchange):
