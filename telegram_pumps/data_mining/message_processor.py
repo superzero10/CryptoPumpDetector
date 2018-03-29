@@ -42,7 +42,8 @@ class MessageProcessor:
         message_text = message.message
 
         if any(unwanted in message_text for unwanted in self._waste_message_fragments) or not message_text:
-            self.__save_unique_cross_promo_group_links(message_text)
+            if any(promo_link_part in message_text for promo_link_part in self._cross_promo_link_parts):
+                self.__save_unique_cross_promo_group_links(message_text)
             return None
 
         self.__process_text_signal_group_message(message_text, group_id)
@@ -64,8 +65,7 @@ class MessageProcessor:
             self._database_writer.save_unknown_group_message(message)
 
     def __save_unique_cross_promo_group_links(self, message_text):
-        if any(promo_link_part in message_text for promo_link_part in self._cross_promo_link_parts):
-            self._database_writer.save_cross_promo_links_if_unique(self.__find_cross_promo_links(message_text))
+        self._database_writer.save_cross_promo_links(self.__find_cross_promo_links(message_text))
 
     def __find_cross_promo_links(self, message_text):
         all_links = self._info_extractor.extract_message_links(message_text)
@@ -120,3 +120,6 @@ class MessageProcessor:
 
     def __process_image_signal_group_message(self, message):
         print(datetime.time(datetime.now()), '- Message from an image signal group')
+
+
+MessageProcessor().
