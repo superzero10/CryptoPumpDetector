@@ -120,6 +120,3 @@ class MessageProcessor:
 
     def __process_image_signal_group_message(self, message):
         print(datetime.time(datetime.now()), '- Message from an image signal group')
-
-
-MessageProcessor().
