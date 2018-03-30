@@ -47,7 +47,7 @@ class MessageInfoExtractor:
             print("-------- OVERALL FOUND COINS", found_coins, 'C', found_cryptopia_coins, "Y", found_yobit_coins)
         return (found_coins and found_coins[0]) or None
 
-    def __extract_message_links(self, message_text):
+    def extract_message_links(self, message_text):
         found_links = re.findall(self._general_url_pattern, message_text)
         return found_links, re.sub(self._general_url_pattern, '', message_text)
 
@@ -115,4 +115,4 @@ class MessageInfoExtractor:
 
 # print(MessageInfoExtractor().extract_pump_signal_from_link("🚀PUMP TIME🚀https://yobit.net/en/trade/XPRO/BTC📈Buy as much quantity as possible in least time and buy it for x2 and x3 times its original price📈🏆Hold the Coin until price gets 200% at least🏆🔴Remember to BUY AS QUICK AS POSSIBLE🔴"))
 # print(MessageInfoExtractor().extract_pump_signal_from_link("🔥🚀 PUMP STARTS 🚀🔥The coin to pump is: 💎 RC 💎 RussiaCoin 🇷🇺Exchange: Cryptopia 📊Target: +150%  📈 Market URL: https://www.cryptopia.co.nz/Exchange/?market=RC_BTCTrollbox:https://www.cryptopia.co.nz/Chat"))
-print(MessageInfoExtractor().extract_pump_signal_from_link("https://www.yobit.net/en/trade/GSX/BTC"))
+# print(MessageInfoExtractor().extract_pump_signal_from_link("https://www.yobit.net/en/trade/GSX/BTC"))
