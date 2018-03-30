@@ -53,13 +53,12 @@ class DatabaseWriter:
         db_connection.close()
 
     def save_cross_promo_links(self, found_cross_promo_links):
-        print(found_cross_promo_links)
         # the db will save only unique records
         db_connection = create_db_connection()
         db_cursor = db_connection.cursor()
 
         for link in found_cross_promo_links:
-            db_cursor.execute('INSERT into unique_cross_promo_links values (%s)', link)
+            db_cursor.execute('INSERT into unique_cross_promo_links values (%s)', [link])
 
         db_connection.commit()
         db_connection.close()
