@@ -22,8 +22,7 @@ def _initialize_client():
         session='login',
         api_id=os.environ.get('API_ID'),
         api_hash=os.environ.get('API_HASH'),
-        proxy=None,
-        update_workers=4
+        proxy=None
     )
 
     print(datetime.time(datetime.now()), 'INFO: Connecting to Telegram Servers...', end='', flush=True)
@@ -58,8 +57,11 @@ def _initialize_client():
     #         _launch_infinite_loop()
 
     print(datetime.time(datetime.now()), 'Client initialized, waiting for updates.')
-    client.add_update_handler(_update_handler)
-    _launch_infinite_loop()
+    client.add_event_handler(_update_handler)
+    with client.start():
+        print('(Press Ctrl+C to stop this)')
+        client.run_until_disconnected()
+    # _launch_infinite_loop()
 
 
 def _launch_infinite_loop():
@@ -67,7 +69,8 @@ def _launch_infinite_loop():
         pass
 
 
-def _update_handler(update):
+async def _update_handler(update):
+    print(update)
     if isinstance(update, UpdateNewChannelMessage):
         messages_handler.handle_channel_updates(update.message)  # whole Message object
 
