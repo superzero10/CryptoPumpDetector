@@ -120,7 +120,3 @@ class MessageProcessor:
 
     def __process_image_signal_group_message(self, message):
         print(datetime.time(datetime.now()), '- Message from an image signal group')
-
-
-MessageProcessor().save_unique_cross_promo_group_links(
-    "New group: https://t.me/joinchat/145wrgfdsv for some extra pump signals")

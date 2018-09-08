@@ -22,8 +22,7 @@ def _initialize_client():
         session='login',
         api_id=os.environ.get('API_ID'),
         api_hash=os.environ.get('API_HASH'),
-        proxy=None,
-        update_workers=4
+        proxy=None
     )
 
     print(datetime.time(datetime.now()), 'INFO: Connecting to Telegram Servers...', end='', flush=True)
@@ -53,21 +52,16 @@ def _initialize_client():
     #         print(datetime.time(datetime.now()), 'Phone code hash', phone_code_hash)
     #         save_phone_code_hash(phone_code_hash)
     #         print(datetime.time(datetime.now()), 'A fresh auth code has been sent. Please update the value in db and deploy')
-    #
-    #         # launch an infinite loop to prevent Heroku from restarting the script resulting in a telegram API ban
-    #         _launch_infinite_loop()
 
     print(datetime.time(datetime.now()), 'Client initialized, waiting for updates.')
-    client.add_update_handler(_update_handler)
-    _launch_infinite_loop()
+    client.add_event_handler(_update_handler)
+    with client.start():
+        print('(Press Ctrl+C to stop this)')
+        client.run_until_disconnected()
 
 
-def _launch_infinite_loop():
-    while True:
-        pass
-
-
-def _update_handler(update):
+async def _update_handler(update):
+    print(update)
     if isinstance(update, UpdateNewChannelMessage):
         messages_handler.handle_channel_updates(update.message)  # whole Message object
 
