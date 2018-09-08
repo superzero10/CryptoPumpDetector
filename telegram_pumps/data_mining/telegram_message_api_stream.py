@@ -13,13 +13,12 @@ messages_handler = MessageProcessor()
 
 
 def _initialize_client():
-    # retrieve_remote_session()
+    with open('session.txt', 'r') as file:
+        session = file.read()
     print_directory_files()
 
-    # client = TelegramClient('login.session', os.environ["API_ID"], os.environ["API_HASH"]).start()
-
     client = TelegramClient(
-        StringSession(),
+        StringSession(session),
         api_id=os.environ.get('API_ID'),
         api_hash=os.environ.get('API_HASH'),
         proxy=None
@@ -31,33 +30,15 @@ def _initialize_client():
     client.disconnect()
     if not client.is_user_authorized():
         print(datetime.time(datetime.now()), 'Unauthorized user')
-    #
-    #     if is_auth_code_available():
-    #         code_ok = False
-    #         while not code_ok:
-    #             auth_code = fetch_auth_code_from_db()
-    #             phone_code_hash = fetch_phone_code_hash_from_db()
-    #             print(datetime.time(datetime.now()), phone_code_hash)
-    #             try:
-    #                 print(datetime.time(datetime.now()), 'authcode used = ', auth_code)
-    #                 print(datetime.time(datetime.now()), 'codehash used = ', phone_code_hash)
-    #                 code_ok = client.sign_in(user_phone, auth_code, phone_code_hash=phone_code_hash)
-    #             except SessionPasswordNeededError:
-    #                 password = getpass('Two step verification enabled. Please enter your password: ')
-    #                 code_ok = client.sign_in(password=password)
-    #
-    #         save_session_file()
-    #     else:
-    #         resend_code_request = client.send_code_request(user_phone)
-    #         phone_code_hash = resend_code_request.phone_code_hash
-    #         print(datetime.time(datetime.now()), 'Phone code hash', phone_code_hash)
-    #         save_phone_code_hash(phone_code_hash)
-    #         print(datetime.time(datetime.now()), 'A fresh auth code has been sent. Please update the value in db and deploy')
+
 
     print(datetime.time(datetime.now()), 'Client initialized, waiting for updates.')
     client.add_event_handler(_update_handler)
     with client.start():
-        print(client.session.save())
+        with open('session.txt', 'w') as file:
+            saved_session_string = client.session.save()
+            file.write(saved_session_string)
+            print(saved_session_string)
         print('(Press Ctrl+C to stop this)')
         client.run_until_disconnected()
 
