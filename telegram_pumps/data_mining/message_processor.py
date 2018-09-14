@@ -73,6 +73,7 @@ class MessageProcessor:
 
     def __process_text_signal_group_message(self, message_text, group_id):
         coin_from_link, exchange_from_link = self._info_extractor.extract_pump_signal_from_link(message_text)
+        print(count, exchange_from_link)
 
         # if there's a pump signal with direct link to the exchange, trade it immediately without checking if pump was expected
         if coin_from_link and exchange_from_link:

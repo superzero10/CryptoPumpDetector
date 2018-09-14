@@ -29,8 +29,8 @@ def _initialize_client():
 
 
 async def _update_handler(update):
-    print(update)
     if isinstance(update, UpdateNewChannelMessage):
+        print(update)
         messages_handler.handle_channel_updates(update.message)  # whole Message object
 
 
