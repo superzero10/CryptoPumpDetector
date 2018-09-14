@@ -14,11 +14,12 @@ class MessageInfoExtractor:
     _coin_link_pattern = r'[A-Z0-9]{2,}'
     _general_url_pattern = "(?P<url>https?://[^\s]+)"
 
-    _serviced_exchange_names_url_parts = ['yobit.', 'cryptopia.']
+    _serviced_exchange_names_url_parts = ['yobit.', 'cryptopia.', 'binance.']
     _serviced_exchange_names = ['yobit', 'coinexchange', 'cryptopia', 'binance']
     _ignored_coins = ['all', 'in', 'are', 'profit', 'coin', 'red', 'today', 'time', 'off', 'buy', 'go', 'start', 'hodl',
                       'post', 'net', 'send', 'can', 'best', 'hope', 'soon', 'btc', 'fly', 'net', 'money', 'max', 'team',
-                      'rise', 'gain', 'waves', 'who', 'yes', 'utc', 'chat', 'hold', 'nice', 'look', 'via']
+                      'rise', 'gain', 'waves', 'who', 'yes', 'utc', 'chat', 'hold', 'nice', 'look', 'via', 'don',
+                      'work']
 
     _cryptopia_coins = [coin.center(len(coin) + 2) for coin in CryptopiaService().fetch_active_btc_pairs()]
     _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
@@ -27,11 +28,11 @@ class MessageInfoExtractor:
     _yobit_search_reverse_list = [coin.strip().upper()[::-1] for coin in _yobit_coins]
 
     def extract_pump_signal_from_link(self, message_text):
-        found_links, _ = self.__extract_message_links(message_text)
+        found_links, _ = self.extract_message_links(message_text)
         return self.__search_for_coin_in_link(found_links)
 
     def extract_possible_pump_signal(self, message_text):
-        _, message_without_links = self.__extract_message_links(message_text)
+        _, message_without_links = self.extract_message_links(message_text)
         cleaned_message = self.__clear_message(message_without_links)
         print(datetime.time(datetime.now()), 'MESSAGE AFTER PROCESSING: "', cleaned_message, '"')
 

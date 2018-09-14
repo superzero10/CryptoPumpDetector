@@ -31,7 +31,11 @@ def _initialize_client():
 async def _update_handler(update):
     if isinstance(update, UpdateNewChannelMessage):
         print(update)
-        messages_handler.handle_channel_updates(update.message)  # whole Message object
+        try:
+            messages_handler.handle_channel_updates(update.message)  # whole Message object
+        except RuntimeError as error:
+            print(error)
+
 
 
 def read_session_file():
