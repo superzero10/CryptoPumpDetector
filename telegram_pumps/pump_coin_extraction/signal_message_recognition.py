@@ -22,7 +22,7 @@ class MessageInfoExtractor:
                       'work']
 
     _cryptopia_coins = [coin.center(len(coin) + 2) for coin in CryptopiaService().fetch_active_btc_pairs()]
-    _cryptopia_coins_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
+    _cryptopia_reverse_search_list = [coin.strip().upper()[::-1] for coin in _cryptopia_coins]
 
     _yobit_coins = [coin.center(len(coin) + 2) for coin in YobitService().fetch_active_btc_pairs()]
     _yobit_search_reverse_list = [coin.strip().upper()[::-1] for coin in _yobit_coins]
@@ -76,7 +76,7 @@ class MessageInfoExtractor:
         return None, None
 
     def __get_coin_search_list(self, exchange_name):
-        return self._yobit_search_reverse_list if exchange_name == 'yobit.' else self._cryptopia_coins_search_list
+        return self._yobit_search_reverse_list if exchange_name == 'yobit.' else self._cryptopia_reverse_search_list
 
     def __clear_message(self, message):
         message_without_emoji = re.sub(self._emoji_removing_pattern, ' ', message).replace('\'', '').strip()
