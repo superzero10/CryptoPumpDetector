@@ -5,7 +5,7 @@ from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import UpdateNewChannelMessage
 
-from telegram_pumps.data_mining.print_cwd_files import print_directory_files
+from common.print_cwd_files import print_directory_files
 
 
 class TelegramApiClient:
