@@ -17,13 +17,12 @@ class PumpTrader:
 
     _recent_traded_coins = []  # [(coin, exchange, timestamp)]
 
-    def trade_pumped_coin_if_viable(self, coin, exchange):
+    def trade_pumped_coin_if_viable(self, coin, exchange, pump_traded_callback):
         print(datetime.time(datetime.now()), '||| PUMP DETECTED, coin:', coin, 'exchange:', exchange)
 
         with self._lock:
             if (coin, exchange) not in [(coin, exchange) for (coin, exchange, timestamp) in self._recent_traded_coins]:
-                # if coin was not traded ever
-                # create a new thread for each trade process
+                # if coin was not traded ever, create a new thread for each trade process
                 trade_thread = threading.Thread(target=self.__trade_coin(coin, exchange))
                 trade_thread.start()
             else:
