@@ -6,7 +6,6 @@ from telegram_pumps.data_mining.expected_pumps_handler import ExpectedPumpsHandl
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
 from telegram_pumps.message_info_extractor import MessageInfoExtractor
-from telegram_pumps.pump_trader import PumpTrader
 
 
 class MessageProcessor:
@@ -23,7 +22,6 @@ class MessageProcessor:
     _info_extractor = MessageInfoExtractor()
     _database_writer = DatabaseWriter()
     _expected_pumps_handler = ExpectedPumpsHandler()
-    _pump_trader = PumpTrader()
 
     def __init__(self):
         self.id = next(self._ids)
@@ -72,9 +70,7 @@ class MessageProcessor:
         return [link for link in all_links if any(part in link for part in self._cross_promo_link_parts)]
 
     def __process_text_signal_group_message(self, message_text, group_id):
-        print(message_text)
         coin_from_link, exchange_from_link = self._info_extractor.extract_pump_signal_from_link(message_text)
-        print(message_text)
 
         # if there's a pump signal with direct link to the exchange, trade it immediately without checking if pump was expected
         if coin_from_link and exchange_from_link:
@@ -111,14 +107,14 @@ class MessageProcessor:
             delay_sec=message_receive_timestamp - message_send_timestamp
         )
 
-    def __trade_on_pump_signal(self, coin, exchange):
-        self._pump_trader.trade_pumped_coin_if_viable(coin, exchange)
-
     def __process_pump_if_was_expected(self, coin, exchange, group_id):
         if self._expected_pumps_handler.is_within_expected_pump_date_range(group_id):
             self.__trade_on_pump_signal(coin, exchange)
         else:
             print(datetime.time(datetime.now()), '++ Nope, didn\'t expect a pump here')
+
+    def __trade_on_pump_signal(self, coin, exchange):
+        self._pump_trader.trade_pumped_coin_if_viable(coin, exchange)
 
     def __process_image_signal_group_message(self, message):
         print(datetime.time(datetime.now()), '- Message from an image signal group')
