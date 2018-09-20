@@ -1,5 +1,5 @@
 from telegram_pumps.data_mining.message_processor import MessageProcessor
-from telegram_pumps.data_mining.telegram_api_client import TelegramApiClient
+from telegram_pumps.telegram_api_client import TelegramApiClient
 
 
 class PumpDetector:

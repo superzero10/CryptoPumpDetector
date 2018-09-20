@@ -5,8 +5,8 @@ from time import time
 from telegram_pumps.data_mining.expected_pumps_handler import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
-from telegram_pumps.pump_coin_extraction.signal_message_recognition import MessageInfoExtractor
-from telegram_pumps.trading.pump_trader import PumpTrader
+from telegram_pumps.message_info_extractor import MessageInfoExtractor
+from telegram_pumps.pump_trader import PumpTrader
 
 
 class MessageProcessor:
