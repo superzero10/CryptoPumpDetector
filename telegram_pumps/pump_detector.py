@@ -8,7 +8,10 @@ class PumpDetector:
     _pump_trader = PumpTrader()
 
     def __init__(self):
-        TelegramApiClient(self._message_processor.handle_messages)
+        TelegramApiClient(self.__process_message)
+
+    def __process_message(self, message):
+        self._message_processor.process_message(message)
 
 
 if __name__ == '__main__':

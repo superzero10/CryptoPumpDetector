@@ -2,9 +2,9 @@ from datetime import datetime
 from itertools import count
 from time import time
 
-from telegram_pumps.data_mining.expected_pumps_handler import ExpectedPumpsHandler
 from telegram_pumps.database.database_retriever import *
 from telegram_pumps.database.database_writer import DatabaseWriter
+from telegram_pumps.expected_pumps_handler import ExpectedPumpsHandler
 from telegram_pumps.message_info_extractor import MessageInfoExtractor
 
 
@@ -34,7 +34,7 @@ class MessageProcessor:
         self._image_signal_groups = fetch_image_signal_groups(True)
         self._unknown_signal_groups = fetch_unknown_signal_groups(True)
 
-    def handle_messages(self, message):
+    def process_message(self, message):
         message_receive_timestamp = time()
         group_id = message.to_id.channel_id
         message_text = message.message
